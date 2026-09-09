@@ -1,0 +1,6415 @@
+{
+  "schemaVersion": 1,
+  "meta": {
+    "title": "POKÉ DAYS version-pinned Pokédex",
+    "versionGroup": "heartgold-soulsilver",
+    "versionGroupId": 10,
+    "generation": 4,
+    "retrievedAt": "2026-09-08T03:20:46.055308+00:00",
+    "source": "PokeAPI community-maintained dataset (not an official Pokémon API)",
+    "canonicalFields": [
+      "species",
+      "learnset level-up HGSS only",
+      "evolution levels and items",
+      "generation-IV friendship threshold",
+      "generation-IV types and base stats",
+      "historical move power accuracy PP type",
+      "experience curves"
+    ],
+    "adaptedRules": [
+      "Game day advances by sleeping, not real-world date.",
+      "Daily fatigue 100; battle +35; feeding +15; sleep resets.",
+      "One random starter hatches from an egg (equal 1/9 probability); only that partner is raised; initial level 10; feed friendship +12; sleep +3; level-up +5.",
+      "Battle reward XP = 40 + 3 × enemy level squared, 80 points; stone purchase and use costs 300.",
+      "One-on-one battle engine simplifies utility, weather, trapping and some secondary move effects; no abilities, held items, IV/EV/natures or breeding.",
+      "PP is restored each encounter; learning slots remain capped at four.",
+      "Move Reminder is free for the current species level-up learnset at or below current level."
+    ],
+    "sources": [
+      {
+        "name": "PokeAPI documentation",
+        "url": "https://pokeapi.co/docs/v2"
+      },
+      {
+        "name": "PokeAPI source CSV",
+        "url": "https://github.com/PokeAPI/pokeapi/tree/master/data/v2/csv"
+      },
+      {
+        "name": "HGSS Pikachu learnset cross-check",
+        "url": "https://pokemondb.net/pokedex/pikachu/moves/4"
+      },
+      {
+        "name": "HGSS Charmander learnset cross-check",
+        "url": "https://pokemondb.net/pokedex/charmander/moves/4"
+      },
+      {
+        "name": "Generation II–VII friendship threshold",
+        "url": "https://bulbapedia.bulbagarden.net/wiki/Friendship_Evolution"
+      },
+      {
+        "name": "Pixel sprites",
+        "url": "https://github.com/PokeAPI/sprites"
+      }
+    ],
+    "sourceFiles": [
+      {
+        "url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/data/v2/csv/version_groups.csv",
+        "sha256": "28da8d89d8eb4966941f81a9e62b3990510ed4d76dd774158246551a8e7707a7"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/data/v2/csv/versions.csv",
+        "sha256": "70083465865a6a69a9aad2be3fc3915078c6ff740f14a090b1367d8ec9cfc3cd"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/data/v2/csv/pokemon.csv",
+        "sha256": "16c81c33188b0eac403aa2f759fcbe9e42c611f722d263f5b5a6a5bff9f8ce6b"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/data/v2/csv/pokemon_species.csv",
+        "sha256": "9878f19c0637095cdd9a4134b4aac8fb2b64776d3bdc599aa68f15c3a011b87c"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/data/v2/csv/pokemon_species_names.csv",
+        "sha256": "820cde17074cdb1c2b0595c997fb8f998e773bd5da3bb525dec85703c86c5fd9"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/data/v2/csv/pokemon_evolution.csv",
+        "sha256": "b39006d85cdaa9c4a464312077ead6f45969d5be038dbe84e894a77d942e75de"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/data/v2/csv/pokemon_moves.csv",
+        "sha256": "22a807cef26891eeac0d0c900bd363e66baf421f7ee795bc7bc3e718f23b939e"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/data/v2/csv/moves.csv",
+        "sha256": "8aafd37bf78f19471495c05b201545180f50f0a08a2a2a844d69f9837dd39ac9"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/data/v2/csv/move_names.csv",
+        "sha256": "99e23ee38ea53d1473474d463b87651deac3cd4928750f8186feae66da45c147"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/data/v2/csv/move_changelog.csv",
+        "sha256": "86c1511f6a0e29dcc5a885c5b8f125ffd502afbec9f69c7f2b85a3e0e8b001f8"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/data/v2/csv/move_meta.csv",
+        "sha256": "93b92d5bddf4fc1536ca0a647c20453bf92e6389010f33ca6fc4c5e9c54363be"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/data/v2/csv/move_meta_stat_changes.csv",
+        "sha256": "489edd9ee45ea7e60c99c5a860c4c0957b337af21f8ae9bf03dd121fd548d5ab"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/data/v2/csv/stats.csv",
+        "sha256": "ee8c541b45b64f40f0eb2545c767294b5801ce8a1410e19d8c33a54e6f1c3b9c"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/data/v2/csv/pokemon_stats.csv",
+        "sha256": "fa2c44263a3706468682fefc3e0b3c4f5487fe9febed7d4ebcd6939c34b16aa8"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/data/v2/csv/pokemon_types.csv",
+        "sha256": "f1fc4bfd657a034ea3bf6972423b10276424aa068577b304a78a08996425ba05"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/data/v2/csv/pokemon_types_past.csv",
+        "sha256": "02553c38e3871f99c7ed809b944066fea3f42ef6bccd4daba19274aca01fbff0"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/data/v2/csv/type_names.csv",
+        "sha256": "685230c51074cf2f723debcf827a4df4c36ab0ec7e929c806ad65a3e40958705"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/data/v2/csv/types.csv",
+        "sha256": "37f039c8d722f47d51ba1c5c5ecf9b7007235b1a9a1af2827645c777b70307c8"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/data/v2/csv/type_efficacy.csv",
+        "sha256": "cdd7de4066680414d0a2433af805f139f425d6350cbf998ecab559a0fe8ff587"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/data/v2/csv/type_efficacy_past.csv",
+        "sha256": "0d8cb1251c7f987c7978d77d6c1b9ecfc54e04474b7584b8ecf96fef498fb9d4"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/data/v2/csv/experience.csv",
+        "sha256": "246d5d215bb90ee47206b57bfb9d9f639f73080ee8e99147382814e44e4f417b"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/data/v2/csv/pokemon_species_flavor_text.csv",
+        "sha256": "c341e602ab623084fef4c44ca4a174938e617802cfcf2deec830d824f688dc69"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/data/v2/csv/pokemon_stats_past.csv",
+        "sha256": "0a074d9581369c1df13d8d4f4015fd7215b896c5dfb58107f3b529f7156950d2"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/data/v2/csv/item_names.csv",
+        "sha256": "7b1b4fe6edf7946110050a5dddabf62c3a1dc3e1616099c4ae97abcb5ebd0f97"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/data/v2/csv/items.csv",
+        "sha256": "f08cd6dc30b447cb91cbe9232c79052e8521f32f6105bb1489b5bfabf4ca3241"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/data/v2/csv/move_meta_ailments.csv",
+        "sha256": "4c6e3ce3afe276478a45730de3d15f65496f646ce927c3e374b32295fbe24ed4"
+      }
+    ]
+  },
+  "starterIds": [
+    25,
+    4,
+    1,
+    7,
+    50,
+    52,
+    238,
+    174,
+    173
+  ],
+  "pokemon": {
+    "1": {
+      "id": 1,
+      "slug": "bulbasaur",
+      "name": "이상해씨",
+      "genus": "씨앗포켓몬",
+      "description": "태어났을 때부터 등에 이상한 씨앗이 심어져 있으며 몸과 함께 자란다고 한다.",
+      "descriptionVersionId": 23,
+      "descriptionVersion": "x",
+      "heightM": 0.7,
+      "weightKg": 6.9,
+      "typeIds": [
+        12,
+        4
+      ],
+      "stats": {
+        "hp": 45,
+        "attack": 49,
+        "defense": 49,
+        "special-attack": 65,
+        "special-defense": 65,
+        "speed": 45
+      },
+      "baseFriendship": 70,
+      "growthRateId": 4,
+      "learnset": [
+        {
+          "level": 1,
+          "moveId": 33,
+          "order": 0
+        },
+        {
+          "level": 3,
+          "moveId": 45,
+          "order": 0
+        },
+        {
+          "level": 7,
+          "moveId": 73,
+          "order": 0
+        },
+        {
+          "level": 9,
+          "moveId": 22,
+          "order": 0
+        },
+        {
+          "level": 13,
+          "moveId": 77,
+          "order": 1
+        },
+        {
+          "level": 13,
+          "moveId": 79,
+          "order": 2
+        },
+        {
+          "level": 15,
+          "moveId": 36,
+          "order": 0
+        },
+        {
+          "level": 19,
+          "moveId": 75,
+          "order": 0
+        },
+        {
+          "level": 21,
+          "moveId": 230,
+          "order": 0
+        },
+        {
+          "level": 25,
+          "moveId": 74,
+          "order": 0
+        },
+        {
+          "level": 27,
+          "moveId": 38,
+          "order": 0
+        },
+        {
+          "level": 31,
+          "moveId": 388,
+          "order": 0
+        },
+        {
+          "level": 33,
+          "moveId": 235,
+          "order": 0
+        },
+        {
+          "level": 37,
+          "moveId": 402,
+          "order": 0
+        }
+      ],
+      "evolutions": [
+        {
+          "to": 2,
+          "trigger": "level-up",
+          "minLevel": 16,
+          "minFriendship": null,
+          "itemId": null,
+          "itemName": null,
+          "sourceRowId": 1,
+          "note": null
+        }
+      ],
+      "family": [
+        1,
+        2,
+        3
+      ],
+      "sprite": "assets/sprites/1.png",
+      "backSprite": "assets/sprites/1-back.png"
+    },
+    "2": {
+      "id": 2,
+      "slug": "ivysaur",
+      "name": "이상해풀",
+      "genus": "씨앗포켓몬",
+      "description": "꽃봉오리가 등에 붙어 있으며 양분을 흡수해가면 커다란 꽃이 핀다고 한다.",
+      "descriptionVersionId": 23,
+      "descriptionVersion": "x",
+      "heightM": 1.0,
+      "weightKg": 13.0,
+      "typeIds": [
+        12,
+        4
+      ],
+      "stats": {
+        "hp": 60,
+        "attack": 62,
+        "defense": 63,
+        "special-attack": 80,
+        "special-defense": 80,
+        "speed": 60
+      },
+      "baseFriendship": 70,
+      "growthRateId": 4,
+      "learnset": [
+        {
+          "level": 1,
+          "moveId": 33,
+          "order": 1
+        },
+        {
+          "level": 1,
+          "moveId": 45,
+          "order": 2
+        },
+        {
+          "level": 1,
+          "moveId": 73,
+          "order": 3
+        },
+        {
+          "level": 3,
+          "moveId": 45,
+          "order": 0
+        },
+        {
+          "level": 7,
+          "moveId": 73,
+          "order": 0
+        },
+        {
+          "level": 9,
+          "moveId": 22,
+          "order": 0
+        },
+        {
+          "level": 13,
+          "moveId": 77,
+          "order": 1
+        },
+        {
+          "level": 13,
+          "moveId": 79,
+          "order": 2
+        },
+        {
+          "level": 15,
+          "moveId": 36,
+          "order": 0
+        },
+        {
+          "level": 20,
+          "moveId": 75,
+          "order": 0
+        },
+        {
+          "level": 23,
+          "moveId": 230,
+          "order": 0
+        },
+        {
+          "level": 28,
+          "moveId": 74,
+          "order": 0
+        },
+        {
+          "level": 31,
+          "moveId": 38,
+          "order": 0
+        },
+        {
+          "level": 36,
+          "moveId": 388,
+          "order": 0
+        },
+        {
+          "level": 39,
+          "moveId": 235,
+          "order": 0
+        },
+        {
+          "level": 44,
+          "moveId": 76,
+          "order": 0
+        }
+      ],
+      "evolutions": [
+        {
+          "to": 3,
+          "trigger": "level-up",
+          "minLevel": 32,
+          "minFriendship": null,
+          "itemId": null,
+          "itemName": null,
+          "sourceRowId": 2,
+          "note": null
+        }
+      ],
+      "family": [
+        1,
+        2,
+        3
+      ],
+      "sprite": "assets/sprites/2.png",
+      "backSprite": "assets/sprites/2-back.png"
+    },
+    "3": {
+      "id": 3,
+      "slug": "venusaur",
+      "name": "이상해꽃",
+      "genus": "씨앗포켓몬",
+      "description": "큰 꽃잎을 펼쳐 햇빛을 받고 있으면 몸에 힘이 넘쳐흐른다.",
+      "descriptionVersionId": 23,
+      "descriptionVersion": "x",
+      "heightM": 2.0,
+      "weightKg": 100.0,
+      "typeIds": [
+        12,
+        4
+      ],
+      "stats": {
+        "hp": 80,
+        "attack": 82,
+        "defense": 83,
+        "special-attack": 100,
+        "special-defense": 100,
+        "speed": 80
+      },
+      "baseFriendship": 70,
+      "growthRateId": 4,
+      "learnset": [
+        {
+          "level": 1,
+          "moveId": 33,
+          "order": 1
+        },
+        {
+          "level": 1,
+          "moveId": 45,
+          "order": 2
+        },
+        {
+          "level": 1,
+          "moveId": 73,
+          "order": 3
+        },
+        {
+          "level": 1,
+          "moveId": 22,
+          "order": 4
+        },
+        {
+          "level": 3,
+          "moveId": 45,
+          "order": 0
+        },
+        {
+          "level": 7,
+          "moveId": 73,
+          "order": 0
+        },
+        {
+          "level": 9,
+          "moveId": 22,
+          "order": 0
+        },
+        {
+          "level": 13,
+          "moveId": 77,
+          "order": 1
+        },
+        {
+          "level": 13,
+          "moveId": 79,
+          "order": 2
+        },
+        {
+          "level": 15,
+          "moveId": 36,
+          "order": 0
+        },
+        {
+          "level": 20,
+          "moveId": 75,
+          "order": 0
+        },
+        {
+          "level": 23,
+          "moveId": 230,
+          "order": 0
+        },
+        {
+          "level": 28,
+          "moveId": 74,
+          "order": 0
+        },
+        {
+          "level": 31,
+          "moveId": 38,
+          "order": 0
+        },
+        {
+          "level": 32,
+          "moveId": 80,
+          "order": 0
+        },
+        {
+          "level": 39,
+          "moveId": 388,
+          "order": 0
+        },
+        {
+          "level": 45,
+          "moveId": 235,
+          "order": 0
+        },
+        {
+          "level": 53,
+          "moveId": 76,
+          "order": 0
+        }
+      ],
+      "evolutions": [],
+      "family": [
+        1,
+        2,
+        3
+      ],
+      "sprite": "assets/sprites/3.png",
+      "backSprite": "assets/sprites/3-back.png"
+    },
+    "4": {
+      "id": 4,
+      "slug": "charmander",
+      "name": "파이리",
+      "genus": "도롱뇽포켓몬",
+      "description": "꼬리의 불꽃은 파이리의 생명력의 상징이다. 건강할 때 왕성하게 불타오른다.",
+      "descriptionVersionId": 23,
+      "descriptionVersion": "x",
+      "heightM": 0.6,
+      "weightKg": 8.5,
+      "typeIds": [
+        10
+      ],
+      "stats": {
+        "hp": 39,
+        "attack": 52,
+        "defense": 43,
+        "special-attack": 60,
+        "special-defense": 50,
+        "speed": 65
+      },
+      "baseFriendship": 70,
+      "growthRateId": 4,
+      "learnset": [
+        {
+          "level": 1,
+          "moveId": 10,
+          "order": 1
+        },
+        {
+          "level": 1,
+          "moveId": 45,
+          "order": 2
+        },
+        {
+          "level": 7,
+          "moveId": 52,
+          "order": 0
+        },
+        {
+          "level": 10,
+          "moveId": 108,
+          "order": 0
+        },
+        {
+          "level": 16,
+          "moveId": 82,
+          "order": 0
+        },
+        {
+          "level": 19,
+          "moveId": 184,
+          "order": 0
+        },
+        {
+          "level": 25,
+          "moveId": 424,
+          "order": 0
+        },
+        {
+          "level": 28,
+          "moveId": 163,
+          "order": 0
+        },
+        {
+          "level": 34,
+          "moveId": 53,
+          "order": 0
+        },
+        {
+          "level": 37,
+          "moveId": 83,
+          "order": 0
+        }
+      ],
+      "evolutions": [
+        {
+          "to": 5,
+          "trigger": "level-up",
+          "minLevel": 16,
+          "minFriendship": null,
+          "itemId": null,
+          "itemName": null,
+          "sourceRowId": 3,
+          "note": null
+        }
+      ],
+      "family": [
+        4,
+        5,
+        6
+      ],
+      "sprite": "assets/sprites/4.png",
+      "backSprite": "assets/sprites/4-back.png"
+    },
+    "5": {
+      "id": 5,
+      "slug": "charmeleon",
+      "name": "리자드",
+      "genus": "화염포켓몬",
+      "description": "꼬리를 휘둘러 상대를 쓰러트리고 날카로운 발톱으로 갈기갈기 찢어버린다.",
+      "descriptionVersionId": 23,
+      "descriptionVersion": "x",
+      "heightM": 1.1,
+      "weightKg": 19.0,
+      "typeIds": [
+        10
+      ],
+      "stats": {
+        "hp": 58,
+        "attack": 64,
+        "defense": 58,
+        "special-attack": 80,
+        "special-defense": 65,
+        "speed": 80
+      },
+      "baseFriendship": 70,
+      "growthRateId": 4,
+      "learnset": [
+        {
+          "level": 1,
+          "moveId": 10,
+          "order": 1
+        },
+        {
+          "level": 1,
+          "moveId": 45,
+          "order": 2
+        },
+        {
+          "level": 1,
+          "moveId": 52,
+          "order": 3
+        },
+        {
+          "level": 7,
+          "moveId": 52,
+          "order": 0
+        },
+        {
+          "level": 10,
+          "moveId": 108,
+          "order": 0
+        },
+        {
+          "level": 17,
+          "moveId": 82,
+          "order": 0
+        },
+        {
+          "level": 21,
+          "moveId": 184,
+          "order": 0
+        },
+        {
+          "level": 28,
+          "moveId": 424,
+          "order": 0
+        },
+        {
+          "level": 32,
+          "moveId": 163,
+          "order": 0
+        },
+        {
+          "level": 39,
+          "moveId": 53,
+          "order": 0
+        },
+        {
+          "level": 43,
+          "moveId": 83,
+          "order": 0
+        }
+      ],
+      "evolutions": [
+        {
+          "to": 6,
+          "trigger": "level-up",
+          "minLevel": 36,
+          "minFriendship": null,
+          "itemId": null,
+          "itemName": null,
+          "sourceRowId": 4,
+          "note": null
+        }
+      ],
+      "family": [
+        4,
+        5,
+        6
+      ],
+      "sprite": "assets/sprites/5.png",
+      "backSprite": "assets/sprites/5-back.png"
+    },
+    "6": {
+      "id": 6,
+      "slug": "charizard",
+      "name": "리자몽",
+      "genus": "화염포켓몬",
+      "description": "입에서 작렬하는 불꽃을 토해낼 때 꼬리의 끝이 더욱 붉고 격렬하게 타오른다.",
+      "descriptionVersionId": 23,
+      "descriptionVersion": "x",
+      "heightM": 1.7,
+      "weightKg": 90.5,
+      "typeIds": [
+        10,
+        3
+      ],
+      "stats": {
+        "hp": 78,
+        "attack": 84,
+        "defense": 78,
+        "special-attack": 109,
+        "special-defense": 85,
+        "speed": 100
+      },
+      "baseFriendship": 70,
+      "growthRateId": 4,
+      "learnset": [
+        {
+          "level": 1,
+          "moveId": 337,
+          "order": 1
+        },
+        {
+          "level": 1,
+          "moveId": 421,
+          "order": 2
+        },
+        {
+          "level": 1,
+          "moveId": 403,
+          "order": 3
+        },
+        {
+          "level": 1,
+          "moveId": 10,
+          "order": 4
+        },
+        {
+          "level": 1,
+          "moveId": 45,
+          "order": 5
+        },
+        {
+          "level": 1,
+          "moveId": 52,
+          "order": 6
+        },
+        {
+          "level": 1,
+          "moveId": 108,
+          "order": 7
+        },
+        {
+          "level": 7,
+          "moveId": 52,
+          "order": 0
+        },
+        {
+          "level": 10,
+          "moveId": 108,
+          "order": 0
+        },
+        {
+          "level": 17,
+          "moveId": 82,
+          "order": 0
+        },
+        {
+          "level": 21,
+          "moveId": 184,
+          "order": 0
+        },
+        {
+          "level": 28,
+          "moveId": 424,
+          "order": 0
+        },
+        {
+          "level": 32,
+          "moveId": 163,
+          "order": 0
+        },
+        {
+          "level": 36,
+          "moveId": 17,
+          "order": 0
+        },
+        {
+          "level": 42,
+          "moveId": 53,
+          "order": 0
+        },
+        {
+          "level": 49,
+          "moveId": 83,
+          "order": 0
+        },
+        {
+          "level": 59,
+          "moveId": 257,
+          "order": 0
+        },
+        {
+          "level": 66,
+          "moveId": 394,
+          "order": 0
+        }
+      ],
+      "evolutions": [],
+      "family": [
+        4,
+        5,
+        6
+      ],
+      "sprite": "assets/sprites/6.png",
+      "backSprite": "assets/sprites/6-back.png"
+    },
+    "7": {
+      "id": 7,
+      "slug": "squirtle",
+      "name": "꼬부기",
+      "genus": "꼬마거북포켓몬",
+      "description": "등껍질에 숨어 몸을 보호한다. 상대의 빈틈을 놓치지 않고 물을 뿜어내어 반격한다.",
+      "descriptionVersionId": 23,
+      "descriptionVersion": "x",
+      "heightM": 0.5,
+      "weightKg": 9.0,
+      "typeIds": [
+        11
+      ],
+      "stats": {
+        "hp": 44,
+        "attack": 48,
+        "defense": 65,
+        "special-attack": 50,
+        "special-defense": 64,
+        "speed": 43
+      },
+      "baseFriendship": 70,
+      "growthRateId": 4,
+      "learnset": [
+        {
+          "level": 1,
+          "moveId": 33,
+          "order": 0
+        },
+        {
+          "level": 4,
+          "moveId": 39,
+          "order": 0
+        },
+        {
+          "level": 7,
+          "moveId": 145,
+          "order": 0
+        },
+        {
+          "level": 10,
+          "moveId": 110,
+          "order": 0
+        },
+        {
+          "level": 13,
+          "moveId": 55,
+          "order": 0
+        },
+        {
+          "level": 16,
+          "moveId": 44,
+          "order": 0
+        },
+        {
+          "level": 19,
+          "moveId": 229,
+          "order": 0
+        },
+        {
+          "level": 22,
+          "moveId": 182,
+          "order": 0
+        },
+        {
+          "level": 25,
+          "moveId": 352,
+          "order": 0
+        },
+        {
+          "level": 28,
+          "moveId": 401,
+          "order": 0
+        },
+        {
+          "level": 31,
+          "moveId": 130,
+          "order": 0
+        },
+        {
+          "level": 34,
+          "moveId": 334,
+          "order": 0
+        },
+        {
+          "level": 37,
+          "moveId": 240,
+          "order": 0
+        },
+        {
+          "level": 40,
+          "moveId": 56,
+          "order": 0
+        }
+      ],
+      "evolutions": [
+        {
+          "to": 8,
+          "trigger": "level-up",
+          "minLevel": 16,
+          "minFriendship": null,
+          "itemId": null,
+          "itemName": null,
+          "sourceRowId": 5,
+          "note": null
+        }
+      ],
+      "family": [
+        7,
+        8,
+        9
+      ],
+      "sprite": "assets/sprites/7.png",
+      "backSprite": "assets/sprites/7-back.png"
+    },
+    "8": {
+      "id": 8,
+      "slug": "wartortle",
+      "name": "어니부기",
+      "genus": "거북포켓몬",
+      "description": "딱 하고 머리를 맞을 때 등껍질로 숨어서 피한다. 하지만 꼬리가 살짝 삐져나와 있다.",
+      "descriptionVersionId": 23,
+      "descriptionVersion": "x",
+      "heightM": 1.0,
+      "weightKg": 22.5,
+      "typeIds": [
+        11
+      ],
+      "stats": {
+        "hp": 59,
+        "attack": 63,
+        "defense": 80,
+        "special-attack": 65,
+        "special-defense": 80,
+        "speed": 58
+      },
+      "baseFriendship": 70,
+      "growthRateId": 4,
+      "learnset": [
+        {
+          "level": 1,
+          "moveId": 33,
+          "order": 1
+        },
+        {
+          "level": 1,
+          "moveId": 39,
+          "order": 2
+        },
+        {
+          "level": 1,
+          "moveId": 145,
+          "order": 3
+        },
+        {
+          "level": 4,
+          "moveId": 39,
+          "order": 0
+        },
+        {
+          "level": 7,
+          "moveId": 145,
+          "order": 0
+        },
+        {
+          "level": 10,
+          "moveId": 110,
+          "order": 0
+        },
+        {
+          "level": 13,
+          "moveId": 55,
+          "order": 0
+        },
+        {
+          "level": 16,
+          "moveId": 44,
+          "order": 0
+        },
+        {
+          "level": 20,
+          "moveId": 229,
+          "order": 0
+        },
+        {
+          "level": 24,
+          "moveId": 182,
+          "order": 0
+        },
+        {
+          "level": 28,
+          "moveId": 352,
+          "order": 0
+        },
+        {
+          "level": 32,
+          "moveId": 401,
+          "order": 0
+        },
+        {
+          "level": 36,
+          "moveId": 130,
+          "order": 0
+        },
+        {
+          "level": 40,
+          "moveId": 334,
+          "order": 0
+        },
+        {
+          "level": 44,
+          "moveId": 240,
+          "order": 0
+        },
+        {
+          "level": 48,
+          "moveId": 56,
+          "order": 0
+        }
+      ],
+      "evolutions": [
+        {
+          "to": 9,
+          "trigger": "level-up",
+          "minLevel": 36,
+          "minFriendship": null,
+          "itemId": null,
+          "itemName": null,
+          "sourceRowId": 6,
+          "note": null
+        }
+      ],
+      "family": [
+        7,
+        8,
+        9
+      ],
+      "sprite": "assets/sprites/8.png",
+      "backSprite": "assets/sprites/8-back.png"
+    },
+    "9": {
+      "id": 9,
+      "slug": "blastoise",
+      "name": "거북왕",
+      "genus": "껍질포켓몬",
+      "description": "무거운 몸으로 상대를 덮쳐서 기절시킨다. 위기에 처하면 등껍질에 숨는다.",
+      "descriptionVersionId": 23,
+      "descriptionVersion": "x",
+      "heightM": 1.6,
+      "weightKg": 85.5,
+      "typeIds": [
+        11
+      ],
+      "stats": {
+        "hp": 79,
+        "attack": 83,
+        "defense": 100,
+        "special-attack": 85,
+        "special-defense": 105,
+        "speed": 78
+      },
+      "baseFriendship": 70,
+      "growthRateId": 4,
+      "learnset": [
+        {
+          "level": 1,
+          "moveId": 430,
+          "order": 1
+        },
+        {
+          "level": 1,
+          "moveId": 33,
+          "order": 2
+        },
+        {
+          "level": 1,
+          "moveId": 39,
+          "order": 3
+        },
+        {
+          "level": 1,
+          "moveId": 145,
+          "order": 4
+        },
+        {
+          "level": 1,
+          "moveId": 110,
+          "order": 5
+        },
+        {
+          "level": 4,
+          "moveId": 39,
+          "order": 0
+        },
+        {
+          "level": 7,
+          "moveId": 145,
+          "order": 0
+        },
+        {
+          "level": 10,
+          "moveId": 110,
+          "order": 0
+        },
+        {
+          "level": 13,
+          "moveId": 55,
+          "order": 0
+        },
+        {
+          "level": 16,
+          "moveId": 44,
+          "order": 0
+        },
+        {
+          "level": 20,
+          "moveId": 229,
+          "order": 0
+        },
+        {
+          "level": 24,
+          "moveId": 182,
+          "order": 0
+        },
+        {
+          "level": 28,
+          "moveId": 352,
+          "order": 0
+        },
+        {
+          "level": 32,
+          "moveId": 401,
+          "order": 0
+        },
+        {
+          "level": 39,
+          "moveId": 130,
+          "order": 0
+        },
+        {
+          "level": 46,
+          "moveId": 334,
+          "order": 0
+        },
+        {
+          "level": 53,
+          "moveId": 240,
+          "order": 0
+        },
+        {
+          "level": 60,
+          "moveId": 56,
+          "order": 0
+        }
+      ],
+      "evolutions": [],
+      "family": [
+        7,
+        8,
+        9
+      ],
+      "sprite": "assets/sprites/9.png",
+      "backSprite": "assets/sprites/9-back.png"
+    },
+    "25": {
+      "id": 25,
+      "slug": "pikachu",
+      "name": "피카츄",
+      "genus": "쥐포켓몬",
+      "description": "꼬리를 세우고 주변의 상황을 살피다 보면 가끔 꼬리에 번개가 친다.",
+      "descriptionVersionId": 23,
+      "descriptionVersion": "x",
+      "heightM": 0.4,
+      "weightKg": 6.0,
+      "typeIds": [
+        13
+      ],
+      "stats": {
+        "hp": 35,
+        "attack": 55,
+        "defense": 30,
+        "special-attack": 50,
+        "special-defense": 40,
+        "speed": 90
+      },
+      "baseFriendship": 70,
+      "growthRateId": 2,
+      "learnset": [
+        {
+          "level": 1,
+          "moveId": 84,
+          "order": 1
+        },
+        {
+          "level": 1,
+          "moveId": 45,
+          "order": 2
+        },
+        {
+          "level": 5,
+          "moveId": 39,
+          "order": 0
+        },
+        {
+          "level": 10,
+          "moveId": 86,
+          "order": 0
+        },
+        {
+          "level": 13,
+          "moveId": 98,
+          "order": 0
+        },
+        {
+          "level": 18,
+          "moveId": 104,
+          "order": 0
+        },
+        {
+          "level": 21,
+          "moveId": 21,
+          "order": 0
+        },
+        {
+          "level": 26,
+          "moveId": 85,
+          "order": 0
+        },
+        {
+          "level": 29,
+          "moveId": 364,
+          "order": 0
+        },
+        {
+          "level": 34,
+          "moveId": 97,
+          "order": 0
+        },
+        {
+          "level": 37,
+          "moveId": 435,
+          "order": 0
+        },
+        {
+          "level": 42,
+          "moveId": 113,
+          "order": 0
+        },
+        {
+          "level": 45,
+          "moveId": 87,
+          "order": 0
+        }
+      ],
+      "evolutions": [
+        {
+          "to": 26,
+          "trigger": "use-item",
+          "minLevel": null,
+          "minFriendship": null,
+          "itemId": 83,
+          "itemName": "천둥의돌",
+          "sourceRowId": 17,
+          "note": null
+        }
+      ],
+      "family": [
+        25,
+        26
+      ],
+      "sprite": "assets/sprites/25.png",
+      "backSprite": "assets/sprites/25-back.png"
+    },
+    "26": {
+      "id": 26,
+      "slug": "raichu",
+      "name": "라이츄",
+      "genus": "쥐포켓몬",
+      "description": "전기가 모이면 근육이 자극되어 여느 때보다 공격적이 된다.",
+      "descriptionVersionId": 23,
+      "descriptionVersion": "x",
+      "heightM": 0.8,
+      "weightKg": 30.0,
+      "typeIds": [
+        13
+      ],
+      "stats": {
+        "hp": 60,
+        "attack": 90,
+        "defense": 55,
+        "special-attack": 90,
+        "special-defense": 80,
+        "speed": 100
+      },
+      "baseFriendship": 70,
+      "growthRateId": 2,
+      "learnset": [
+        {
+          "level": 1,
+          "moveId": 84,
+          "order": 1
+        },
+        {
+          "level": 1,
+          "moveId": 39,
+          "order": 2
+        },
+        {
+          "level": 1,
+          "moveId": 98,
+          "order": 3
+        },
+        {
+          "level": 1,
+          "moveId": 85,
+          "order": 4
+        }
+      ],
+      "evolutions": [],
+      "family": [
+        25,
+        26
+      ],
+      "sprite": "assets/sprites/26.png",
+      "backSprite": "assets/sprites/26-back.png"
+    },
+    "35": {
+      "id": 35,
+      "slug": "clefairy",
+      "name": "삐삐",
+      "genus": "요정포켓몬",
+      "description": "보름달 밤에 삐삐가 모여 춤을 추는 모습을 보면 행복해진다고 전해진다.",
+      "descriptionVersionId": 23,
+      "descriptionVersion": "x",
+      "heightM": 0.6,
+      "weightKg": 7.5,
+      "typeIds": [
+        1
+      ],
+      "stats": {
+        "hp": 70,
+        "attack": 45,
+        "defense": 48,
+        "special-attack": 60,
+        "special-defense": 65,
+        "speed": 35
+      },
+      "baseFriendship": 140,
+      "growthRateId": 3,
+      "learnset": [
+        {
+          "level": 1,
+          "moveId": 1,
+          "order": 1
+        },
+        {
+          "level": 1,
+          "moveId": 45,
+          "order": 2
+        },
+        {
+          "level": 4,
+          "moveId": 227,
+          "order": 0
+        },
+        {
+          "level": 7,
+          "moveId": 47,
+          "order": 0
+        },
+        {
+          "level": 10,
+          "moveId": 3,
+          "order": 0
+        },
+        {
+          "level": 13,
+          "moveId": 111,
+          "order": 0
+        },
+        {
+          "level": 16,
+          "moveId": 266,
+          "order": 0
+        },
+        {
+          "level": 19,
+          "moveId": 107,
+          "order": 0
+        },
+        {
+          "level": 22,
+          "moveId": 358,
+          "order": 0
+        },
+        {
+          "level": 25,
+          "moveId": 322,
+          "order": 0
+        },
+        {
+          "level": 28,
+          "moveId": 381,
+          "order": 0
+        },
+        {
+          "level": 31,
+          "moveId": 118,
+          "order": 0
+        },
+        {
+          "level": 34,
+          "moveId": 356,
+          "order": 0
+        },
+        {
+          "level": 37,
+          "moveId": 236,
+          "order": 0
+        },
+        {
+          "level": 40,
+          "moveId": 113,
+          "order": 0
+        },
+        {
+          "level": 43,
+          "moveId": 309,
+          "order": 0
+        },
+        {
+          "level": 46,
+          "moveId": 361,
+          "order": 0
+        }
+      ],
+      "evolutions": [
+        {
+          "to": 36,
+          "trigger": "use-item",
+          "minLevel": null,
+          "minFriendship": null,
+          "itemId": 81,
+          "itemName": "달의돌",
+          "sourceRowId": 24,
+          "note": null
+        }
+      ],
+      "family": [
+        35,
+        36,
+        173
+      ],
+      "sprite": "assets/sprites/35.png",
+      "backSprite": "assets/sprites/35-back.png"
+    },
+    "36": {
+      "id": 36,
+      "slug": "clefable",
+      "name": "픽시",
+      "genus": "요정포켓몬",
+      "description": "1km 전방에 떨어진 바늘 소리도 분간할 수 있는 우수한 귀를 가지고 있다. 조용한 산속에 살고 있다.",
+      "descriptionVersionId": 23,
+      "descriptionVersion": "x",
+      "heightM": 1.3,
+      "weightKg": 40.0,
+      "typeIds": [
+        1
+      ],
+      "stats": {
+        "hp": 95,
+        "attack": 70,
+        "defense": 73,
+        "special-attack": 85,
+        "special-defense": 90,
+        "speed": 60
+      },
+      "baseFriendship": 140,
+      "growthRateId": 3,
+      "learnset": [
+        {
+          "level": 1,
+          "moveId": 47,
+          "order": 1
+        },
+        {
+          "level": 1,
+          "moveId": 3,
+          "order": 2
+        },
+        {
+          "level": 1,
+          "moveId": 107,
+          "order": 3
+        },
+        {
+          "level": 1,
+          "moveId": 118,
+          "order": 4
+        }
+      ],
+      "evolutions": [],
+      "family": [
+        35,
+        36,
+        173
+      ],
+      "sprite": "assets/sprites/36.png",
+      "backSprite": "assets/sprites/36-back.png"
+    },
+    "39": {
+      "id": 39,
+      "slug": "jigglypuff",
+      "name": "푸린",
+      "genus": "풍선포켓몬",
+      "description": "동그랗고 커다란 눈동자로 유인하고 기분 좋은 노래를 불러 상대방을 잠들게 한다.",
+      "descriptionVersionId": 23,
+      "descriptionVersion": "x",
+      "heightM": 0.5,
+      "weightKg": 5.5,
+      "typeIds": [
+        1
+      ],
+      "stats": {
+        "hp": 115,
+        "attack": 45,
+        "defense": 20,
+        "special-attack": 45,
+        "special-defense": 25,
+        "speed": 20
+      },
+      "baseFriendship": 70,
+      "growthRateId": 3,
+      "learnset": [
+        {
+          "level": 1,
+          "moveId": 47,
+          "order": 0
+        },
+        {
+          "level": 5,
+          "moveId": 111,
+          "order": 0
+        },
+        {
+          "level": 9,
+          "moveId": 1,
+          "order": 0
+        },
+        {
+          "level": 13,
+          "moveId": 50,
+          "order": 0
+        },
+        {
+          "level": 17,
+          "moveId": 205,
+          "order": 0
+        },
+        {
+          "level": 21,
+          "moveId": 3,
+          "order": 0
+        },
+        {
+          "level": 25,
+          "moveId": 156,
+          "order": 0
+        },
+        {
+          "level": 29,
+          "moveId": 34,
+          "order": 0
+        },
+        {
+          "level": 33,
+          "moveId": 360,
+          "order": 0
+        },
+        {
+          "level": 37,
+          "moveId": 358,
+          "order": 0
+        },
+        {
+          "level": 41,
+          "moveId": 102,
+          "order": 0
+        },
+        {
+          "level": 45,
+          "moveId": 304,
+          "order": 0
+        },
+        {
+          "level": 49,
+          "moveId": 38,
+          "order": 0
+        }
+      ],
+      "evolutions": [
+        {
+          "to": 40,
+          "trigger": "use-item",
+          "minLevel": null,
+          "minFriendship": null,
+          "itemId": 81,
+          "itemName": "달의돌",
+          "sourceRowId": 27,
+          "note": null
+        }
+      ],
+      "family": [
+        39,
+        40,
+        174
+      ],
+      "sprite": "assets/sprites/39.png",
+      "backSprite": "assets/sprites/39-back.png"
+    },
+    "40": {
+      "id": 40,
+      "slug": "wigglytuff",
+      "name": "푸크린",
+      "genus": "풍선포켓몬",
+      "description": "2마리가 바싹 붙어 있으면 서로의 털이 너무 기분 좋아서 떨어지지 않게 되어버린다.",
+      "descriptionVersionId": 23,
+      "descriptionVersion": "x",
+      "heightM": 1.0,
+      "weightKg": 12.0,
+      "typeIds": [
+        1
+      ],
+      "stats": {
+        "hp": 140,
+        "attack": 70,
+        "defense": 45,
+        "special-attack": 75,
+        "special-defense": 50,
+        "speed": 45
+      },
+      "baseFriendship": 70,
+      "growthRateId": 3,
+      "learnset": [
+        {
+          "level": 1,
+          "moveId": 47,
+          "order": 1
+        },
+        {
+          "level": 1,
+          "moveId": 50,
+          "order": 2
+        },
+        {
+          "level": 1,
+          "moveId": 111,
+          "order": 3
+        },
+        {
+          "level": 1,
+          "moveId": 3,
+          "order": 4
+        }
+      ],
+      "evolutions": [],
+      "family": [
+        39,
+        40,
+        174
+      ],
+      "sprite": "assets/sprites/40.png",
+      "backSprite": "assets/sprites/40-back.png"
+    },
+    "50": {
+      "id": 50,
+      "slug": "diglett",
+      "name": "디그다",
+      "genus": "두더지포켓몬",
+      "description": "지하 1m 정도를 파고들어 가서 나무뿌리 등을 씹어 먹고 산다. 가끔 지상으로 얼굴을 내민다.",
+      "descriptionVersionId": 23,
+      "descriptionVersion": "x",
+      "heightM": 0.2,
+      "weightKg": 0.8,
+      "typeIds": [
+        5
+      ],
+      "stats": {
+        "hp": 10,
+        "attack": 55,
+        "defense": 25,
+        "special-attack": 35,
+        "special-defense": 45,
+        "speed": 95
+      },
+      "baseFriendship": 70,
+      "growthRateId": 2,
+      "learnset": [
+        {
+          "level": 1,
+          "moveId": 10,
+          "order": 1
+        },
+        {
+          "level": 1,
+          "moveId": 28,
+          "order": 2
+        },
+        {
+          "level": 4,
+          "moveId": 45,
+          "order": 0
+        },
+        {
+          "level": 7,
+          "moveId": 310,
+          "order": 0
+        },
+        {
+          "level": 12,
+          "moveId": 222,
+          "order": 0
+        },
+        {
+          "level": 15,
+          "moveId": 189,
+          "order": 0
+        },
+        {
+          "level": 18,
+          "moveId": 91,
+          "order": 0
+        },
+        {
+          "level": 23,
+          "moveId": 389,
+          "order": 0
+        },
+        {
+          "level": 26,
+          "moveId": 414,
+          "order": 0
+        },
+        {
+          "level": 29,
+          "moveId": 426,
+          "order": 0
+        },
+        {
+          "level": 34,
+          "moveId": 163,
+          "order": 0
+        },
+        {
+          "level": 37,
+          "moveId": 89,
+          "order": 0
+        },
+        {
+          "level": 40,
+          "moveId": 90,
+          "order": 0
+        }
+      ],
+      "evolutions": [
+        {
+          "to": 51,
+          "trigger": "level-up",
+          "minLevel": 26,
+          "minFriendship": null,
+          "itemId": null,
+          "itemName": null,
+          "sourceRowId": 33,
+          "note": null
+        }
+      ],
+      "family": [
+        50,
+        51
+      ],
+      "sprite": "assets/sprites/50.png",
+      "backSprite": "assets/sprites/50-back.png"
+    },
+    "51": {
+      "id": 51,
+      "slug": "dugtrio",
+      "name": "닥트리오",
+      "genus": "두더지포켓몬",
+      "description": "땅속을 파고들어 가 상대가 방심하고 있을 때 다른 곳에서 공격한다.",
+      "descriptionVersionId": 23,
+      "descriptionVersion": "x",
+      "heightM": 0.7,
+      "weightKg": 33.3,
+      "typeIds": [
+        5
+      ],
+      "stats": {
+        "hp": 35,
+        "attack": 80,
+        "defense": 50,
+        "special-attack": 50,
+        "special-defense": 70,
+        "speed": 120
+      },
+      "baseFriendship": 70,
+      "growthRateId": 2,
+      "learnset": [
+        {
+          "level": 1,
+          "moveId": 400,
+          "order": 1
+        },
+        {
+          "level": 1,
+          "moveId": 161,
+          "order": 2
+        },
+        {
+          "level": 1,
+          "moveId": 10,
+          "order": 3
+        },
+        {
+          "level": 1,
+          "moveId": 28,
+          "order": 4
+        },
+        {
+          "level": 1,
+          "moveId": 45,
+          "order": 5
+        },
+        {
+          "level": 4,
+          "moveId": 45,
+          "order": 0
+        },
+        {
+          "level": 7,
+          "moveId": 310,
+          "order": 0
+        },
+        {
+          "level": 12,
+          "moveId": 222,
+          "order": 0
+        },
+        {
+          "level": 15,
+          "moveId": 189,
+          "order": 0
+        },
+        {
+          "level": 18,
+          "moveId": 91,
+          "order": 0
+        },
+        {
+          "level": 23,
+          "moveId": 389,
+          "order": 0
+        },
+        {
+          "level": 26,
+          "moveId": 328,
+          "order": 0
+        },
+        {
+          "level": 28,
+          "moveId": 414,
+          "order": 0
+        },
+        {
+          "level": 33,
+          "moveId": 426,
+          "order": 0
+        },
+        {
+          "level": 40,
+          "moveId": 163,
+          "order": 0
+        },
+        {
+          "level": 45,
+          "moveId": 89,
+          "order": 0
+        },
+        {
+          "level": 50,
+          "moveId": 90,
+          "order": 0
+        }
+      ],
+      "evolutions": [],
+      "family": [
+        50,
+        51
+      ],
+      "sprite": "assets/sprites/51.png",
+      "backSprite": "assets/sprites/51-back.png"
+    },
+    "52": {
+      "id": 52,
+      "slug": "meowth",
+      "name": "나옹",
+      "genus": "요괴고양이포켓몬",
+      "description": "한밤중에 움직이는 습성이 있다. 반짝반짝 빛나는 것을 발견하면 그에 못지않게 눈동자가 반짝인다.",
+      "descriptionVersionId": 23,
+      "descriptionVersion": "x",
+      "heightM": 0.4,
+      "weightKg": 4.2,
+      "typeIds": [
+        1
+      ],
+      "stats": {
+        "hp": 40,
+        "attack": 45,
+        "defense": 35,
+        "special-attack": 40,
+        "special-defense": 40,
+        "speed": 90
+      },
+      "baseFriendship": 70,
+      "growthRateId": 2,
+      "learnset": [
+        {
+          "level": 1,
+          "moveId": 10,
+          "order": 1
+        },
+        {
+          "level": 1,
+          "moveId": 45,
+          "order": 2
+        },
+        {
+          "level": 6,
+          "moveId": 44,
+          "order": 0
+        },
+        {
+          "level": 9,
+          "moveId": 252,
+          "order": 0
+        },
+        {
+          "level": 14,
+          "moveId": 154,
+          "order": 0
+        },
+        {
+          "level": 17,
+          "moveId": 103,
+          "order": 0
+        },
+        {
+          "level": 22,
+          "moveId": 185,
+          "order": 0
+        },
+        {
+          "level": 25,
+          "moveId": 269,
+          "order": 0
+        },
+        {
+          "level": 30,
+          "moveId": 6,
+          "order": 0
+        },
+        {
+          "level": 33,
+          "moveId": 163,
+          "order": 0
+        },
+        {
+          "level": 38,
+          "moveId": 417,
+          "order": 0
+        },
+        {
+          "level": 41,
+          "moveId": 372,
+          "order": 0
+        },
+        {
+          "level": 46,
+          "moveId": 445,
+          "order": 0
+        },
+        {
+          "level": 49,
+          "moveId": 400,
+          "order": 0
+        },
+        {
+          "level": 54,
+          "moveId": 364,
+          "order": 0
+        }
+      ],
+      "evolutions": [
+        {
+          "to": 53,
+          "trigger": "level-up",
+          "minLevel": 28,
+          "minFriendship": null,
+          "itemId": null,
+          "itemName": null,
+          "sourceRowId": 34,
+          "note": null
+        }
+      ],
+      "family": [
+        52,
+        53
+      ],
+      "sprite": "assets/sprites/52.png",
+      "backSprite": "assets/sprites/52-back.png"
+    },
+    "53": {
+      "id": 53,
+      "slug": "persian",
+      "name": "페르시온",
+      "genus": "샴고양이포켓몬",
+      "description": "털의 결이 아름다워 애완용으로 기르려는 사람이 많지만, 곧잘 할퀴려 들기 때문에 쉽지 않다.",
+      "descriptionVersionId": 23,
+      "descriptionVersion": "x",
+      "heightM": 1.0,
+      "weightKg": 32.0,
+      "typeIds": [
+        1
+      ],
+      "stats": {
+        "hp": 65,
+        "attack": 70,
+        "defense": 60,
+        "special-attack": 65,
+        "special-defense": 65,
+        "speed": 115
+      },
+      "baseFriendship": 70,
+      "growthRateId": 2,
+      "learnset": [
+        {
+          "level": 1,
+          "moveId": 415,
+          "order": 1
+        },
+        {
+          "level": 1,
+          "moveId": 10,
+          "order": 2
+        },
+        {
+          "level": 1,
+          "moveId": 45,
+          "order": 3
+        },
+        {
+          "level": 1,
+          "moveId": 44,
+          "order": 4
+        },
+        {
+          "level": 1,
+          "moveId": 252,
+          "order": 5
+        },
+        {
+          "level": 6,
+          "moveId": 44,
+          "order": 0
+        },
+        {
+          "level": 9,
+          "moveId": 252,
+          "order": 0
+        },
+        {
+          "level": 14,
+          "moveId": 154,
+          "order": 0
+        },
+        {
+          "level": 17,
+          "moveId": 103,
+          "order": 0
+        },
+        {
+          "level": 22,
+          "moveId": 185,
+          "order": 0
+        },
+        {
+          "level": 25,
+          "moveId": 269,
+          "order": 0
+        },
+        {
+          "level": 32,
+          "moveId": 408,
+          "order": 0
+        },
+        {
+          "level": 37,
+          "moveId": 163,
+          "order": 0
+        },
+        {
+          "level": 44,
+          "moveId": 417,
+          "order": 0
+        },
+        {
+          "level": 49,
+          "moveId": 372,
+          "order": 0
+        },
+        {
+          "level": 56,
+          "moveId": 445,
+          "order": 0
+        },
+        {
+          "level": 61,
+          "moveId": 400,
+          "order": 0
+        },
+        {
+          "level": 68,
+          "moveId": 364,
+          "order": 0
+        }
+      ],
+      "evolutions": [],
+      "family": [
+        52,
+        53
+      ],
+      "sprite": "assets/sprites/53.png",
+      "backSprite": "assets/sprites/53-back.png"
+    },
+    "124": {
+      "id": 124,
+      "slug": "jynx",
+      "name": "루주라",
+      "genus": "인간형태포켓몬",
+      "description": "허리를 흔드는 듯이 걷고 있다. 방심하면 엉겁결에 따라서 춤춰버린다고 한다.",
+      "descriptionVersionId": 23,
+      "descriptionVersion": "x",
+      "heightM": 1.4,
+      "weightKg": 40.6,
+      "typeIds": [
+        15,
+        14
+      ],
+      "stats": {
+        "hp": 65,
+        "attack": 50,
+        "defense": 35,
+        "special-attack": 115,
+        "special-defense": 95,
+        "speed": 95
+      },
+      "baseFriendship": 70,
+      "growthRateId": 2,
+      "learnset": [
+        {
+          "level": 1,
+          "moveId": 1,
+          "order": 1
+        },
+        {
+          "level": 1,
+          "moveId": 122,
+          "order": 2
+        },
+        {
+          "level": 1,
+          "moveId": 142,
+          "order": 3
+        },
+        {
+          "level": 1,
+          "moveId": 181,
+          "order": 4
+        },
+        {
+          "level": 5,
+          "moveId": 122,
+          "order": 0
+        },
+        {
+          "level": 8,
+          "moveId": 142,
+          "order": 0
+        },
+        {
+          "level": 11,
+          "moveId": 181,
+          "order": 0
+        },
+        {
+          "level": 15,
+          "moveId": 3,
+          "order": 0
+        },
+        {
+          "level": 18,
+          "moveId": 8,
+          "order": 0
+        },
+        {
+          "level": 21,
+          "moveId": 212,
+          "order": 0
+        },
+        {
+          "level": 25,
+          "moveId": 313,
+          "order": 0
+        },
+        {
+          "level": 28,
+          "moveId": 358,
+          "order": 0
+        },
+        {
+          "level": 33,
+          "moveId": 419,
+          "order": 0
+        },
+        {
+          "level": 39,
+          "moveId": 34,
+          "order": 0
+        },
+        {
+          "level": 44,
+          "moveId": 378,
+          "order": 0
+        },
+        {
+          "level": 49,
+          "moveId": 195,
+          "order": 0
+        },
+        {
+          "level": 55,
+          "moveId": 59,
+          "order": 0
+        }
+      ],
+      "evolutions": [],
+      "family": [
+        124,
+        238
+      ],
+      "sprite": "assets/sprites/124.png",
+      "backSprite": "assets/sprites/124-back.png"
+    },
+    "173": {
+      "id": 173,
+      "slug": "cleffa",
+      "name": "삐",
+      "genus": "별포켓몬",
+      "description": "별님 같은 실루엣이다. 그 모습 때문에 별똥별을 타고 온다고 여겨진다.",
+      "descriptionVersionId": 23,
+      "descriptionVersion": "x",
+      "heightM": 0.3,
+      "weightKg": 3.0,
+      "typeIds": [
+        1
+      ],
+      "stats": {
+        "hp": 50,
+        "attack": 25,
+        "defense": 28,
+        "special-attack": 45,
+        "special-defense": 55,
+        "speed": 15
+      },
+      "baseFriendship": 140,
+      "growthRateId": 3,
+      "learnset": [
+        {
+          "level": 1,
+          "moveId": 1,
+          "order": 1
+        },
+        {
+          "level": 1,
+          "moveId": 204,
+          "order": 2
+        },
+        {
+          "level": 4,
+          "moveId": 227,
+          "order": 0
+        },
+        {
+          "level": 7,
+          "moveId": 47,
+          "order": 0
+        },
+        {
+          "level": 10,
+          "moveId": 186,
+          "order": 0
+        },
+        {
+          "level": 13,
+          "moveId": 383,
+          "order": 0
+        },
+        {
+          "level": 16,
+          "moveId": 345,
+          "order": 0
+        }
+      ],
+      "evolutions": [
+        {
+          "to": 35,
+          "trigger": "level-up",
+          "minLevel": null,
+          "minFriendship": 220,
+          "itemId": null,
+          "itemName": null,
+          "sourceRowId": 23,
+          "note": "HGSS 친밀도 진화 기준 220 적용"
+        }
+      ],
+      "family": [
+        35,
+        36,
+        173
+      ],
+      "sprite": "assets/sprites/173.png",
+      "backSprite": "assets/sprites/173-back.png"
+    },
+    "174": {
+      "id": 174,
+      "slug": "igglybuff",
+      "name": "푸푸린",
+      "genus": "풍선포켓몬",
+      "description": "짧은 다리로 걷는 것보다는 부드러운 몸으로 튀어 오르며 돌아다닌다.",
+      "descriptionVersionId": 23,
+      "descriptionVersion": "x",
+      "heightM": 0.3,
+      "weightKg": 1.0,
+      "typeIds": [
+        1
+      ],
+      "stats": {
+        "hp": 90,
+        "attack": 30,
+        "defense": 15,
+        "special-attack": 40,
+        "special-defense": 20,
+        "speed": 15
+      },
+      "baseFriendship": 70,
+      "growthRateId": 3,
+      "learnset": [
+        {
+          "level": 1,
+          "moveId": 47,
+          "order": 1
+        },
+        {
+          "level": 1,
+          "moveId": 204,
+          "order": 2
+        },
+        {
+          "level": 5,
+          "moveId": 111,
+          "order": 0
+        },
+        {
+          "level": 9,
+          "moveId": 1,
+          "order": 0
+        },
+        {
+          "level": 13,
+          "moveId": 186,
+          "order": 0
+        },
+        {
+          "level": 17,
+          "moveId": 383,
+          "order": 0
+        }
+      ],
+      "evolutions": [
+        {
+          "to": 39,
+          "trigger": "level-up",
+          "minLevel": null,
+          "minFriendship": 220,
+          "itemId": null,
+          "itemName": null,
+          "sourceRowId": 26,
+          "note": "HGSS 친밀도 진화 기준 220 적용"
+        }
+      ],
+      "family": [
+        39,
+        40,
+        174
+      ],
+      "sprite": "assets/sprites/174.png",
+      "backSprite": "assets/sprites/174-back.png"
+    },
+    "238": {
+      "id": 238,
+      "slug": "smoochum",
+      "name": "뽀뽀라",
+      "genus": "뽀뽀포켓몬",
+      "description": "입술이 제일 민감하다. 뭐든지 먼저 입술로 건드려서 어떤 것인지 확인한다.",
+      "descriptionVersionId": 23,
+      "descriptionVersion": "x",
+      "heightM": 0.4,
+      "weightKg": 6.0,
+      "typeIds": [
+        15,
+        14
+      ],
+      "stats": {
+        "hp": 45,
+        "attack": 30,
+        "defense": 15,
+        "special-attack": 85,
+        "special-defense": 65,
+        "speed": 65
+      },
+      "baseFriendship": 70,
+      "growthRateId": 2,
+      "learnset": [
+        {
+          "level": 1,
+          "moveId": 1,
+          "order": 0
+        },
+        {
+          "level": 5,
+          "moveId": 122,
+          "order": 0
+        },
+        {
+          "level": 8,
+          "moveId": 186,
+          "order": 0
+        },
+        {
+          "level": 11,
+          "moveId": 181,
+          "order": 0
+        },
+        {
+          "level": 15,
+          "moveId": 93,
+          "order": 0
+        },
+        {
+          "level": 18,
+          "moveId": 47,
+          "order": 0
+        },
+        {
+          "level": 21,
+          "moveId": 212,
+          "order": 0
+        },
+        {
+          "level": 25,
+          "moveId": 313,
+          "order": 0
+        },
+        {
+          "level": 28,
+          "moveId": 381,
+          "order": 0
+        },
+        {
+          "level": 31,
+          "moveId": 419,
+          "order": 0
+        },
+        {
+          "level": 35,
+          "moveId": 94,
+          "order": 0
+        },
+        {
+          "level": 38,
+          "moveId": 383,
+          "order": 0
+        },
+        {
+          "level": 41,
+          "moveId": 195,
+          "order": 0
+        },
+        {
+          "level": 45,
+          "moveId": 59,
+          "order": 0
+        }
+      ],
+      "evolutions": [
+        {
+          "to": 124,
+          "trigger": "level-up",
+          "minLevel": 30,
+          "minFriendship": null,
+          "itemId": null,
+          "itemName": null,
+          "sourceRowId": 72,
+          "note": null
+        }
+      ],
+      "family": [
+        124,
+        238
+      ],
+      "sprite": "assets/sprites/238.png",
+      "backSprite": "assets/sprites/238-back.png"
+    }
+  },
+  "moves": {
+    "1": {
+      "id": 1,
+      "name": "막치기",
+      "slug": "pound",
+      "typeId": 1,
+      "power": 40,
+      "accuracy": 100,
+      "pp": 35,
+      "priority": 0,
+      "damageClass": "physical",
+      "target": "opponent",
+      "targetId": 10,
+      "effectId": 1,
+      "effectChance": null,
+      "meta": {
+        "ailment": 0,
+        "ailmentChance": 0,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": []
+    },
+    "3": {
+      "id": 3,
+      "name": "연속뺨치기",
+      "slug": "double-slap",
+      "typeId": 1,
+      "power": 15,
+      "accuracy": 85,
+      "pp": 10,
+      "priority": 0,
+      "damageClass": "physical",
+      "target": "opponent",
+      "targetId": 10,
+      "effectId": 30,
+      "effectChance": null,
+      "meta": {
+        "ailment": 0,
+        "ailmentChance": 0,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": 2,
+        "maxHits": 5
+      },
+      "statChanges": []
+    },
+    "6": {
+      "id": 6,
+      "name": "고양이돈받기",
+      "slug": "pay-day",
+      "typeId": 1,
+      "power": 40,
+      "accuracy": 100,
+      "pp": 20,
+      "priority": 0,
+      "damageClass": "physical",
+      "target": "opponent",
+      "targetId": 10,
+      "effectId": 35,
+      "effectChance": null,
+      "meta": {
+        "ailment": 0,
+        "ailmentChance": 0,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": []
+    },
+    "8": {
+      "id": 8,
+      "name": "냉동펀치",
+      "slug": "ice-punch",
+      "typeId": 15,
+      "power": 75,
+      "accuracy": 100,
+      "pp": 15,
+      "priority": 0,
+      "damageClass": "physical",
+      "target": "opponent",
+      "targetId": 10,
+      "effectId": 6,
+      "effectChance": 10,
+      "meta": {
+        "ailment": 3,
+        "ailmentChance": 10,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": []
+    },
+    "10": {
+      "id": 10,
+      "name": "할퀴기",
+      "slug": "scratch",
+      "typeId": 1,
+      "power": 40,
+      "accuracy": 100,
+      "pp": 35,
+      "priority": 0,
+      "damageClass": "physical",
+      "target": "opponent",
+      "targetId": 10,
+      "effectId": 1,
+      "effectChance": null,
+      "meta": {
+        "ailment": 0,
+        "ailmentChance": 0,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": []
+    },
+    "17": {
+      "id": 17,
+      "name": "날개치기",
+      "slug": "wing-attack",
+      "typeId": 3,
+      "power": 60,
+      "accuracy": 100,
+      "pp": 35,
+      "priority": 0,
+      "damageClass": "physical",
+      "target": "opponent",
+      "targetId": 10,
+      "effectId": 1,
+      "effectChance": null,
+      "meta": {
+        "ailment": 0,
+        "ailmentChance": 0,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": []
+    },
+    "21": {
+      "id": 21,
+      "name": "힘껏치기",
+      "slug": "slam",
+      "typeId": 1,
+      "power": 80,
+      "accuracy": 75,
+      "pp": 20,
+      "priority": 0,
+      "damageClass": "physical",
+      "target": "opponent",
+      "targetId": 10,
+      "effectId": 1,
+      "effectChance": null,
+      "meta": {
+        "ailment": 0,
+        "ailmentChance": 0,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": []
+    },
+    "22": {
+      "id": 22,
+      "name": "덩굴채찍",
+      "slug": "vine-whip",
+      "typeId": 12,
+      "power": 35,
+      "accuracy": 100,
+      "pp": 15,
+      "priority": 0,
+      "damageClass": "physical",
+      "target": "opponent",
+      "targetId": 10,
+      "effectId": 1,
+      "effectChance": null,
+      "meta": {
+        "ailment": 0,
+        "ailmentChance": 0,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": []
+    },
+    "28": {
+      "id": 28,
+      "name": "모래뿌리기",
+      "slug": "sand-attack",
+      "typeId": 5,
+      "power": null,
+      "accuracy": 100,
+      "pp": 15,
+      "priority": 0,
+      "damageClass": "status",
+      "target": "opponent",
+      "targetId": 10,
+      "effectId": 24,
+      "effectChance": null,
+      "meta": {
+        "ailment": 0,
+        "ailmentChance": 0,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": [
+        {
+          "stat": "accuracy",
+          "label": "명중률",
+          "change": -1
+        }
+      ]
+    },
+    "33": {
+      "id": 33,
+      "name": "몸통박치기",
+      "slug": "tackle",
+      "typeId": 1,
+      "power": 35,
+      "accuracy": 95,
+      "pp": 35,
+      "priority": 0,
+      "damageClass": "physical",
+      "target": "opponent",
+      "targetId": 10,
+      "effectId": 1,
+      "effectChance": null,
+      "meta": {
+        "ailment": 0,
+        "ailmentChance": 0,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": []
+    },
+    "34": {
+      "id": 34,
+      "name": "누르기",
+      "slug": "body-slam",
+      "typeId": 1,
+      "power": 85,
+      "accuracy": 100,
+      "pp": 15,
+      "priority": 0,
+      "damageClass": "physical",
+      "target": "opponent",
+      "targetId": 10,
+      "effectId": 7,
+      "effectChance": 30,
+      "meta": {
+        "ailment": 1,
+        "ailmentChance": 30,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": []
+    },
+    "36": {
+      "id": 36,
+      "name": "돌진",
+      "slug": "take-down",
+      "typeId": 1,
+      "power": 90,
+      "accuracy": 85,
+      "pp": 20,
+      "priority": 0,
+      "damageClass": "physical",
+      "target": "opponent",
+      "targetId": 10,
+      "effectId": 49,
+      "effectChance": null,
+      "meta": {
+        "ailment": 0,
+        "ailmentChance": 0,
+        "statChance": 0,
+        "healing": 0,
+        "drain": -25,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": []
+    },
+    "38": {
+      "id": 38,
+      "name": "이판사판태클",
+      "slug": "double-edge",
+      "typeId": 1,
+      "power": 120,
+      "accuracy": 100,
+      "pp": 15,
+      "priority": 0,
+      "damageClass": "physical",
+      "target": "opponent",
+      "targetId": 10,
+      "effectId": 199,
+      "effectChance": null,
+      "meta": {
+        "ailment": 0,
+        "ailmentChance": 0,
+        "statChance": 0,
+        "healing": 0,
+        "drain": -33,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": []
+    },
+    "39": {
+      "id": 39,
+      "name": "꼬리흔들기",
+      "slug": "tail-whip",
+      "typeId": 1,
+      "power": null,
+      "accuracy": 100,
+      "pp": 30,
+      "priority": 0,
+      "damageClass": "status",
+      "target": "opponent",
+      "targetId": 11,
+      "effectId": 20,
+      "effectChance": null,
+      "meta": {
+        "ailment": 0,
+        "ailmentChance": 0,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": [
+        {
+          "stat": "defense",
+          "label": "방어",
+          "change": -1
+        }
+      ]
+    },
+    "44": {
+      "id": 44,
+      "name": "물기",
+      "slug": "bite",
+      "typeId": 17,
+      "power": 60,
+      "accuracy": 100,
+      "pp": 25,
+      "priority": 0,
+      "damageClass": "physical",
+      "target": "opponent",
+      "targetId": 10,
+      "effectId": 32,
+      "effectChance": 30,
+      "meta": {
+        "ailment": 0,
+        "ailmentChance": 0,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": []
+    },
+    "45": {
+      "id": 45,
+      "name": "울음소리",
+      "slug": "growl",
+      "typeId": 1,
+      "power": null,
+      "accuracy": 100,
+      "pp": 40,
+      "priority": 0,
+      "damageClass": "status",
+      "target": "opponent",
+      "targetId": 11,
+      "effectId": 19,
+      "effectChance": null,
+      "meta": {
+        "ailment": 0,
+        "ailmentChance": 0,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": [
+        {
+          "stat": "attack",
+          "label": "공격",
+          "change": -1
+        }
+      ]
+    },
+    "47": {
+      "id": 47,
+      "name": "노래하기",
+      "slug": "sing",
+      "typeId": 1,
+      "power": null,
+      "accuracy": 55,
+      "pp": 15,
+      "priority": 0,
+      "damageClass": "status",
+      "target": "opponent",
+      "targetId": 10,
+      "effectId": 2,
+      "effectChance": null,
+      "meta": {
+        "ailment": 2,
+        "ailmentChance": 0,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": []
+    },
+    "50": {
+      "id": 50,
+      "name": "사슬묶기",
+      "slug": "disable",
+      "typeId": 1,
+      "power": null,
+      "accuracy": 80,
+      "pp": 20,
+      "priority": 0,
+      "damageClass": "status",
+      "target": "opponent",
+      "targetId": 10,
+      "effectId": 87,
+      "effectChance": null,
+      "meta": {
+        "ailment": 13,
+        "ailmentChance": 0,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": []
+    },
+    "52": {
+      "id": 52,
+      "name": "불꽃세례",
+      "slug": "ember",
+      "typeId": 10,
+      "power": 40,
+      "accuracy": 100,
+      "pp": 25,
+      "priority": 0,
+      "damageClass": "special",
+      "target": "opponent",
+      "targetId": 10,
+      "effectId": 5,
+      "effectChance": 10,
+      "meta": {
+        "ailment": 4,
+        "ailmentChance": 10,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": []
+    },
+    "53": {
+      "id": 53,
+      "name": "화염방사",
+      "slug": "flamethrower",
+      "typeId": 10,
+      "power": 95,
+      "accuracy": 100,
+      "pp": 15,
+      "priority": 0,
+      "damageClass": "special",
+      "target": "opponent",
+      "targetId": 10,
+      "effectId": 5,
+      "effectChance": 10,
+      "meta": {
+        "ailment": 4,
+        "ailmentChance": 10,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": []
+    },
+    "55": {
+      "id": 55,
+      "name": "물대포",
+      "slug": "water-gun",
+      "typeId": 11,
+      "power": 40,
+      "accuracy": 100,
+      "pp": 25,
+      "priority": 0,
+      "damageClass": "special",
+      "target": "opponent",
+      "targetId": 10,
+      "effectId": 1,
+      "effectChance": null,
+      "meta": {
+        "ailment": 0,
+        "ailmentChance": 0,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": []
+    },
+    "56": {
+      "id": 56,
+      "name": "하이드로펌프",
+      "slug": "hydro-pump",
+      "typeId": 11,
+      "power": 120,
+      "accuracy": 80,
+      "pp": 5,
+      "priority": 0,
+      "damageClass": "special",
+      "target": "opponent",
+      "targetId": 10,
+      "effectId": 1,
+      "effectChance": null,
+      "meta": {
+        "ailment": 0,
+        "ailmentChance": 0,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": []
+    },
+    "59": {
+      "id": 59,
+      "name": "눈보라",
+      "slug": "blizzard",
+      "typeId": 15,
+      "power": 120,
+      "accuracy": 70,
+      "pp": 5,
+      "priority": 0,
+      "damageClass": "special",
+      "target": "opponent",
+      "targetId": 11,
+      "effectId": 261,
+      "effectChance": 10,
+      "meta": {
+        "ailment": 3,
+        "ailmentChance": 10,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": []
+    },
+    "73": {
+      "id": 73,
+      "name": "씨뿌리기",
+      "slug": "leech-seed",
+      "typeId": 12,
+      "power": null,
+      "accuracy": 90,
+      "pp": 10,
+      "priority": 0,
+      "damageClass": "status",
+      "target": "opponent",
+      "targetId": 10,
+      "effectId": 85,
+      "effectChance": null,
+      "meta": {
+        "ailment": 18,
+        "ailmentChance": 0,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": []
+    },
+    "74": {
+      "id": 74,
+      "name": "성장",
+      "slug": "growth",
+      "typeId": 1,
+      "power": null,
+      "accuracy": null,
+      "pp": 40,
+      "priority": 0,
+      "damageClass": "status",
+      "target": "user",
+      "targetId": 7,
+      "effectId": 14,
+      "effectChance": null,
+      "meta": {
+        "ailment": 0,
+        "ailmentChance": 0,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": [
+        {
+          "stat": "special-attack",
+          "label": "특수공격",
+          "change": 1
+        }
+      ]
+    },
+    "75": {
+      "id": 75,
+      "name": "잎날가르기",
+      "slug": "razor-leaf",
+      "typeId": 12,
+      "power": 55,
+      "accuracy": 95,
+      "pp": 25,
+      "priority": 0,
+      "damageClass": "physical",
+      "target": "opponent",
+      "targetId": 11,
+      "effectId": 44,
+      "effectChance": null,
+      "meta": {
+        "ailment": 0,
+        "ailmentChance": 0,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": []
+    },
+    "76": {
+      "id": 76,
+      "name": "솔라빔",
+      "slug": "solar-beam",
+      "typeId": 12,
+      "power": 120,
+      "accuracy": 100,
+      "pp": 10,
+      "priority": 0,
+      "damageClass": "special",
+      "target": "opponent",
+      "targetId": 10,
+      "effectId": 152,
+      "effectChance": null,
+      "meta": {
+        "ailment": 0,
+        "ailmentChance": 0,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": []
+    },
+    "77": {
+      "id": 77,
+      "name": "독가루",
+      "slug": "poison-powder",
+      "typeId": 4,
+      "power": null,
+      "accuracy": 75,
+      "pp": 35,
+      "priority": 0,
+      "damageClass": "status",
+      "target": "opponent",
+      "targetId": 10,
+      "effectId": 67,
+      "effectChance": null,
+      "meta": {
+        "ailment": 5,
+        "ailmentChance": 0,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": []
+    },
+    "79": {
+      "id": 79,
+      "name": "수면가루",
+      "slug": "sleep-powder",
+      "typeId": 12,
+      "power": null,
+      "accuracy": 75,
+      "pp": 15,
+      "priority": 0,
+      "damageClass": "status",
+      "target": "opponent",
+      "targetId": 10,
+      "effectId": 2,
+      "effectChance": null,
+      "meta": {
+        "ailment": 2,
+        "ailmentChance": 0,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": []
+    },
+    "80": {
+      "id": 80,
+      "name": "꽃잎댄스",
+      "slug": "petal-dance",
+      "typeId": 12,
+      "power": 90,
+      "accuracy": 100,
+      "pp": 20,
+      "priority": 0,
+      "damageClass": "special",
+      "target": "opponent",
+      "targetId": 8,
+      "effectId": 28,
+      "effectChance": null,
+      "meta": {
+        "ailment": 0,
+        "ailmentChance": 0,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": []
+    },
+    "82": {
+      "id": 82,
+      "name": "용의분노",
+      "slug": "dragon-rage",
+      "typeId": 16,
+      "power": null,
+      "accuracy": 100,
+      "pp": 10,
+      "priority": 0,
+      "damageClass": "special",
+      "target": "opponent",
+      "targetId": 10,
+      "effectId": 42,
+      "effectChance": null,
+      "meta": {
+        "ailment": 0,
+        "ailmentChance": 0,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": []
+    },
+    "83": {
+      "id": 83,
+      "name": "회오리불꽃",
+      "slug": "fire-spin",
+      "typeId": 10,
+      "power": 15,
+      "accuracy": 70,
+      "pp": 15,
+      "priority": 0,
+      "damageClass": "special",
+      "target": "opponent",
+      "targetId": 10,
+      "effectId": 43,
+      "effectChance": 100,
+      "meta": {
+        "ailment": 8,
+        "ailmentChance": 100,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": []
+    },
+    "84": {
+      "id": 84,
+      "name": "전기쇼크",
+      "slug": "thunder-shock",
+      "typeId": 13,
+      "power": 40,
+      "accuracy": 100,
+      "pp": 30,
+      "priority": 0,
+      "damageClass": "special",
+      "target": "opponent",
+      "targetId": 10,
+      "effectId": 7,
+      "effectChance": 10,
+      "meta": {
+        "ailment": 1,
+        "ailmentChance": 10,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": []
+    },
+    "85": {
+      "id": 85,
+      "name": "10만볼트",
+      "slug": "thunderbolt",
+      "typeId": 13,
+      "power": 95,
+      "accuracy": 100,
+      "pp": 15,
+      "priority": 0,
+      "damageClass": "special",
+      "target": "opponent",
+      "targetId": 10,
+      "effectId": 7,
+      "effectChance": 10,
+      "meta": {
+        "ailment": 1,
+        "ailmentChance": 10,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": []
+    },
+    "86": {
+      "id": 86,
+      "name": "전기자석파",
+      "slug": "thunder-wave",
+      "typeId": 13,
+      "power": null,
+      "accuracy": 100,
+      "pp": 20,
+      "priority": 0,
+      "damageClass": "status",
+      "target": "opponent",
+      "targetId": 10,
+      "effectId": 68,
+      "effectChance": null,
+      "meta": {
+        "ailment": 1,
+        "ailmentChance": 0,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": []
+    },
+    "87": {
+      "id": 87,
+      "name": "번개",
+      "slug": "thunder",
+      "typeId": 13,
+      "power": 120,
+      "accuracy": 70,
+      "pp": 10,
+      "priority": 0,
+      "damageClass": "special",
+      "target": "opponent",
+      "targetId": 10,
+      "effectId": 153,
+      "effectChance": 30,
+      "meta": {
+        "ailment": 1,
+        "ailmentChance": 30,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": []
+    },
+    "89": {
+      "id": 89,
+      "name": "지진",
+      "slug": "earthquake",
+      "typeId": 5,
+      "power": 100,
+      "accuracy": 100,
+      "pp": 10,
+      "priority": 0,
+      "damageClass": "physical",
+      "target": "opponent",
+      "targetId": 9,
+      "effectId": 148,
+      "effectChance": null,
+      "meta": {
+        "ailment": 0,
+        "ailmentChance": 0,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": []
+    },
+    "90": {
+      "id": 90,
+      "name": "땅가르기",
+      "slug": "fissure",
+      "typeId": 5,
+      "power": null,
+      "accuracy": 30,
+      "pp": 5,
+      "priority": 0,
+      "damageClass": "physical",
+      "target": "opponent",
+      "targetId": 10,
+      "effectId": 39,
+      "effectChance": null,
+      "meta": {
+        "ailment": 0,
+        "ailmentChance": 0,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": []
+    },
+    "91": {
+      "id": 91,
+      "name": "구멍파기",
+      "slug": "dig",
+      "typeId": 5,
+      "power": 80,
+      "accuracy": 100,
+      "pp": 10,
+      "priority": 0,
+      "damageClass": "physical",
+      "target": "opponent",
+      "targetId": 10,
+      "effectId": 257,
+      "effectChance": null,
+      "meta": {
+        "ailment": 0,
+        "ailmentChance": 0,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": []
+    },
+    "93": {
+      "id": 93,
+      "name": "염동력",
+      "slug": "confusion",
+      "typeId": 14,
+      "power": 50,
+      "accuracy": 100,
+      "pp": 25,
+      "priority": 0,
+      "damageClass": "special",
+      "target": "opponent",
+      "targetId": 10,
+      "effectId": 77,
+      "effectChance": 10,
+      "meta": {
+        "ailment": 6,
+        "ailmentChance": 10,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": []
+    },
+    "94": {
+      "id": 94,
+      "name": "사이코키네시스",
+      "slug": "psychic",
+      "typeId": 14,
+      "power": 90,
+      "accuracy": 100,
+      "pp": 10,
+      "priority": 0,
+      "damageClass": "special",
+      "target": "opponent",
+      "targetId": 10,
+      "effectId": 73,
+      "effectChance": 10,
+      "meta": {
+        "ailment": 0,
+        "ailmentChance": 0,
+        "statChance": 10,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": [
+        {
+          "stat": "special-defense",
+          "label": "특수방어",
+          "change": -1
+        }
+      ]
+    },
+    "97": {
+      "id": 97,
+      "name": "고속이동",
+      "slug": "agility",
+      "typeId": 14,
+      "power": null,
+      "accuracy": null,
+      "pp": 30,
+      "priority": 0,
+      "damageClass": "status",
+      "target": "user",
+      "targetId": 7,
+      "effectId": 53,
+      "effectChance": null,
+      "meta": {
+        "ailment": 0,
+        "ailmentChance": 0,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": [
+        {
+          "stat": "speed",
+          "label": "스피드",
+          "change": 2
+        }
+      ]
+    },
+    "98": {
+      "id": 98,
+      "name": "전광석화",
+      "slug": "quick-attack",
+      "typeId": 1,
+      "power": 40,
+      "accuracy": 100,
+      "pp": 30,
+      "priority": 1,
+      "damageClass": "physical",
+      "target": "opponent",
+      "targetId": 10,
+      "effectId": 104,
+      "effectChance": null,
+      "meta": {
+        "ailment": 0,
+        "ailmentChance": 0,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": []
+    },
+    "102": {
+      "id": 102,
+      "name": "흉내내기",
+      "slug": "mimic",
+      "typeId": 1,
+      "power": null,
+      "accuracy": null,
+      "pp": 10,
+      "priority": 0,
+      "damageClass": "status",
+      "target": "opponent",
+      "targetId": 10,
+      "effectId": 83,
+      "effectChance": null,
+      "meta": {
+        "ailment": 0,
+        "ailmentChance": 0,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": []
+    },
+    "103": {
+      "id": 103,
+      "name": "싫은소리",
+      "slug": "screech",
+      "typeId": 1,
+      "power": null,
+      "accuracy": 85,
+      "pp": 40,
+      "priority": 0,
+      "damageClass": "status",
+      "target": "opponent",
+      "targetId": 10,
+      "effectId": 60,
+      "effectChance": null,
+      "meta": {
+        "ailment": 0,
+        "ailmentChance": 0,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": [
+        {
+          "stat": "defense",
+          "label": "방어",
+          "change": -2
+        }
+      ]
+    },
+    "104": {
+      "id": 104,
+      "name": "그림자분신",
+      "slug": "double-team",
+      "typeId": 1,
+      "power": null,
+      "accuracy": null,
+      "pp": 15,
+      "priority": 0,
+      "damageClass": "status",
+      "target": "user",
+      "targetId": 7,
+      "effectId": 17,
+      "effectChance": null,
+      "meta": {
+        "ailment": 0,
+        "ailmentChance": 0,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": [
+        {
+          "stat": "evasion",
+          "label": "회피율",
+          "change": 1
+        }
+      ]
+    },
+    "107": {
+      "id": 107,
+      "name": "작아지기",
+      "slug": "minimize",
+      "typeId": 1,
+      "power": null,
+      "accuracy": null,
+      "pp": 20,
+      "priority": 0,
+      "damageClass": "status",
+      "target": "user",
+      "targetId": 7,
+      "effectId": 109,
+      "effectChance": null,
+      "meta": {
+        "ailment": 0,
+        "ailmentChance": 0,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": [
+        {
+          "stat": "evasion",
+          "label": "회피율",
+          "change": 2
+        }
+      ]
+    },
+    "108": {
+      "id": 108,
+      "name": "연막",
+      "slug": "smokescreen",
+      "typeId": 1,
+      "power": null,
+      "accuracy": 100,
+      "pp": 20,
+      "priority": 0,
+      "damageClass": "status",
+      "target": "opponent",
+      "targetId": 10,
+      "effectId": 24,
+      "effectChance": null,
+      "meta": {
+        "ailment": 0,
+        "ailmentChance": 0,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": [
+        {
+          "stat": "accuracy",
+          "label": "명중률",
+          "change": -1
+        }
+      ]
+    },
+    "110": {
+      "id": 110,
+      "name": "껍질에숨기",
+      "slug": "withdraw",
+      "typeId": 11,
+      "power": null,
+      "accuracy": null,
+      "pp": 40,
+      "priority": 0,
+      "damageClass": "status",
+      "target": "user",
+      "targetId": 7,
+      "effectId": 12,
+      "effectChance": null,
+      "meta": {
+        "ailment": 0,
+        "ailmentChance": 0,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": [
+        {
+          "stat": "defense",
+          "label": "방어",
+          "change": 1
+        }
+      ]
+    },
+    "111": {
+      "id": 111,
+      "name": "웅크리기",
+      "slug": "defense-curl",
+      "typeId": 1,
+      "power": null,
+      "accuracy": null,
+      "pp": 40,
+      "priority": 0,
+      "damageClass": "status",
+      "target": "user",
+      "targetId": 7,
+      "effectId": 157,
+      "effectChance": null,
+      "meta": {
+        "ailment": 0,
+        "ailmentChance": 0,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": [
+        {
+          "stat": "defense",
+          "label": "방어",
+          "change": 1
+        }
+      ]
+    },
+    "113": {
+      "id": 113,
+      "name": "빛의장막",
+      "slug": "light-screen",
+      "typeId": 14,
+      "power": null,
+      "accuracy": null,
+      "pp": 30,
+      "priority": 0,
+      "damageClass": "status",
+      "target": "opponent",
+      "targetId": 4,
+      "effectId": 36,
+      "effectChance": null,
+      "meta": {
+        "ailment": 0,
+        "ailmentChance": 0,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": []
+    },
+    "118": {
+      "id": 118,
+      "name": "손가락흔들기",
+      "slug": "metronome",
+      "typeId": 1,
+      "power": null,
+      "accuracy": null,
+      "pp": 10,
+      "priority": 0,
+      "damageClass": "status",
+      "target": "user",
+      "targetId": 7,
+      "effectId": 84,
+      "effectChance": null,
+      "meta": {
+        "ailment": 0,
+        "ailmentChance": 0,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": []
+    },
+    "122": {
+      "id": 122,
+      "name": "핥기",
+      "slug": "lick",
+      "typeId": 8,
+      "power": 20,
+      "accuracy": 100,
+      "pp": 30,
+      "priority": 0,
+      "damageClass": "physical",
+      "target": "opponent",
+      "targetId": 10,
+      "effectId": 7,
+      "effectChance": 30,
+      "meta": {
+        "ailment": 1,
+        "ailmentChance": 30,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": []
+    },
+    "130": {
+      "id": 130,
+      "name": "로켓박치기",
+      "slug": "skull-bash",
+      "typeId": 1,
+      "power": 100,
+      "accuracy": 100,
+      "pp": 15,
+      "priority": 0,
+      "damageClass": "physical",
+      "target": "opponent",
+      "targetId": 10,
+      "effectId": 146,
+      "effectChance": 100,
+      "meta": {
+        "ailment": 0,
+        "ailmentChance": 100,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": []
+    },
+    "142": {
+      "id": 142,
+      "name": "악마의키스",
+      "slug": "lovely-kiss",
+      "typeId": 1,
+      "power": null,
+      "accuracy": 75,
+      "pp": 10,
+      "priority": 0,
+      "damageClass": "status",
+      "target": "opponent",
+      "targetId": 10,
+      "effectId": 2,
+      "effectChance": null,
+      "meta": {
+        "ailment": 2,
+        "ailmentChance": 0,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": []
+    },
+    "145": {
+      "id": 145,
+      "name": "거품",
+      "slug": "bubble",
+      "typeId": 11,
+      "power": 20,
+      "accuracy": 100,
+      "pp": 30,
+      "priority": 0,
+      "damageClass": "special",
+      "target": "opponent",
+      "targetId": 11,
+      "effectId": 71,
+      "effectChance": 10,
+      "meta": {
+        "ailment": 0,
+        "ailmentChance": 0,
+        "statChance": 10,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": [
+        {
+          "stat": "speed",
+          "label": "스피드",
+          "change": -1
+        }
+      ]
+    },
+    "154": {
+      "id": 154,
+      "name": "마구할퀴기",
+      "slug": "fury-swipes",
+      "typeId": 1,
+      "power": 18,
+      "accuracy": 80,
+      "pp": 15,
+      "priority": 0,
+      "damageClass": "physical",
+      "target": "opponent",
+      "targetId": 10,
+      "effectId": 30,
+      "effectChance": null,
+      "meta": {
+        "ailment": 0,
+        "ailmentChance": 0,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": 2,
+        "maxHits": 5
+      },
+      "statChanges": []
+    },
+    "156": {
+      "id": 156,
+      "name": "잠자기",
+      "slug": "rest",
+      "typeId": 14,
+      "power": null,
+      "accuracy": null,
+      "pp": 5,
+      "priority": 0,
+      "damageClass": "status",
+      "target": "user",
+      "targetId": 7,
+      "effectId": 38,
+      "effectChance": null,
+      "meta": {
+        "ailment": 0,
+        "ailmentChance": 0,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": []
+    },
+    "161": {
+      "id": 161,
+      "name": "트라이어택",
+      "slug": "tri-attack",
+      "typeId": 1,
+      "power": 80,
+      "accuracy": 100,
+      "pp": 10,
+      "priority": 0,
+      "damageClass": "special",
+      "target": "opponent",
+      "targetId": 10,
+      "effectId": 37,
+      "effectChance": 20,
+      "meta": {
+        "ailment": -1,
+        "ailmentChance": 20,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": []
+    },
+    "163": {
+      "id": 163,
+      "name": "베어가르기",
+      "slug": "slash",
+      "typeId": 1,
+      "power": 70,
+      "accuracy": 100,
+      "pp": 20,
+      "priority": 0,
+      "damageClass": "physical",
+      "target": "opponent",
+      "targetId": 10,
+      "effectId": 44,
+      "effectChance": null,
+      "meta": {
+        "ailment": 0,
+        "ailmentChance": 0,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": []
+    },
+    "181": {
+      "id": 181,
+      "name": "눈싸라기",
+      "slug": "powder-snow",
+      "typeId": 15,
+      "power": 40,
+      "accuracy": 100,
+      "pp": 25,
+      "priority": 0,
+      "damageClass": "special",
+      "target": "opponent",
+      "targetId": 11,
+      "effectId": 6,
+      "effectChance": 10,
+      "meta": {
+        "ailment": 3,
+        "ailmentChance": 10,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": []
+    },
+    "182": {
+      "id": 182,
+      "name": "방어",
+      "slug": "protect",
+      "typeId": 1,
+      "power": null,
+      "accuracy": null,
+      "pp": 10,
+      "priority": 4,
+      "damageClass": "status",
+      "target": "user",
+      "targetId": 7,
+      "effectId": 112,
+      "effectChance": null,
+      "meta": {
+        "ailment": 43,
+        "ailmentChance": 0,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": []
+    },
+    "184": {
+      "id": 184,
+      "name": "겁나는얼굴",
+      "slug": "scary-face",
+      "typeId": 1,
+      "power": null,
+      "accuracy": 90,
+      "pp": 10,
+      "priority": 0,
+      "damageClass": "status",
+      "target": "opponent",
+      "targetId": 10,
+      "effectId": 61,
+      "effectChance": null,
+      "meta": {
+        "ailment": 0,
+        "ailmentChance": 0,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": [
+        {
+          "stat": "speed",
+          "label": "스피드",
+          "change": -2
+        }
+      ]
+    },
+    "185": {
+      "id": 185,
+      "name": "속여때리기",
+      "slug": "feint-attack",
+      "typeId": 17,
+      "power": 60,
+      "accuracy": null,
+      "pp": 20,
+      "priority": 0,
+      "damageClass": "physical",
+      "target": "opponent",
+      "targetId": 10,
+      "effectId": 18,
+      "effectChance": null,
+      "meta": {
+        "ailment": 0,
+        "ailmentChance": 0,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": []
+    },
+    "186": {
+      "id": 186,
+      "name": "천사의키스",
+      "slug": "sweet-kiss",
+      "typeId": 1,
+      "power": null,
+      "accuracy": 75,
+      "pp": 10,
+      "priority": 0,
+      "damageClass": "status",
+      "target": "opponent",
+      "targetId": 10,
+      "effectId": 50,
+      "effectChance": null,
+      "meta": {
+        "ailment": 6,
+        "ailmentChance": 0,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": []
+    },
+    "189": {
+      "id": 189,
+      "name": "진흙뿌리기",
+      "slug": "mud-slap",
+      "typeId": 5,
+      "power": 20,
+      "accuracy": 100,
+      "pp": 10,
+      "priority": 0,
+      "damageClass": "special",
+      "target": "opponent",
+      "targetId": 10,
+      "effectId": 74,
+      "effectChance": 100,
+      "meta": {
+        "ailment": 0,
+        "ailmentChance": 0,
+        "statChance": 100,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": [
+        {
+          "stat": "accuracy",
+          "label": "명중률",
+          "change": -1
+        }
+      ]
+    },
+    "195": {
+      "id": 195,
+      "name": "멸망의노래",
+      "slug": "perish-song",
+      "typeId": 1,
+      "power": null,
+      "accuracy": null,
+      "pp": 5,
+      "priority": 0,
+      "damageClass": "status",
+      "target": "opponent",
+      "targetId": 12,
+      "effectId": 115,
+      "effectChance": null,
+      "meta": {
+        "ailment": 20,
+        "ailmentChance": 0,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": []
+    },
+    "204": {
+      "id": 204,
+      "name": "애교부리기",
+      "slug": "charm",
+      "typeId": 1,
+      "power": null,
+      "accuracy": 100,
+      "pp": 20,
+      "priority": 0,
+      "damageClass": "status",
+      "target": "opponent",
+      "targetId": 10,
+      "effectId": 59,
+      "effectChance": null,
+      "meta": {
+        "ailment": 0,
+        "ailmentChance": 0,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": [
+        {
+          "stat": "attack",
+          "label": "공격",
+          "change": -2
+        }
+      ]
+    },
+    "205": {
+      "id": 205,
+      "name": "구르기",
+      "slug": "rollout",
+      "typeId": 6,
+      "power": 30,
+      "accuracy": 90,
+      "pp": 20,
+      "priority": 0,
+      "damageClass": "physical",
+      "target": "opponent",
+      "targetId": 10,
+      "effectId": 118,
+      "effectChance": null,
+      "meta": {
+        "ailment": 0,
+        "ailmentChance": 0,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": []
+    },
+    "212": {
+      "id": 212,
+      "name": "검은눈빛",
+      "slug": "mean-look",
+      "typeId": 1,
+      "power": null,
+      "accuracy": null,
+      "pp": 5,
+      "priority": 0,
+      "damageClass": "status",
+      "target": "opponent",
+      "targetId": 10,
+      "effectId": 107,
+      "effectChance": null,
+      "meta": {
+        "ailment": 0,
+        "ailmentChance": 0,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": []
+    },
+    "222": {
+      "id": 222,
+      "name": "매그니튜드",
+      "slug": "magnitude",
+      "typeId": 5,
+      "power": null,
+      "accuracy": 100,
+      "pp": 30,
+      "priority": 0,
+      "damageClass": "physical",
+      "target": "opponent",
+      "targetId": 9,
+      "effectId": 127,
+      "effectChance": null,
+      "meta": {
+        "ailment": 0,
+        "ailmentChance": 0,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": []
+    },
+    "227": {
+      "id": 227,
+      "name": "앙코르",
+      "slug": "encore",
+      "typeId": 1,
+      "power": null,
+      "accuracy": 100,
+      "pp": 5,
+      "priority": 0,
+      "damageClass": "status",
+      "target": "opponent",
+      "targetId": 10,
+      "effectId": 91,
+      "effectChance": null,
+      "meta": {
+        "ailment": 0,
+        "ailmentChance": 0,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": []
+    },
+    "229": {
+      "id": 229,
+      "name": "고속스핀",
+      "slug": "rapid-spin",
+      "typeId": 1,
+      "power": 20,
+      "accuracy": 100,
+      "pp": 40,
+      "priority": 0,
+      "damageClass": "physical",
+      "target": "opponent",
+      "targetId": 10,
+      "effectId": 130,
+      "effectChance": 100,
+      "meta": {
+        "ailment": 0,
+        "ailmentChance": 0,
+        "statChance": 100,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": [
+        {
+          "stat": "speed",
+          "label": "스피드",
+          "change": 1
+        }
+      ]
+    },
+    "230": {
+      "id": 230,
+      "name": "달콤한향기",
+      "slug": "sweet-scent",
+      "typeId": 1,
+      "power": null,
+      "accuracy": 100,
+      "pp": 20,
+      "priority": 0,
+      "damageClass": "status",
+      "target": "opponent",
+      "targetId": 11,
+      "effectId": 25,
+      "effectChance": null,
+      "meta": {
+        "ailment": 0,
+        "ailmentChance": 0,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": [
+        {
+          "stat": "evasion",
+          "label": "회피율",
+          "change": -2
+        }
+      ]
+    },
+    "235": {
+      "id": 235,
+      "name": "광합성",
+      "slug": "synthesis",
+      "typeId": 12,
+      "power": null,
+      "accuracy": null,
+      "pp": 5,
+      "priority": 0,
+      "damageClass": "status",
+      "target": "user",
+      "targetId": 7,
+      "effectId": 133,
+      "effectChance": null,
+      "meta": {
+        "ailment": 0,
+        "ailmentChance": 0,
+        "statChance": 0,
+        "healing": 50,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": []
+    },
+    "236": {
+      "id": 236,
+      "name": "달빛",
+      "slug": "moonlight",
+      "typeId": 1,
+      "power": null,
+      "accuracy": null,
+      "pp": 5,
+      "priority": 0,
+      "damageClass": "status",
+      "target": "user",
+      "targetId": 7,
+      "effectId": 133,
+      "effectChance": null,
+      "meta": {
+        "ailment": 0,
+        "ailmentChance": 0,
+        "statChance": 0,
+        "healing": 50,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": []
+    },
+    "240": {
+      "id": 240,
+      "name": "비바라기",
+      "slug": "rain-dance",
+      "typeId": 11,
+      "power": null,
+      "accuracy": null,
+      "pp": 5,
+      "priority": 0,
+      "damageClass": "status",
+      "target": "opponent",
+      "targetId": 12,
+      "effectId": 137,
+      "effectChance": null,
+      "meta": {
+        "ailment": 0,
+        "ailmentChance": 0,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": []
+    },
+    "252": {
+      "id": 252,
+      "name": "속이기",
+      "slug": "fake-out",
+      "typeId": 1,
+      "power": 40,
+      "accuracy": 100,
+      "pp": 10,
+      "priority": 3,
+      "damageClass": "physical",
+      "target": "opponent",
+      "targetId": 10,
+      "effectId": 159,
+      "effectChance": 100,
+      "meta": {
+        "ailment": 0,
+        "ailmentChance": 0,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": []
+    },
+    "257": {
+      "id": 257,
+      "name": "열풍",
+      "slug": "heat-wave",
+      "typeId": 10,
+      "power": 100,
+      "accuracy": 90,
+      "pp": 10,
+      "priority": 0,
+      "damageClass": "special",
+      "target": "opponent",
+      "targetId": 11,
+      "effectId": 5,
+      "effectChance": 10,
+      "meta": {
+        "ailment": 4,
+        "ailmentChance": 10,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": []
+    },
+    "266": {
+      "id": 266,
+      "name": "날따름",
+      "slug": "follow-me",
+      "typeId": 1,
+      "power": null,
+      "accuracy": null,
+      "pp": 20,
+      "priority": 3,
+      "damageClass": "status",
+      "target": "user",
+      "targetId": 7,
+      "effectId": 173,
+      "effectChance": null,
+      "meta": {
+        "ailment": 0,
+        "ailmentChance": 0,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": []
+    },
+    "269": {
+      "id": 269,
+      "name": "도발",
+      "slug": "taunt",
+      "typeId": 17,
+      "power": null,
+      "accuracy": 100,
+      "pp": 20,
+      "priority": 0,
+      "damageClass": "status",
+      "target": "opponent",
+      "targetId": 10,
+      "effectId": 176,
+      "effectChance": null,
+      "meta": {
+        "ailment": 0,
+        "ailmentChance": 0,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": []
+    },
+    "304": {
+      "id": 304,
+      "name": "하이퍼보이스",
+      "slug": "hyper-voice",
+      "typeId": 1,
+      "power": 90,
+      "accuracy": 100,
+      "pp": 10,
+      "priority": 0,
+      "damageClass": "special",
+      "target": "opponent",
+      "targetId": 11,
+      "effectId": 1,
+      "effectChance": null,
+      "meta": {
+        "ailment": 0,
+        "ailmentChance": 0,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": []
+    },
+    "309": {
+      "id": 309,
+      "name": "코멧펀치",
+      "slug": "meteor-mash",
+      "typeId": 9,
+      "power": 100,
+      "accuracy": 85,
+      "pp": 10,
+      "priority": 0,
+      "damageClass": "physical",
+      "target": "opponent",
+      "targetId": 10,
+      "effectId": 140,
+      "effectChance": 20,
+      "meta": {
+        "ailment": 0,
+        "ailmentChance": 0,
+        "statChance": 20,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": [
+        {
+          "stat": "attack",
+          "label": "공격",
+          "change": 1
+        }
+      ]
+    },
+    "310": {
+      "id": 310,
+      "name": "놀래키기",
+      "slug": "astonish",
+      "typeId": 8,
+      "power": 30,
+      "accuracy": 100,
+      "pp": 15,
+      "priority": 0,
+      "damageClass": "physical",
+      "target": "opponent",
+      "targetId": 10,
+      "effectId": 32,
+      "effectChance": 30,
+      "meta": {
+        "ailment": 0,
+        "ailmentChance": 0,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": []
+    },
+    "313": {
+      "id": 313,
+      "name": "거짓울음",
+      "slug": "fake-tears",
+      "typeId": 17,
+      "power": null,
+      "accuracy": 100,
+      "pp": 20,
+      "priority": 0,
+      "damageClass": "status",
+      "target": "opponent",
+      "targetId": 10,
+      "effectId": 63,
+      "effectChance": null,
+      "meta": {
+        "ailment": 0,
+        "ailmentChance": 0,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": [
+        {
+          "stat": "special-defense",
+          "label": "특수방어",
+          "change": -2
+        }
+      ]
+    },
+    "322": {
+      "id": 322,
+      "name": "코스믹파워",
+      "slug": "cosmic-power",
+      "typeId": 14,
+      "power": null,
+      "accuracy": null,
+      "pp": 20,
+      "priority": 0,
+      "damageClass": "status",
+      "target": "user",
+      "targetId": 7,
+      "effectId": 207,
+      "effectChance": null,
+      "meta": {
+        "ailment": 0,
+        "ailmentChance": 0,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": [
+        {
+          "stat": "defense",
+          "label": "방어",
+          "change": 1
+        },
+        {
+          "stat": "special-defense",
+          "label": "특수방어",
+          "change": 1
+        }
+      ]
+    },
+    "328": {
+      "id": 328,
+      "name": "모래지옥",
+      "slug": "sand-tomb",
+      "typeId": 5,
+      "power": 15,
+      "accuracy": 70,
+      "pp": 15,
+      "priority": 0,
+      "damageClass": "physical",
+      "target": "opponent",
+      "targetId": 10,
+      "effectId": 43,
+      "effectChance": 100,
+      "meta": {
+        "ailment": 8,
+        "ailmentChance": 100,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": []
+    },
+    "334": {
+      "id": 334,
+      "name": "철벽",
+      "slug": "iron-defense",
+      "typeId": 9,
+      "power": null,
+      "accuracy": null,
+      "pp": 15,
+      "priority": 0,
+      "damageClass": "status",
+      "target": "user",
+      "targetId": 7,
+      "effectId": 52,
+      "effectChance": null,
+      "meta": {
+        "ailment": 0,
+        "ailmentChance": 0,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": [
+        {
+          "stat": "defense",
+          "label": "방어",
+          "change": 2
+        }
+      ]
+    },
+    "337": {
+      "id": 337,
+      "name": "드래곤클로",
+      "slug": "dragon-claw",
+      "typeId": 16,
+      "power": 80,
+      "accuracy": 100,
+      "pp": 15,
+      "priority": 0,
+      "damageClass": "physical",
+      "target": "opponent",
+      "targetId": 10,
+      "effectId": 1,
+      "effectChance": null,
+      "meta": {
+        "ailment": 0,
+        "ailmentChance": 0,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": []
+    },
+    "345": {
+      "id": 345,
+      "name": "매지컬리프",
+      "slug": "magical-leaf",
+      "typeId": 12,
+      "power": 60,
+      "accuracy": null,
+      "pp": 20,
+      "priority": 0,
+      "damageClass": "special",
+      "target": "opponent",
+      "targetId": 10,
+      "effectId": 18,
+      "effectChance": null,
+      "meta": {
+        "ailment": 0,
+        "ailmentChance": 0,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": []
+    },
+    "352": {
+      "id": 352,
+      "name": "물의파동",
+      "slug": "water-pulse",
+      "typeId": 11,
+      "power": 60,
+      "accuracy": 100,
+      "pp": 20,
+      "priority": 0,
+      "damageClass": "special",
+      "target": "opponent",
+      "targetId": 10,
+      "effectId": 77,
+      "effectChance": 20,
+      "meta": {
+        "ailment": 6,
+        "ailmentChance": 20,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": []
+    },
+    "356": {
+      "id": 356,
+      "name": "중력",
+      "slug": "gravity",
+      "typeId": 14,
+      "power": null,
+      "accuracy": null,
+      "pp": 5,
+      "priority": 0,
+      "damageClass": "status",
+      "target": "opponent",
+      "targetId": 12,
+      "effectId": 216,
+      "effectChance": null,
+      "meta": {
+        "ailment": 0,
+        "ailmentChance": 0,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": []
+    },
+    "358": {
+      "id": 358,
+      "name": "잠깨움뺨치기",
+      "slug": "wake-up-slap",
+      "typeId": 2,
+      "power": 60,
+      "accuracy": 100,
+      "pp": 10,
+      "priority": 0,
+      "damageClass": "physical",
+      "target": "opponent",
+      "targetId": 10,
+      "effectId": 218,
+      "effectChance": null,
+      "meta": {
+        "ailment": 0,
+        "ailmentChance": 0,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": []
+    },
+    "360": {
+      "id": 360,
+      "name": "자이로볼",
+      "slug": "gyro-ball",
+      "typeId": 9,
+      "power": null,
+      "accuracy": 100,
+      "pp": 5,
+      "priority": 0,
+      "damageClass": "physical",
+      "target": "opponent",
+      "targetId": 10,
+      "effectId": 220,
+      "effectChance": null,
+      "meta": {
+        "ailment": 0,
+        "ailmentChance": 0,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": []
+    },
+    "361": {
+      "id": 361,
+      "name": "치유소원",
+      "slug": "healing-wish",
+      "typeId": 14,
+      "power": null,
+      "accuracy": null,
+      "pp": 10,
+      "priority": 0,
+      "damageClass": "status",
+      "target": "user",
+      "targetId": 7,
+      "effectId": 221,
+      "effectChance": null,
+      "meta": {
+        "ailment": 0,
+        "ailmentChance": 0,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": []
+    },
+    "364": {
+      "id": 364,
+      "name": "페인트",
+      "slug": "feint",
+      "typeId": 1,
+      "power": 50,
+      "accuracy": 100,
+      "pp": 10,
+      "priority": 2,
+      "damageClass": "physical",
+      "target": "opponent",
+      "targetId": 10,
+      "effectId": 224,
+      "effectChance": null,
+      "meta": {
+        "ailment": 0,
+        "ailmentChance": 0,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": []
+    },
+    "372": {
+      "id": 372,
+      "name": "승부굳히기",
+      "slug": "assurance",
+      "typeId": 17,
+      "power": 50,
+      "accuracy": 100,
+      "pp": 10,
+      "priority": 0,
+      "damageClass": "physical",
+      "target": "opponent",
+      "targetId": 10,
+      "effectId": 232,
+      "effectChance": null,
+      "meta": {
+        "ailment": 0,
+        "ailmentChance": 0,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": []
+    },
+    "378": {
+      "id": 378,
+      "name": "쥐어짜기",
+      "slug": "wring-out",
+      "typeId": 1,
+      "power": null,
+      "accuracy": 100,
+      "pp": 5,
+      "priority": 0,
+      "damageClass": "special",
+      "target": "opponent",
+      "targetId": 10,
+      "effectId": 238,
+      "effectChance": null,
+      "meta": {
+        "ailment": 0,
+        "ailmentChance": 0,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": []
+    },
+    "381": {
+      "id": 381,
+      "name": "주술",
+      "slug": "lucky-chant",
+      "typeId": 1,
+      "power": null,
+      "accuracy": null,
+      "pp": 30,
+      "priority": 0,
+      "damageClass": "status",
+      "target": "opponent",
+      "targetId": 4,
+      "effectId": 241,
+      "effectChance": null,
+      "meta": {
+        "ailment": 0,
+        "ailmentChance": 0,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": []
+    },
+    "383": {
+      "id": 383,
+      "name": "흉내쟁이",
+      "slug": "copycat",
+      "typeId": 1,
+      "power": null,
+      "accuracy": null,
+      "pp": 20,
+      "priority": 0,
+      "damageClass": "status",
+      "target": "user",
+      "targetId": 7,
+      "effectId": 243,
+      "effectChance": null,
+      "meta": {
+        "ailment": 0,
+        "ailmentChance": 0,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": []
+    },
+    "388": {
+      "id": 388,
+      "name": "고민씨",
+      "slug": "worry-seed",
+      "typeId": 12,
+      "power": null,
+      "accuracy": 100,
+      "pp": 10,
+      "priority": 0,
+      "damageClass": "status",
+      "target": "opponent",
+      "targetId": 10,
+      "effectId": 248,
+      "effectChance": null,
+      "meta": {
+        "ailment": 0,
+        "ailmentChance": 0,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": []
+    },
+    "389": {
+      "id": 389,
+      "name": "기습",
+      "slug": "sucker-punch",
+      "typeId": 17,
+      "power": 80,
+      "accuracy": 100,
+      "pp": 5,
+      "priority": 1,
+      "damageClass": "physical",
+      "target": "opponent",
+      "targetId": 10,
+      "effectId": 249,
+      "effectChance": null,
+      "meta": {
+        "ailment": 0,
+        "ailmentChance": 0,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": []
+    },
+    "394": {
+      "id": 394,
+      "name": "플레어드라이브",
+      "slug": "flare-blitz",
+      "typeId": 10,
+      "power": 120,
+      "accuracy": 100,
+      "pp": 15,
+      "priority": 0,
+      "damageClass": "physical",
+      "target": "opponent",
+      "targetId": 10,
+      "effectId": 254,
+      "effectChance": 10,
+      "meta": {
+        "ailment": 4,
+        "ailmentChance": 10,
+        "statChance": 0,
+        "healing": 0,
+        "drain": -33,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": []
+    },
+    "400": {
+      "id": 400,
+      "name": "깜짝베기",
+      "slug": "night-slash",
+      "typeId": 17,
+      "power": 70,
+      "accuracy": 100,
+      "pp": 15,
+      "priority": 0,
+      "damageClass": "physical",
+      "target": "opponent",
+      "targetId": 10,
+      "effectId": 44,
+      "effectChance": null,
+      "meta": {
+        "ailment": 0,
+        "ailmentChance": 0,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": []
+    },
+    "401": {
+      "id": 401,
+      "name": "아쿠아테일",
+      "slug": "aqua-tail",
+      "typeId": 11,
+      "power": 90,
+      "accuracy": 90,
+      "pp": 10,
+      "priority": 0,
+      "damageClass": "physical",
+      "target": "opponent",
+      "targetId": 10,
+      "effectId": 1,
+      "effectChance": null,
+      "meta": {
+        "ailment": 0,
+        "ailmentChance": 0,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": []
+    },
+    "402": {
+      "id": 402,
+      "name": "씨폭탄",
+      "slug": "seed-bomb",
+      "typeId": 12,
+      "power": 80,
+      "accuracy": 100,
+      "pp": 15,
+      "priority": 0,
+      "damageClass": "physical",
+      "target": "opponent",
+      "targetId": 10,
+      "effectId": 1,
+      "effectChance": null,
+      "meta": {
+        "ailment": 0,
+        "ailmentChance": 0,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": []
+    },
+    "403": {
+      "id": 403,
+      "name": "에어슬래시",
+      "slug": "air-slash",
+      "typeId": 3,
+      "power": 75,
+      "accuracy": 95,
+      "pp": 20,
+      "priority": 0,
+      "damageClass": "special",
+      "target": "opponent",
+      "targetId": 10,
+      "effectId": 32,
+      "effectChance": 30,
+      "meta": {
+        "ailment": 0,
+        "ailmentChance": 0,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": []
+    },
+    "408": {
+      "id": 408,
+      "name": "파워젬",
+      "slug": "power-gem",
+      "typeId": 6,
+      "power": 70,
+      "accuracy": 100,
+      "pp": 20,
+      "priority": 0,
+      "damageClass": "special",
+      "target": "opponent",
+      "targetId": 10,
+      "effectId": 1,
+      "effectChance": null,
+      "meta": {
+        "ailment": 0,
+        "ailmentChance": 0,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": []
+    },
+    "414": {
+      "id": 414,
+      "name": "대지의힘",
+      "slug": "earth-power",
+      "typeId": 5,
+      "power": 90,
+      "accuracy": 100,
+      "pp": 10,
+      "priority": 0,
+      "damageClass": "special",
+      "target": "opponent",
+      "targetId": 10,
+      "effectId": 73,
+      "effectChance": 10,
+      "meta": {
+        "ailment": 0,
+        "ailmentChance": 0,
+        "statChance": 10,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": [
+        {
+          "stat": "special-defense",
+          "label": "특수방어",
+          "change": -1
+        }
+      ]
+    },
+    "415": {
+      "id": 415,
+      "name": "바꿔치기",
+      "slug": "switcheroo",
+      "typeId": 17,
+      "power": null,
+      "accuracy": 100,
+      "pp": 10,
+      "priority": 0,
+      "damageClass": "status",
+      "target": "opponent",
+      "targetId": 10,
+      "effectId": 178,
+      "effectChance": null,
+      "meta": {
+        "ailment": 0,
+        "ailmentChance": 0,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": []
+    },
+    "417": {
+      "id": 417,
+      "name": "나쁜음모",
+      "slug": "nasty-plot",
+      "typeId": 17,
+      "power": null,
+      "accuracy": null,
+      "pp": 20,
+      "priority": 0,
+      "damageClass": "status",
+      "target": "user",
+      "targetId": 7,
+      "effectId": 54,
+      "effectChance": null,
+      "meta": {
+        "ailment": 0,
+        "ailmentChance": 0,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": [
+        {
+          "stat": "special-attack",
+          "label": "특수공격",
+          "change": 2
+        }
+      ]
+    },
+    "419": {
+      "id": 419,
+      "name": "눈사태",
+      "slug": "avalanche",
+      "typeId": 15,
+      "power": 60,
+      "accuracy": 100,
+      "pp": 10,
+      "priority": -4,
+      "damageClass": "physical",
+      "target": "opponent",
+      "targetId": 10,
+      "effectId": 186,
+      "effectChance": null,
+      "meta": {
+        "ailment": 0,
+        "ailmentChance": 0,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": []
+    },
+    "421": {
+      "id": 421,
+      "name": "섀도클로",
+      "slug": "shadow-claw",
+      "typeId": 8,
+      "power": 70,
+      "accuracy": 100,
+      "pp": 15,
+      "priority": 0,
+      "damageClass": "physical",
+      "target": "opponent",
+      "targetId": 10,
+      "effectId": 44,
+      "effectChance": null,
+      "meta": {
+        "ailment": 0,
+        "ailmentChance": 0,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": []
+    },
+    "424": {
+      "id": 424,
+      "name": "불꽃엄니",
+      "slug": "fire-fang",
+      "typeId": 10,
+      "power": 65,
+      "accuracy": 95,
+      "pp": 15,
+      "priority": 0,
+      "damageClass": "physical",
+      "target": "opponent",
+      "targetId": 10,
+      "effectId": 274,
+      "effectChance": 10,
+      "meta": {
+        "ailment": 4,
+        "ailmentChance": 10,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": []
+    },
+    "426": {
+      "id": 426,
+      "name": "진흙폭탄",
+      "slug": "mud-bomb",
+      "typeId": 5,
+      "power": 65,
+      "accuracy": 85,
+      "pp": 10,
+      "priority": 0,
+      "damageClass": "special",
+      "target": "opponent",
+      "targetId": 10,
+      "effectId": 74,
+      "effectChance": 30,
+      "meta": {
+        "ailment": 0,
+        "ailmentChance": 0,
+        "statChance": 30,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": [
+        {
+          "stat": "accuracy",
+          "label": "명중률",
+          "change": -1
+        }
+      ]
+    },
+    "430": {
+      "id": 430,
+      "name": "러스터캐논",
+      "slug": "flash-cannon",
+      "typeId": 9,
+      "power": 80,
+      "accuracy": 100,
+      "pp": 10,
+      "priority": 0,
+      "damageClass": "special",
+      "target": "opponent",
+      "targetId": 10,
+      "effectId": 73,
+      "effectChance": 10,
+      "meta": {
+        "ailment": 0,
+        "ailmentChance": 0,
+        "statChance": 10,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": [
+        {
+          "stat": "special-defense",
+          "label": "특수방어",
+          "change": -1
+        }
+      ]
+    },
+    "435": {
+      "id": 435,
+      "name": "방전",
+      "slug": "discharge",
+      "typeId": 13,
+      "power": 80,
+      "accuracy": 100,
+      "pp": 15,
+      "priority": 0,
+      "damageClass": "special",
+      "target": "opponent",
+      "targetId": 9,
+      "effectId": 7,
+      "effectChance": 30,
+      "meta": {
+        "ailment": 1,
+        "ailmentChance": 30,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": []
+    },
+    "445": {
+      "id": 445,
+      "name": "유혹",
+      "slug": "captivate",
+      "typeId": 1,
+      "power": null,
+      "accuracy": 100,
+      "pp": 20,
+      "priority": 0,
+      "damageClass": "status",
+      "target": "opponent",
+      "targetId": 11,
+      "effectId": 266,
+      "effectChance": null,
+      "meta": {
+        "ailment": 0,
+        "ailmentChance": 0,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": [
+        {
+          "stat": "special-attack",
+          "label": "특수공격",
+          "change": -2
+        }
+      ]
+    }
+  },
+  "types": {
+    "1": {
+      "slug": "normal",
+      "name": "노말"
+    },
+    "2": {
+      "slug": "fighting",
+      "name": "격투"
+    },
+    "3": {
+      "slug": "flying",
+      "name": "비행"
+    },
+    "4": {
+      "slug": "poison",
+      "name": "독"
+    },
+    "5": {
+      "slug": "ground",
+      "name": "땅"
+    },
+    "6": {
+      "slug": "rock",
+      "name": "바위"
+    },
+    "7": {
+      "slug": "bug",
+      "name": "벌레"
+    },
+    "8": {
+      "slug": "ghost",
+      "name": "고스트"
+    },
+    "9": {
+      "slug": "steel",
+      "name": "강철"
+    },
+    "10": {
+      "slug": "fire",
+      "name": "불꽃"
+    },
+    "11": {
+      "slug": "water",
+      "name": "물"
+    },
+    "12": {
+      "slug": "grass",
+      "name": "풀"
+    },
+    "13": {
+      "slug": "electric",
+      "name": "전기"
+    },
+    "14": {
+      "slug": "psychic",
+      "name": "에스퍼"
+    },
+    "15": {
+      "slug": "ice",
+      "name": "얼음"
+    },
+    "16": {
+      "slug": "dragon",
+      "name": "드래곤"
+    },
+    "17": {
+      "slug": "dark",
+      "name": "악"
+    }
+  },
+  "typeChart": {
+    "1": {
+      "1": 1.0,
+      "2": 1.0,
+      "3": 1.0,
+      "4": 1.0,
+      "5": 1.0,
+      "6": 0.5,
+      "7": 1.0,
+      "8": 0.0,
+      "9": 0.5,
+      "10": 1.0,
+      "11": 1.0,
+      "12": 1.0,
+      "13": 1.0,
+      "14": 1.0,
+      "15": 1.0,
+      "16": 1.0,
+      "17": 1.0
+    },
+    "2": {
+      "1": 2.0,
+      "2": 1.0,
+      "3": 0.5,
+      "4": 0.5,
+      "5": 1.0,
+      "6": 2.0,
+      "7": 0.5,
+      "8": 0.0,
+      "9": 2.0,
+      "10": 1.0,
+      "11": 1.0,
+      "12": 1.0,
+      "13": 1.0,
+      "14": 0.5,
+      "15": 2.0,
+      "16": 1.0,
+      "17": 2.0
+    },
+    "3": {
+      "1": 1.0,
+      "2": 2.0,
+      "3": 1.0,
+      "4": 1.0,
+      "5": 1.0,
+      "6": 0.5,
+      "7": 2.0,
+      "8": 1.0,
+      "9": 0.5,
+      "10": 1.0,
+      "11": 1.0,
+      "12": 2.0,
+      "13": 0.5,
+      "14": 1.0,
+      "15": 1.0,
+      "16": 1.0,
+      "17": 1.0
+    },
+    "4": {
+      "1": 1.0,
+      "2": 1.0,
+      "3": 1.0,
+      "4": 0.5,
+      "5": 0.5,
+      "6": 0.5,
+      "7": 1.0,
+      "8": 0.5,
+      "9": 0.0,
+      "10": 1.0,
+      "11": 1.0,
+      "12": 2.0,
+      "13": 1.0,
+      "14": 1.0,
+      "15": 1.0,
+      "16": 1.0,
+      "17": 1.0
+    },
+    "5": {
+      "1": 1.0,
+      "2": 1.0,
+      "3": 0.0,
+      "4": 2.0,
+      "5": 1.0,
+      "6": 2.0,
+      "7": 0.5,
+      "8": 1.0,
+      "9": 2.0,
+      "10": 2.0,
+      "11": 1.0,
+      "12": 0.5,
+      "13": 2.0,
+      "14": 1.0,
+      "15": 1.0,
+      "16": 1.0,
+      "17": 1.0
+    },
+    "6": {
+      "1": 1.0,
+      "2": 0.5,
+      "3": 2.0,
+      "4": 1.0,
+      "5": 0.5,
+      "6": 1.0,
+      "7": 2.0,
+      "8": 1.0,
+      "9": 0.5,
+      "10": 2.0,
+      "11": 1.0,
+      "12": 1.0,
+      "13": 1.0,
+      "14": 1.0,
+      "15": 2.0,
+      "16": 1.0,
+      "17": 1.0
+    },
+    "7": {
+      "1": 1.0,
+      "2": 0.5,
+      "3": 0.5,
+      "4": 0.5,
+      "5": 1.0,
+      "6": 1.0,
+      "7": 1.0,
+      "8": 0.5,
+      "9": 0.5,
+      "10": 0.5,
+      "11": 1.0,
+      "12": 2.0,
+      "13": 1.0,
+      "14": 2.0,
+      "15": 1.0,
+      "16": 1.0,
+      "17": 2.0
+    },
+    "8": {
+      "1": 0.0,
+      "2": 1.0,
+      "3": 1.0,
+      "4": 1.0,
+      "5": 1.0,
+      "6": 1.0,
+      "7": 1.0,
+      "8": 2.0,
+      "9": 0.5,
+      "10": 1.0,
+      "11": 1.0,
+      "12": 1.0,
+      "13": 1.0,
+      "14": 2.0,
+      "15": 1.0,
+      "16": 1.0,
+      "17": 0.5
+    },
+    "9": {
+      "1": 1.0,
+      "2": 1.0,
+      "3": 1.0,
+      "4": 1.0,
+      "5": 1.0,
+      "6": 2.0,
+      "7": 1.0,
+      "8": 1.0,
+      "9": 0.5,
+      "10": 0.5,
+      "11": 0.5,
+      "12": 1.0,
+      "13": 0.5,
+      "14": 1.0,
+      "15": 2.0,
+      "16": 1.0,
+      "17": 1.0
+    },
+    "10": {
+      "1": 1.0,
+      "2": 1.0,
+      "3": 1.0,
+      "4": 1.0,
+      "5": 1.0,
+      "6": 0.5,
+      "7": 2.0,
+      "8": 1.0,
+      "9": 2.0,
+      "10": 0.5,
+      "11": 0.5,
+      "12": 2.0,
+      "13": 1.0,
+      "14": 1.0,
+      "15": 2.0,
+      "16": 0.5,
+      "17": 1.0
+    },
+    "11": {
+      "1": 1.0,
+      "2": 1.0,
+      "3": 1.0,
+      "4": 1.0,
+      "5": 2.0,
+      "6": 2.0,
+      "7": 1.0,
+      "8": 1.0,
+      "9": 1.0,
+      "10": 2.0,
+      "11": 0.5,
+      "12": 0.5,
+      "13": 1.0,
+      "14": 1.0,
+      "15": 1.0,
+      "16": 0.5,
+      "17": 1.0
+    },
+    "12": {
+      "1": 1.0,
+      "2": 1.0,
+      "3": 0.5,
+      "4": 0.5,
+      "5": 2.0,
+      "6": 2.0,
+      "7": 0.5,
+      "8": 1.0,
+      "9": 0.5,
+      "10": 0.5,
+      "11": 2.0,
+      "12": 0.5,
+      "13": 1.0,
+      "14": 1.0,
+      "15": 1.0,
+      "16": 0.5,
+      "17": 1.0
+    },
+    "13": {
+      "1": 1.0,
+      "2": 1.0,
+      "3": 2.0,
+      "4": 1.0,
+      "5": 0.0,
+      "6": 1.0,
+      "7": 1.0,
+      "8": 1.0,
+      "9": 1.0,
+      "10": 1.0,
+      "11": 2.0,
+      "12": 0.5,
+      "13": 0.5,
+      "14": 1.0,
+      "15": 1.0,
+      "16": 0.5,
+      "17": 1.0
+    },
+    "14": {
+      "1": 1.0,
+      "2": 2.0,
+      "3": 1.0,
+      "4": 2.0,
+      "5": 1.0,
+      "6": 1.0,
+      "7": 1.0,
+      "8": 1.0,
+      "9": 0.5,
+      "10": 1.0,
+      "11": 1.0,
+      "12": 1.0,
+      "13": 1.0,
+      "14": 0.5,
+      "15": 1.0,
+      "16": 1.0,
+      "17": 0.0
+    },
+    "15": {
+      "1": 1.0,
+      "2": 1.0,
+      "3": 2.0,
+      "4": 1.0,
+      "5": 2.0,
+      "6": 1.0,
+      "7": 1.0,
+      "8": 1.0,
+      "9": 0.5,
+      "10": 0.5,
+      "11": 0.5,
+      "12": 2.0,
+      "13": 1.0,
+      "14": 1.0,
+      "15": 0.5,
+      "16": 2.0,
+      "17": 1.0
+    },
+    "16": {
+      "1": 1.0,
+      "2": 1.0,
+      "3": 1.0,
+      "4": 1.0,
+      "5": 1.0,
+      "6": 1.0,
+      "7": 1.0,
+      "8": 1.0,
+      "9": 0.5,
+      "10": 1.0,
+      "11": 1.0,
+      "12": 1.0,
+      "13": 1.0,
+      "14": 1.0,
+      "15": 1.0,
+      "16": 2.0,
+      "17": 1.0
+    },
+    "17": {
+      "1": 1.0,
+      "2": 0.5,
+      "3": 1.0,
+      "4": 1.0,
+      "5": 1.0,
+      "6": 1.0,
+      "7": 1.0,
+      "8": 2.0,
+      "9": 0.5,
+      "10": 1.0,
+      "11": 1.0,
+      "12": 1.0,
+      "13": 1.0,
+      "14": 2.0,
+      "15": 1.0,
+      "16": 1.0,
+      "17": 0.5
+    }
+  },
+  "experience": {
+    "2": {
+      "1": 0,
+      "2": 8,
+      "3": 27,
+      "4": 64,
+      "5": 125,
+      "6": 216,
+      "7": 343,
+      "8": 512,
+      "9": 729,
+      "10": 1000,
+      "11": 1331,
+      "12": 1728,
+      "13": 2197,
+      "14": 2744,
+      "15": 3375,
+      "16": 4096,
+      "17": 4913,
+      "18": 5832,
+      "19": 6859,
+      "20": 8000,
+      "21": 9261,
+      "22": 10648,
+      "23": 12167,
+      "24": 13824,
+      "25": 15625,
+      "26": 17576,
+      "27": 19683,
+      "28": 21952,
+      "29": 24389,
+      "30": 27000,
+      "31": 29791,
+      "32": 32768,
+      "33": 35937,
+      "34": 39304,
+      "35": 42875,
+      "36": 46656,
+      "37": 50653,
+      "38": 54872,
+      "39": 59319,
+      "40": 64000,
+      "41": 68921,
+      "42": 74088,
+      "43": 79507,
+      "44": 85184,
+      "45": 91125,
+      "46": 97336,
+      "47": 103823,
+      "48": 110592,
+      "49": 117649,
+      "50": 125000,
+      "51": 132651,
+      "52": 140608,
+      "53": 148877,
+      "54": 157464,
+      "55": 166375,
+      "56": 175616,
+      "57": 185193,
+      "58": 195112,
+      "59": 205379,
+      "60": 216000,
+      "61": 226981,
+      "62": 238328,
+      "63": 250047,
+      "64": 262144,
+      "65": 274625,
+      "66": 287496,
+      "67": 300763,
+      "68": 314432,
+      "69": 328509,
+      "70": 343000,
+      "71": 357911,
+      "72": 373248,
+      "73": 389017,
+      "74": 405224,
+      "75": 421875,
+      "76": 438976,
+      "77": 456533,
+      "78": 474552,
+      "79": 493039,
+      "80": 512000,
+      "81": 531441,
+      "82": 551368,
+      "83": 571787,
+      "84": 592704,
+      "85": 614125,
+      "86": 636056,
+      "87": 658503,
+      "88": 681472,
+      "89": 704969,
+      "90": 729000,
+      "91": 753571,
+      "92": 778688,
+      "93": 804357,
+      "94": 830584,
+      "95": 857375,
+      "96": 884736,
+      "97": 912673,
+      "98": 941192,
+      "99": 970299,
+      "100": 1000000
+    },
+    "3": {
+      "1": 0,
+      "2": 6,
+      "3": 21,
+      "4": 51,
+      "5": 100,
+      "6": 172,
+      "7": 274,
+      "8": 409,
+      "9": 583,
+      "10": 800,
+      "11": 1064,
+      "12": 1382,
+      "13": 1757,
+      "14": 2195,
+      "15": 2700,
+      "16": 3276,
+      "17": 3930,
+      "18": 4665,
+      "19": 5487,
+      "20": 6400,
+      "21": 7408,
+      "22": 8518,
+      "23": 9733,
+      "24": 11059,
+      "25": 12500,
+      "26": 14060,
+      "27": 15746,
+      "28": 17561,
+      "29": 19511,
+      "30": 21600,
+      "31": 23832,
+      "32": 26214,
+      "33": 28749,
+      "34": 31443,
+      "35": 34300,
+      "36": 37324,
+      "37": 40522,
+      "38": 43897,
+      "39": 47455,
+      "40": 51200,
+      "41": 55136,
+      "42": 59270,
+      "43": 63605,
+      "44": 68147,
+      "45": 72900,
+      "46": 77868,
+      "47": 83058,
+      "48": 88473,
+      "49": 94119,
+      "50": 100000,
+      "51": 106120,
+      "52": 112486,
+      "53": 119101,
+      "54": 125971,
+      "55": 133100,
+      "56": 140492,
+      "57": 148154,
+      "58": 156089,
+      "59": 164303,
+      "60": 172800,
+      "61": 181584,
+      "62": 190662,
+      "63": 200037,
+      "64": 209715,
+      "65": 219700,
+      "66": 229996,
+      "67": 240610,
+      "68": 251545,
+      "69": 262807,
+      "70": 274400,
+      "71": 286328,
+      "72": 298598,
+      "73": 311213,
+      "74": 324179,
+      "75": 337500,
+      "76": 351180,
+      "77": 365226,
+      "78": 379641,
+      "79": 394431,
+      "80": 409600,
+      "81": 425152,
+      "82": 441094,
+      "83": 457429,
+      "84": 474163,
+      "85": 491300,
+      "86": 508844,
+      "87": 526802,
+      "88": 545177,
+      "89": 563975,
+      "90": 583200,
+      "91": 602856,
+      "92": 622950,
+      "93": 643485,
+      "94": 664467,
+      "95": 685900,
+      "96": 707788,
+      "97": 730138,
+      "98": 752953,
+      "99": 776239,
+      "100": 800000
+    },
+    "4": {
+      "1": 0,
+      "2": 9,
+      "3": 57,
+      "4": 96,
+      "5": 135,
+      "6": 179,
+      "7": 236,
+      "8": 314,
+      "9": 419,
+      "10": 560,
+      "11": 742,
+      "12": 973,
+      "13": 1261,
+      "14": 1612,
+      "15": 2035,
+      "16": 2535,
+      "17": 3120,
+      "18": 3798,
+      "19": 4575,
+      "20": 5460,
+      "21": 6458,
+      "22": 7577,
+      "23": 8825,
+      "24": 10208,
+      "25": 11735,
+      "26": 13411,
+      "27": 15244,
+      "28": 17242,
+      "29": 19411,
+      "30": 21760,
+      "31": 24294,
+      "32": 27021,
+      "33": 29949,
+      "34": 33084,
+      "35": 36435,
+      "36": 40007,
+      "37": 43808,
+      "38": 47846,
+      "39": 52127,
+      "40": 56660,
+      "41": 61450,
+      "42": 66505,
+      "43": 71833,
+      "44": 77440,
+      "45": 83335,
+      "46": 89523,
+      "47": 96012,
+      "48": 102810,
+      "49": 109923,
+      "50": 117360,
+      "51": 125126,
+      "52": 133229,
+      "53": 141677,
+      "54": 150476,
+      "55": 159635,
+      "56": 169159,
+      "57": 179056,
+      "58": 189334,
+      "59": 199999,
+      "60": 211060,
+      "61": 222522,
+      "62": 234393,
+      "63": 246681,
+      "64": 259392,
+      "65": 272535,
+      "66": 286115,
+      "67": 300140,
+      "68": 314618,
+      "69": 329555,
+      "70": 344960,
+      "71": 360838,
+      "72": 377197,
+      "73": 394045,
+      "74": 411388,
+      "75": 429235,
+      "76": 447591,
+      "77": 466464,
+      "78": 485862,
+      "79": 505791,
+      "80": 526260,
+      "81": 547274,
+      "82": 568841,
+      "83": 590969,
+      "84": 613664,
+      "85": 636935,
+      "86": 660787,
+      "87": 685228,
+      "88": 710266,
+      "89": 735907,
+      "90": 762160,
+      "91": 789030,
+      "92": 816525,
+      "93": 844653,
+      "94": 873420,
+      "95": 902835,
+      "96": 932903,
+      "97": 963632,
+      "98": 995030,
+      "99": 1027103,
+      "100": 1059860
+    }
+  }
+}
