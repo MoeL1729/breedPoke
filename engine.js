@@ -1,8 +1,8 @@
 // Pure game rules. Canonical data lives in data/pokedex.json; care rules are game-specific.
 export const clamp=(n,a,b)=>Math.min(b,Math.max(a,n));
-export function statsFor(db,id,level){
+export function statsFor(db,id,level,ivs={}){
   const s=db.pokemon[id].stats, out={};
-  for(const [k,v] of Object.entries(s)) out[k]=Math.floor(2*v*level/100)+(k==='hp'?level+10:5);
+  for(const [k,v] of Object.entries(s)) out[k]=Math.floor((2*v+(ivs?.[k]??0))*level/100)+(k==='hp'?level+10:5);
   return out;
 }
 export function initialMoves(db,id,level){
@@ -26,7 +26,9 @@ export function migrateState(db,state){
 export function validateState(db,s){
   if(!s||![1,2].includes(s.schemaVersion)||(s.schemaVersion===1||s.hatched?!db.starterIds.includes(s.active):s.active!==null)||!Number.isInteger(s.day)||s.day<1||!Number.isFinite(s.fatigue)||s.fatigue<0||s.fatigue>100||!Number.isFinite(s.coins)||s.coins<0)throw Error('올바른 저장 파일이 아닙니다.');
   if(s.schemaVersion===2){if(typeof s.hatched!=='boolean'||!s.pets||Object.keys(s.pets).length!==(s.hatched?1:0)||(s.hatched&&!s.pets[s.active])||(!s.hatched&&(s.battle||s.pending?.length||s.progressing)))throw Error('부화 정보가 올바르지 않습니다.');}
-  for(const id of s.schemaVersion===1?db.legacyStarterIds:s.hatched?[s.active]:[]){const p=s.pets?.[id],spec=db.pokemon[p?.speciesId];if(!p||!spec||!db.pokemon[id].family.includes(p.speciesId)||!Number.isInteger(p.level)||p.level<1||p.level>100||!Array.isArray(p.moves)||p.moves.length>4||new Set(p.moves).size!==p.moves.length||p.moves.some(m=>!db.moves[m])||![p.hp,p.hunger,p.friendship,p.exp,p.wins].every(Number.isFinite)||p.hp<0||p.hp>statsFor(db,p.speciesId,p.level).hp||p.hunger<0||p.hunger>100||p.friendship<0||p.friendship>255||p.exp<0)throw Error('포켓몬 저장 정보가 손상됐습니다.');}
+  for(const id of s.schemaVersion===1?db.legacyStarterIds:s.hatched?[s.active]:[]){const p=s.pets?.[id],spec=db.pokemon[p?.speciesId];if(!p||!spec||!db.pokemon[id].family.includes(p.speciesId)||!Number.isInteger(p.level)||p.level<1||p.level>100||!Array.isArray(p.moves)||p.moves.length>4||new Set(p.moves).size!==p.moves.length||p.moves.some(m=>!db.moves[m])||![p.hp,p.hunger,p.friendship,p.exp,p.wins].every(Number.isFinite)||p.hp<0||p.hp>statsFor(db,p.speciesId,p.level,p.ivs).hp||p.hunger<0||p.hunger>100||p.friendship<0||p.friendship>255||p.exp<0)throw Error('포켓몬 저장 정보가 손상됐습니다.');}
+  if(s.evolutionContext&&(!['day','night'].includes(s.evolutionContext.timeOfDay)||![null,8,10,48].includes(s.evolutionContext.locationId)))throw Error('진화 환경 정보가 올바르지 않습니다.');
+  for(const p of Object.values(s.pets??{})){if(p.ivs&&Object.entries(p.ivs).some(([k,v])=>!['attack','defense'].includes(k)||!Number.isInteger(v)||v<0||v>31))throw Error('능력치 정보가 올바르지 않습니다.');}
   if(!Array.isArray(s.journal)||!Array.isArray(s.pending))throw Error('저장 형식을 확인할 수 없습니다.');
   // Backups are deliberately only accepted outside combat / pending choices.
   if(s.battle||s.pending.length||s.progressing)throw Error('전투와 성장을 마친 뒤 만든 백업을 사용해 주세요.');
@@ -37,31 +39,54 @@ export class Game{
   get pet(){return this.s.pets[this.s.active];} get species(){return this.db.pokemon[this.pet.speciesId];}
   log(text){this.s.journal.unshift({day:this.s.day,text});this.s.journal=this.s.journal.slice(0,30);}
   ready(){return this.s.hatched&&!this.s.battle&&!this.s.pending.length&&!this.s.progressing;}
-  hatch(random=Math.random){if(this.s.hatched)return false;const value=random();if(!Number.isFinite(value)||value<0||value>=1)throw Error('잘못된 난수입니다.');const table=this.db.hatchTable,total=table.reduce((n,x)=>n+x.weight,0);let ticket=value*total;const id=table.find(x=>{ticket-=x.weight;return ticket<0;}).id;this.s.active=id;this.s.pets={[id]:makePet(this.db,id)};this.s.hatched=true;this.log(`${this.species.name}가 알에서 태어났어요! 이제 둘만의 모험을 시작해요.`);return id;}
+  hatch(random=Math.random){if(this.s.hatched)return false;const value=random();if(!Number.isFinite(value)||value<0||value>=1)throw Error('잘못된 난수입니다.');const table=this.db.hatchTable,total=table.reduce((n,x)=>n+x.weight,0);let ticket=value*total;const id=table.find(x=>{ticket-=x.weight;return ticket<0;}).id;this.s.active=id;this.s.pets={[id]:makePet(this.db,id)};if(id===236){const iv=()=>{const r=random();if(!Number.isFinite(r)||r<0||r>=1)throw Error('잘못된 난수입니다.');return Math.floor(r*32);};this.s.pets[id].ivs={attack:iv(),defense:iv()};}this.s.hatched=true;this.log(`${this.species.name}가 알에서 태어났어요! 이제 둘만의 모험을 시작해요.`);return id;}
+  release(){if(!this.ready())throw Error('전투와 성장을 마친 뒤 놓아줄 수 있어요.');this.s=freshState(this.db);return this.s;}
+  setEvolutionContext(timeOfDay,locationId){
+    if(!this.ready())throw Error('진행 중인 일을 먼저 마쳐주세요.');
+    if(!['day','night'].includes(timeOfDay)||![null,8,10,48].includes(locationId))throw Error('진화 환경이 올바르지 않습니다.');
+    this.s.evolutionContext={timeOfDay,locationId};
+  }
+  evolutionEligible(e){
+    const p=this.pet,c=this.s.evolutionContext??{timeOfDay:'day',locationId:null};
+    if(e.trigger!=='level-up'||p.level<(e.minLevel||1)||p.friendship<(e.minFriendship||0))return false;
+    if(e.timeOfDay&&e.timeOfDay!==c.timeOfDay)return false;
+    if(e.locationId&&e.locationId!==c.locationId)return false;
+    if(e.relativePhysicalStats!==null&&e.relativePhysicalStats!==undefined){const st=statsFor(this.db,p.speciesId,p.level,p.ivs);if(Math.sign(st.attack-st.defense)!==e.relativePhysicalStats)return false;}
+    return true;
+  }
   switch(id){return this.s.hatched&&this.s.active===id&&this.ready();}
   can(action){if(!this.ready())return '지금 진행 중인 일을 먼저 마쳐주세요.';if(action==='battle'){if(this.s.fatigue+35>100)return '오늘은 많이 피곤해요. 잠을 자고 다시 도전하세요.';if(this.pet.hp<=0)return 'HP를 회복한 뒤 전투할 수 있어요.';if(this.pet.hunger<15)return '배가 고파요. 먼저 밥을 먹여주세요.';}if(action==='feed'&&this.s.fatigue+15>100)return '식사할 기운도 부족해요. 잠을 자고 내일 먹어요.';return null;}
-  feed(){const e=this.can('feed');if(e)throw Error(e);const p=this.pet;this.s.fatigue+=15;p.hunger=clamp(p.hunger+35,0,100);p.hp=clamp(p.hp+Math.ceil(statsFor(this.db,p.speciesId,p.level).hp*.3),0,statsFor(this.db,p.speciesId,p.level).hp);p.friendship=clamp(p.friendship+12,0,255);this.log(`${this.species.name}에게 밥을 주었어요. 친밀도 +12`);}
-  sleep(){const e=this.can('sleep');if(e)throw Error(e);this.s.day++;this.s.fatigue=0;for(const p of Object.values(this.s.pets)){p.hp=statsFor(this.db,p.speciesId,p.level).hp;p.hunger=clamp(p.hunger-12,0,100);}this.pet.friendship=clamp(this.pet.friendship+3,0,255);this.log('친구가 푹 잤어요. 피로와 HP를 회복하고 새 아침을 맞았어요.');}
+  feed(){const e=this.can('feed');if(e)throw Error(e);const p=this.pet;this.s.fatigue+=15;p.hunger=clamp(p.hunger+35,0,100);p.hp=clamp(p.hp+Math.ceil(statsFor(this.db,p.speciesId,p.level,p.ivs).hp*.3),0,statsFor(this.db,p.speciesId,p.level,p.ivs).hp);p.friendship=clamp(p.friendship+12,0,255);this.log(`${this.species.name}에게 밥을 주었어요. 친밀도 +12`);}
+  sleep(){const e=this.can('sleep');if(e)throw Error(e);this.s.day++;this.s.fatigue=0;for(const p of Object.values(this.s.pets)){p.hp=statsFor(this.db,p.speciesId,p.level,p.ivs).hp;p.hunger=clamp(p.hunger-12,0,100);}this.pet.friendship=clamp(this.pet.friendship+3,0,255);this.log('친구가 푹 잤어요. 피로와 HP를 회복하고 새 아침을 맞았어요.');}
   nextXp(p=this.pet){return p.level>=100?null:this.db.experience[this.db.pokemon[p.speciesId].growthRateId][p.level+1];}
   awardXP(amount){this.pet.exp=Math.min(this.db.experience[this.species.growthRateId][100],this.pet.exp+amount);this.s.progressing=true;this.progress();}
   progress(){
     if(this.s.pending.length)return this.s.pending[0];
     const p=this.pet;if(p.level>=100||p.exp<this.nextXp()){this.s.progressing=false;return null;}
-    const oldHP=statsFor(this.db,p.speciesId,p.level).hp;p.level++;p.hp=clamp(p.hp+statsFor(this.db,p.speciesId,p.level).hp-oldHP,0,statsFor(this.db,p.speciesId,p.level).hp);p.friendship=clamp(p.friendship+5,0,255);this.log(`${this.species.name}, 레벨 ${p.level} 달성!`);
+    const oldHP=statsFor(this.db,p.speciesId,p.level,p.ivs).hp;p.level++;p.hp=clamp(p.hp+statsFor(this.db,p.speciesId,p.level,p.ivs).hp-oldHP,0,statsFor(this.db,p.speciesId,p.level,p.ivs).hp);p.friendship=clamp(p.friendship+5,0,255);this.log(`${this.species.name}, 레벨 ${p.level} 달성!`);
     for(const m of this.species.learnset.filter(m=>m.level===p.level&&!p.moves.includes(m.moveId)))if(!this.s.pending.some(e=>e.kind==='move'&&e.moveId===m.moveId))this.s.pending.push({kind:'move',moveId:m.moveId,level:p.level});
-    const e=this.species.evolutions.find(e=>e.trigger==='level-up'&&p.level>=(e.minLevel||1)&&p.friendship>=(e.minFriendship||0));
+    const e=[...this.species.evolutions].sort((a,b)=>Number(!!b.locationId)-Number(!!a.locationId)).find(e=>this.evolutionEligible(e));
     if(e)this.s.pending.push({kind:'evolution',to:e.to,from:p.speciesId});
     return this.s.pending[0]??this.progress();
   }
   chooseMove(slot){const event=this.s.pending[0];if(event?.kind!=='move')throw Error('학습할 기술이 없습니다.');const p=this.pet;if(slot!==null){if(p.moves.includes(event.moveId))throw Error('이미 알고 있는 기술입니다.');if(p.moves.length<4)p.moves.push(event.moveId);else{if(!Number.isInteger(slot)||slot<0||slot>3)throw Error('교체할 기술을 선택하세요.');p.moves[slot]=event.moveId;}this.log(`${this.species.name}, ${this.db.moves[event.moveId].name} 습득!`);}else this.log(`${this.db.moves[event.moveId].name} 배우기를 건너뛰었어요.`);this.s.pending.shift();return this.progress();}
-  evolveTo(to){const p=this.pet,old=this.species,oldHp=statsFor(this.db,p.speciesId,p.level).hp;p.speciesId=to;p.hp=clamp(p.hp+statsFor(this.db,to,p.level).hp-oldHp,0,statsFor(this.db,to,p.level).hp);this.log(`${old.name} → ${this.species.name}! 진화했어요.`);}
+  evolveTo(to){const p=this.pet,old=this.species,oldHp=statsFor(this.db,p.speciesId,p.level,p.ivs).hp;p.speciesId=to;p.hp=clamp(p.hp+statsFor(this.db,to,p.level,p.ivs).hp-oldHp,0,statsFor(this.db,to,p.level,p.ivs).hp);this.log(`${old.name} → ${this.species.name}! 진화했어요.`);}
   chooseEvolution(accept){const e=this.s.pending[0];if(e?.kind!=='evolution')throw Error('진화할 수 없습니다.');this.s.pending.shift();if(accept){this.evolveTo(e.to);const learned=this.species.learnset.filter(m=>m.level===this.pet.level&&!this.pet.moves.includes(m.moveId));this.s.pending.unshift(...learned.map(m=>({kind:'move',moveId:m.moveId,level:this.pet.level})));}else this.log(`${this.species.name}의 진화를 다음 레벨업으로 미뤘어요.`);return this.progress();}
-  stone(){if(!this.ready())throw Error('진행 중인 일을 먼저 마쳐주세요.');const e=this.species.evolutions.find(e=>e.trigger==='use-item');if(!e)throw Error('진화의돌을 사용할 수 없습니다.');if(this.s.coins<300)throw Error('모험 포인트 300 P가 필요해요.');this.s.coins-=300;this.evolveTo(e.to);}
+  stone(to=null){if(!this.ready())throw Error('진행 중인 일을 먼저 마쳐주세요.');const e=this.species.evolutions.find(e=>e.trigger==='use-item'&&(to===null||e.to===to));if(!e)throw Error('진화의돌을 사용할 수 없습니다.');if(this.s.coins<300)throw Error('모험 포인트 300 P가 필요해요.');this.s.coins-=300;this.evolveTo(e.to);}
+  trade(to){
+    if(!this.ready())throw Error('진행 중인 일을 먼저 마쳐주세요.');
+    const e=this.species.evolutions.find(e=>e.trigger==='trade'&&e.to===to);
+    if(!e)throw Error('교환 진화 대상이 아닙니다.');
+    if(this.s.coins<300)throw Error('교환소 이용에 300 P가 필요해요.');
+    this.s.coins-=300;this.pet.heldItemId=e.heldItemId??null;
+    this.log(`${e.heldItemName??'교환 준비'} · NPC에게 맡겼다가 같은 친구를 돌려받아요.`);
+    this.evolveTo(e.to);delete this.pet.heldItemId;
+  }
   recall(moveId,slot){if(!this.ready())throw Error('진행 중인 일을 먼저 마쳐주세요.');const p=this.pet;if(!this.species.learnset.some(m=>m.moveId===moveId&&m.level<=p.level)||p.moves.includes(moveId))throw Error('떠올릴 수 없는 기술입니다.');if(p.moves.length<4)p.moves.push(moveId);else{if(!Number.isInteger(slot)||slot<0||slot>3)throw Error('교체할 기술을 선택하세요.');p.moves[slot]=moveId;}this.log(`${this.species.name}, ${this.db.moves[moveId].name}을 떠올렸어요.`);}
   startBattle(random=Math.random){const error=this.can('battle');if(error)throw Error(error);this.s.fatigue+=35;this.pet.hunger=clamp(this.pet.hunger-18,0,100);const level=clamp(this.pet.level-Math.floor(random()*3),1,100);const candidates=encounterPool(this.db,level);const id=candidates[Math.floor(random()*candidates.length)];const enemy=makePet(this.db,id,level);this.s.battle={player:this.fighter(this.pet),enemy:this.fighter(enemy),turn:1};this.log(`야생 ${this.db.pokemon[id].name}와 만났어요.`);return this.s.battle;}
-  fighter(p){return {speciesId:p.speciesId,level:p.level,hp:p.hp,maxHp:statsFor(this.db,p.speciesId,p.level).hp,moves:p.moves.map(id=>({id,pp:this.db.moves[id].pp})),stages:{attack:0,defense:0,'special-attack':0,'special-defense':0,speed:0,accuracy:0,evasion:0},status:null,statusTurns:0,confused:0,seeded:false,guard:false,charge:null,lastDamage:0,lastClass:null,recharge:false};}
+  fighter(p){return {speciesId:p.speciesId,level:p.level,ivs:{...(p.ivs??{})},hp:p.hp,maxHp:statsFor(this.db,p.speciesId,p.level,p.ivs).hp,moves:p.moves.map(id=>({id,pp:this.db.moves[id].pp})),stages:{attack:0,defense:0,'special-attack':0,'special-defense':0,speed:0,accuracy:0,evasion:0},status:null,statusTurns:0,confused:0,seeded:false,guard:false,charge:null,lastDamage:0,lastClass:null,recharge:false};}
   usable(f){return f.moves.filter(m=>m.pp>0);}
-  effectiveStat(f,key){let n=(f.copiedStats??statsFor(this.db,f.speciesId,f.level))[key],stage=f.stages[key]||0;n*=stage>=0?(2+stage)/2:2/(2-stage);if(key==='speed'&&f.status==='paralysis')n*=.25;if(key==='attack'&&f.status==='burn')n*=.5;return n;}
+  effectiveStat(f,key){let n=(f.copiedStats??statsFor(this.db,f.speciesId,f.level,f.ivs))[key],stage=f.stages[key]||0;n*=stage>=0?(2+stage)/2:2/(2-stage);if(key==='speed'&&f.status==='paralysis')n*=.25;if(key==='attack'&&f.status==='burn')n*=.5;return n;}
   fighterTypes(f){return f.typeIds??this.db.pokemon[f.speciesId].typeIds;}
   effectiveness(move,defender){if(move.slug==='struggle')return 1;return this.fighterTypes(defender).reduce((n,t)=>n*(this.db.typeChart[move.typeId]?.[t]??1),1);}
   moveMatchup(move,attacker,defender){
@@ -112,7 +137,7 @@ export class Game{
     if(slug==='transform'){
       if(a.transformed||d.transformed){logs.push('변신에 실패했어요.');return;}
       a.transformed=true;a.typeIds=[...this.fighterTypes(d)];
-      a.copiedStats={...statsFor(this.db,d.speciesId,d.level)};
+      a.copiedStats={...statsFor(this.db,d.speciesId,d.level,d.ivs)};
       a.stages={...d.stages};a.moves=d.moves.map(x=>({id:x.id,pp:5}));
       logs.push('상대의 타입·능력치·기술을 복사했어요. HP와 레벨은 유지돼요.');return;
     }

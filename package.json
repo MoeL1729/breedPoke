@@ -1,1 +1,1 @@
-{"name":"pokemon-days","version":"1.3.0","private":true,"type":"module","description":"Version-pinned HGSS pixel Pokemon raising game","scripts":{"test":"node --test tests/engine.test.js"}}
+{"name":"pokemon-days","version":"1.4.0","private":true,"type":"module","description":"Version-pinned HGSS pixel Pokemon raising game","scripts":{"test":"node --test tests/engine.test.js"}}

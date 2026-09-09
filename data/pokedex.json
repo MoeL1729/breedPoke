@@ -5,7 +5,7 @@
     "versionGroup": "heartgold-soulsilver",
     "versionGroupId": 10,
     "generation": 4,
-    "retrievedAt": "2026-09-09T07:02:52.675433+00:00",
+    "retrievedAt": "2026-09-09T07:36:04.692257+00:00",
     "source": "PokeAPI community-maintained dataset (not an official Pokémon API)",
     "canonicalFields": [
       "species",
@@ -17,12 +17,14 @@
       "experience curves"
     ],
     "adaptedRules": [
+      "Release resets the entire local run to an unhatched egg after confirmation; optional backup before release.",
+      "Sinnoh evolution locations and game day/night are selectable contexts. Trade evolution is simulated by an NPC returning the same partner, with the required held item purchased and consumed for 300 points. Tyrogue rolls attack and defense IVs (0-31) at hatching; those two IVs persist through evolution. Other IVs remain zero; EVs and natures are not modeled.",
       "Wild opponents: 146 Kanto species excluding Articuno, Zapdos, Moltres, Mewtwo and Mew. Kanto-only evolution stages; middle gates >=20; final gates >=36 and actual minimum evolution level; non-evolving species >=20 or >=30 for base stat total >=450. Enemy level is partner level minus 0 to 2.",
       "Game day advances by sleeping, not real-world date.",
       "Daily fatigue 100; battle +35; feeding +15; sleep resets.",
-      "One random starter hatches from an egg (Dratini 1%; each of the nine original starters 11%); only that partner is raised; initial level 10; feed friendship +12; sleep +3; level-up +5.",
+      "One random starter hatches from an egg (Dratini 1%; Eevee 5%; thirteen other starters share 94% equally); only that partner is raised; initial level 10; feed friendship +12; sleep +3; level-up +5.",
       "Battle reward XP = 40 + 3 × enemy level squared, 80 points; stone purchase and use costs 300.",
-      "One-on-one battle engine simplifies utility, weather, trapping and some secondary move effects; no abilities, held items, IV/EV/natures or breeding.",
+      "One-on-one battle engine simplifies utility, weather, trapping and some secondary move effects; no abilities, battle held items, EV/natures or breeding; Tyrogue-line attack/defense IVs are supported.",
       "PP is restored each encounter; learning slots remain capped at four.",
       "Move Reminder is free for the current species level-up learnset at or below current level."
     ],
@@ -160,6 +162,10 @@
       {
         "url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/data/v2/csv/move_meta_ailments.csv",
         "sha256": "4c6e3ce3afe276478a45730de3d15f65496f646ce927c3e374b32295fbe24ed4"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/data/v2/csv/location_names.csv",
+        "sha256": "4f901da13ab1fcd4cfeee99dd653652c2bd10afe21739f47a99ee906a99a004e"
       }
     ]
   },
@@ -173,7 +179,85 @@
     238,
     174,
     173,
-    147
+    147,
+    239,
+    81,
+    240,
+    236,
+    133
+  ],
+  "legacyStarterIds": [
+    25,
+    4,
+    1,
+    7,
+    50,
+    52,
+    238,
+    174,
+    173
+  ],
+  "hatchTable": [
+    {
+      "id": 25,
+      "weight": 94
+    },
+    {
+      "id": 4,
+      "weight": 94
+    },
+    {
+      "id": 1,
+      "weight": 94
+    },
+    {
+      "id": 7,
+      "weight": 94
+    },
+    {
+      "id": 50,
+      "weight": 94
+    },
+    {
+      "id": 52,
+      "weight": 94
+    },
+    {
+      "id": 238,
+      "weight": 94
+    },
+    {
+      "id": 174,
+      "weight": 94
+    },
+    {
+      "id": 173,
+      "weight": 94
+    },
+    {
+      "id": 239,
+      "weight": 94
+    },
+    {
+      "id": 81,
+      "weight": 94
+    },
+    {
+      "id": 240,
+      "weight": 94
+    },
+    {
+      "id": 236,
+      "weight": 94
+    },
+    {
+      "id": 147,
+      "weight": 13
+    },
+    {
+      "id": 133,
+      "weight": 65
+    }
   ],
   "enemyIds": [
     1,
@@ -428,6 +512,14 @@
           "minFriendship": null,
           "itemId": null,
           "itemName": null,
+          "heldItemId": null,
+          "heldItemName": null,
+          "timeOfDay": null,
+          "relativePhysicalStats": null,
+          "locationId": null,
+          "locationName": null,
+          "nearSpecialRock": false,
+          "conditionVersion": "heartgold-soulsilver",
           "sourceRowId": 1,
           "note": null
         }
@@ -559,6 +651,14 @@
           "minFriendship": null,
           "itemId": null,
           "itemName": null,
+          "heldItemId": null,
+          "heldItemName": null,
+          "timeOfDay": null,
+          "relativePhysicalStats": null,
+          "locationId": null,
+          "locationName": null,
+          "nearSpecialRock": false,
+          "conditionVersion": "heartgold-soulsilver",
           "sourceRowId": 2,
           "note": null
         }
@@ -789,6 +889,14 @@
           "minFriendship": null,
           "itemId": null,
           "itemName": null,
+          "heldItemId": null,
+          "heldItemName": null,
+          "timeOfDay": null,
+          "relativePhysicalStats": null,
+          "locationId": null,
+          "locationName": null,
+          "nearSpecialRock": false,
+          "conditionVersion": "heartgold-soulsilver",
           "sourceRowId": 3,
           "note": null
         }
@@ -894,6 +1002,14 @@
           "minFriendship": null,
           "itemId": null,
           "itemName": null,
+          "heldItemId": null,
+          "heldItemName": null,
+          "timeOfDay": null,
+          "relativePhysicalStats": null,
+          "locationId": null,
+          "locationName": null,
+          "nearSpecialRock": false,
+          "conditionVersion": "heartgold-soulsilver",
           "sourceRowId": 4,
           "note": null
         }
@@ -1144,6 +1260,14 @@
           "minFriendship": null,
           "itemId": null,
           "itemName": null,
+          "heldItemId": null,
+          "heldItemName": null,
+          "timeOfDay": null,
+          "relativePhysicalStats": null,
+          "locationId": null,
+          "locationName": null,
+          "nearSpecialRock": false,
+          "conditionVersion": "heartgold-soulsilver",
           "sourceRowId": 5,
           "note": null
         }
@@ -1274,6 +1398,14 @@
           "minFriendship": null,
           "itemId": null,
           "itemName": null,
+          "heldItemId": null,
+          "heldItemName": null,
+          "timeOfDay": null,
+          "relativePhysicalStats": null,
+          "locationId": null,
+          "locationName": null,
+          "nearSpecialRock": false,
+          "conditionVersion": "heartgold-soulsilver",
           "sourceRowId": 6,
           "note": null
         }
@@ -1468,6 +1600,14 @@
           "minFriendship": null,
           "itemId": null,
           "itemName": null,
+          "heldItemId": null,
+          "heldItemName": null,
+          "timeOfDay": null,
+          "relativePhysicalStats": null,
+          "locationId": null,
+          "locationName": null,
+          "nearSpecialRock": false,
+          "conditionVersion": "heartgold-soulsilver",
           "sourceRowId": 7,
           "note": null
         }
@@ -1528,6 +1668,14 @@
           "minFriendship": null,
           "itemId": null,
           "itemName": null,
+          "heldItemId": null,
+          "heldItemName": null,
+          "timeOfDay": null,
+          "relativePhysicalStats": null,
+          "locationId": null,
+          "locationName": null,
+          "nearSpecialRock": false,
+          "conditionVersion": "heartgold-soulsilver",
           "sourceRowId": 8,
           "note": null
         }
@@ -1704,6 +1852,14 @@
           "minFriendship": null,
           "itemId": null,
           "itemName": null,
+          "heldItemId": null,
+          "heldItemName": null,
+          "timeOfDay": null,
+          "relativePhysicalStats": null,
+          "locationId": null,
+          "locationName": null,
+          "nearSpecialRock": false,
+          "conditionVersion": "heartgold-soulsilver",
           "sourceRowId": 9,
           "note": null
         }
@@ -1765,6 +1921,14 @@
           "minFriendship": null,
           "itemId": null,
           "itemName": null,
+          "heldItemId": null,
+          "heldItemName": null,
+          "timeOfDay": null,
+          "relativePhysicalStats": null,
+          "locationId": null,
+          "locationName": null,
+          "nearSpecialRock": false,
+          "conditionVersion": "heartgold-soulsilver",
           "sourceRowId": 10,
           "note": null
         }
@@ -1981,6 +2145,14 @@
           "minFriendship": null,
           "itemId": null,
           "itemName": null,
+          "heldItemId": null,
+          "heldItemName": null,
+          "timeOfDay": null,
+          "relativePhysicalStats": null,
+          "locationId": null,
+          "locationName": null,
+          "nearSpecialRock": false,
+          "conditionVersion": "heartgold-soulsilver",
           "sourceRowId": 11,
           "note": null
         }
@@ -2107,6 +2279,14 @@
           "minFriendship": null,
           "itemId": null,
           "itemName": null,
+          "heldItemId": null,
+          "heldItemName": null,
+          "timeOfDay": null,
+          "relativePhysicalStats": null,
+          "locationId": null,
+          "locationName": null,
+          "nearSpecialRock": false,
+          "conditionVersion": "heartgold-soulsilver",
           "sourceRowId": 12,
           "note": null
         }
@@ -2342,6 +2522,14 @@
           "minFriendship": null,
           "itemId": null,
           "itemName": null,
+          "heldItemId": null,
+          "heldItemName": null,
+          "timeOfDay": null,
+          "relativePhysicalStats": null,
+          "locationId": null,
+          "locationName": null,
+          "nearSpecialRock": false,
+          "conditionVersion": "heartgold-soulsilver",
           "sourceRowId": 13,
           "note": null
         }
@@ -2570,6 +2758,14 @@
           "minFriendship": null,
           "itemId": null,
           "itemName": null,
+          "heldItemId": null,
+          "heldItemName": null,
+          "timeOfDay": null,
+          "relativePhysicalStats": null,
+          "locationId": null,
+          "locationName": null,
+          "nearSpecialRock": false,
+          "conditionVersion": "heartgold-soulsilver",
           "sourceRowId": 14,
           "note": null
         }
@@ -2798,6 +2994,14 @@
           "minFriendship": null,
           "itemId": null,
           "itemName": null,
+          "heldItemId": null,
+          "heldItemName": null,
+          "timeOfDay": null,
+          "relativePhysicalStats": null,
+          "locationId": null,
+          "locationName": null,
+          "nearSpecialRock": false,
+          "conditionVersion": "heartgold-soulsilver",
           "sourceRowId": 15,
           "note": null
         }
@@ -3050,6 +3254,14 @@
           "minFriendship": null,
           "itemId": 83,
           "itemName": "천둥의돌",
+          "heldItemId": null,
+          "heldItemName": null,
+          "timeOfDay": null,
+          "relativePhysicalStats": null,
+          "locationId": null,
+          "locationName": null,
+          "nearSpecialRock": false,
+          "conditionVersion": "heartgold-soulsilver",
           "sourceRowId": 17,
           "note": null
         }
@@ -3222,6 +3434,14 @@
           "minFriendship": null,
           "itemId": null,
           "itemName": null,
+          "heldItemId": null,
+          "heldItemName": null,
+          "timeOfDay": null,
+          "relativePhysicalStats": null,
+          "locationId": null,
+          "locationName": null,
+          "nearSpecialRock": false,
+          "conditionVersion": "heartgold-soulsilver",
           "sourceRowId": 18,
           "note": null
         }
@@ -3454,6 +3674,14 @@
           "minFriendship": null,
           "itemId": null,
           "itemName": null,
+          "heldItemId": null,
+          "heldItemName": null,
+          "timeOfDay": null,
+          "relativePhysicalStats": null,
+          "locationId": null,
+          "locationName": null,
+          "nearSpecialRock": false,
+          "conditionVersion": "heartgold-soulsilver",
           "sourceRowId": 19,
           "note": null
         }
@@ -3569,6 +3797,14 @@
           "minFriendship": null,
           "itemId": 81,
           "itemName": "달의돌",
+          "heldItemId": null,
+          "heldItemName": null,
+          "timeOfDay": null,
+          "relativePhysicalStats": null,
+          "locationId": null,
+          "locationName": null,
+          "nearSpecialRock": false,
+          "conditionVersion": "heartgold-soulsilver",
           "sourceRowId": 20,
           "note": null
         }
@@ -3759,6 +3995,14 @@
           "minFriendship": null,
           "itemId": null,
           "itemName": null,
+          "heldItemId": null,
+          "heldItemName": null,
+          "timeOfDay": null,
+          "relativePhysicalStats": null,
+          "locationId": null,
+          "locationName": null,
+          "nearSpecialRock": false,
+          "conditionVersion": "heartgold-soulsilver",
           "sourceRowId": 21,
           "note": null
         }
@@ -3874,6 +4118,14 @@
           "minFriendship": null,
           "itemId": 81,
           "itemName": "달의돌",
+          "heldItemId": null,
+          "heldItemName": null,
+          "timeOfDay": null,
+          "relativePhysicalStats": null,
+          "locationId": null,
+          "locationName": null,
+          "nearSpecialRock": false,
+          "conditionVersion": "heartgold-soulsilver",
           "sourceRowId": 22,
           "note": null
         }
@@ -4084,6 +4336,14 @@
           "minFriendship": null,
           "itemId": 81,
           "itemName": "달의돌",
+          "heldItemId": null,
+          "heldItemName": null,
+          "timeOfDay": null,
+          "relativePhysicalStats": null,
+          "locationId": null,
+          "locationName": null,
+          "nearSpecialRock": false,
+          "conditionVersion": "heartgold-soulsilver",
           "sourceRowId": 24,
           "note": null
         }
@@ -4268,6 +4528,14 @@
           "minFriendship": null,
           "itemId": 82,
           "itemName": "불꽃의돌",
+          "heldItemId": null,
+          "heldItemName": null,
+          "timeOfDay": null,
+          "relativePhysicalStats": null,
+          "locationId": null,
+          "locationName": null,
+          "nearSpecialRock": false,
+          "conditionVersion": "heartgold-soulsilver",
           "sourceRowId": 25,
           "note": null
         }
@@ -4445,6 +4713,14 @@
           "minFriendship": null,
           "itemId": 81,
           "itemName": "달의돌",
+          "heldItemId": null,
+          "heldItemName": null,
+          "timeOfDay": null,
+          "relativePhysicalStats": null,
+          "locationId": null,
+          "locationName": null,
+          "nearSpecialRock": false,
+          "conditionVersion": "heartgold-soulsilver",
           "sourceRowId": 27,
           "note": null
         }
@@ -4610,6 +4886,14 @@
           "minFriendship": null,
           "itemId": null,
           "itemName": null,
+          "heldItemId": null,
+          "heldItemName": null,
+          "timeOfDay": null,
+          "relativePhysicalStats": null,
+          "locationId": null,
+          "locationName": null,
+          "nearSpecialRock": false,
+          "conditionVersion": "heartgold-soulsilver",
           "sourceRowId": 28,
           "note": null
         }
@@ -4829,6 +5113,14 @@
           "minFriendship": null,
           "itemId": null,
           "itemName": null,
+          "heldItemId": null,
+          "heldItemName": null,
+          "timeOfDay": null,
+          "relativePhysicalStats": null,
+          "locationId": null,
+          "locationName": null,
+          "nearSpecialRock": false,
+          "conditionVersion": "heartgold-soulsilver",
           "sourceRowId": 29,
           "note": null
         }
@@ -4950,6 +5242,14 @@
           "minFriendship": null,
           "itemId": 85,
           "itemName": "리프의돌",
+          "heldItemId": null,
+          "heldItemName": null,
+          "timeOfDay": null,
+          "relativePhysicalStats": null,
+          "locationId": null,
+          "locationName": null,
+          "nearSpecialRock": false,
+          "conditionVersion": "heartgold-soulsilver",
           "sourceRowId": 30,
           "note": null
         }
@@ -5121,6 +5421,14 @@
           "minFriendship": null,
           "itemId": null,
           "itemName": null,
+          "heldItemId": null,
+          "heldItemName": null,
+          "timeOfDay": null,
+          "relativePhysicalStats": null,
+          "locationId": null,
+          "locationName": null,
+          "nearSpecialRock": false,
+          "conditionVersion": "heartgold-soulsilver",
           "sourceRowId": 31,
           "note": null
         }
@@ -5350,6 +5658,14 @@
           "minFriendship": null,
           "itemId": null,
           "itemName": null,
+          "heldItemId": null,
+          "heldItemName": null,
+          "timeOfDay": null,
+          "relativePhysicalStats": null,
+          "locationId": null,
+          "locationName": null,
+          "nearSpecialRock": false,
+          "conditionVersion": "heartgold-soulsilver",
           "sourceRowId": 32,
           "note": null
         }
@@ -5593,6 +5909,14 @@
           "minFriendship": null,
           "itemId": null,
           "itemName": null,
+          "heldItemId": null,
+          "heldItemName": null,
+          "timeOfDay": null,
+          "relativePhysicalStats": null,
+          "locationId": null,
+          "locationName": null,
+          "nearSpecialRock": false,
+          "conditionVersion": "heartgold-soulsilver",
           "sourceRowId": 33,
           "note": null
         }
@@ -5840,6 +6164,14 @@
           "minFriendship": null,
           "itemId": null,
           "itemName": null,
+          "heldItemId": null,
+          "heldItemName": null,
+          "timeOfDay": null,
+          "relativePhysicalStats": null,
+          "locationId": null,
+          "locationName": null,
+          "nearSpecialRock": false,
+          "conditionVersion": "heartgold-soulsilver",
           "sourceRowId": 34,
           "note": null
         }
@@ -6082,6 +6414,14 @@
           "minFriendship": null,
           "itemId": null,
           "itemName": null,
+          "heldItemId": null,
+          "heldItemName": null,
+          "timeOfDay": null,
+          "relativePhysicalStats": null,
+          "locationId": null,
+          "locationName": null,
+          "nearSpecialRock": false,
+          "conditionVersion": "heartgold-soulsilver",
           "sourceRowId": 35,
           "note": null
         }
@@ -6324,6 +6664,14 @@
           "minFriendship": null,
           "itemId": null,
           "itemName": null,
+          "heldItemId": null,
+          "heldItemName": null,
+          "timeOfDay": null,
+          "relativePhysicalStats": null,
+          "locationId": null,
+          "locationName": null,
+          "nearSpecialRock": false,
+          "conditionVersion": "heartgold-soulsilver",
           "sourceRowId": 36,
           "note": null
         }
@@ -6566,6 +6914,14 @@
           "minFriendship": null,
           "itemId": 82,
           "itemName": "불꽃의돌",
+          "heldItemId": null,
+          "heldItemName": null,
+          "timeOfDay": null,
+          "relativePhysicalStats": null,
+          "locationId": null,
+          "locationName": null,
+          "nearSpecialRock": false,
+          "conditionVersion": "heartgold-soulsilver",
           "sourceRowId": 37,
           "note": null
         }
@@ -6748,6 +7104,14 @@
           "minFriendship": null,
           "itemId": null,
           "itemName": null,
+          "heldItemId": null,
+          "heldItemName": null,
+          "timeOfDay": null,
+          "relativePhysicalStats": null,
+          "locationId": null,
+          "locationName": null,
+          "nearSpecialRock": false,
+          "conditionVersion": "heartgold-soulsilver",
           "sourceRowId": 38,
           "note": null
         }
@@ -6873,6 +7237,14 @@
           "minFriendship": null,
           "itemId": 84,
           "itemName": "물의돌",
+          "heldItemId": null,
+          "heldItemName": null,
+          "timeOfDay": null,
+          "relativePhysicalStats": null,
+          "locationId": null,
+          "locationName": null,
+          "nearSpecialRock": false,
+          "conditionVersion": "heartgold-soulsilver",
           "sourceRowId": 39,
           "note": null
         }
@@ -6998,6 +7370,14 @@
           "minFriendship": null,
           "itemId": null,
           "itemName": null,
+          "heldItemId": null,
+          "heldItemName": null,
+          "timeOfDay": null,
+          "relativePhysicalStats": null,
+          "locationId": null,
+          "locationName": null,
+          "nearSpecialRock": false,
+          "conditionVersion": "heartgold-soulsilver",
           "sourceRowId": 40,
           "note": null
         }
@@ -7118,6 +7498,14 @@
           "minFriendship": null,
           "itemId": null,
           "itemName": null,
+          "heldItemId": null,
+          "heldItemName": null,
+          "timeOfDay": null,
+          "relativePhysicalStats": null,
+          "locationId": null,
+          "locationName": null,
+          "nearSpecialRock": false,
+          "conditionVersion": "heartgold-soulsilver",
           "sourceRowId": 41,
           "note": null
         }
@@ -7342,6 +7730,14 @@
           "minFriendship": null,
           "itemId": null,
           "itemName": null,
+          "heldItemId": null,
+          "heldItemName": null,
+          "timeOfDay": null,
+          "relativePhysicalStats": null,
+          "locationId": null,
+          "locationName": null,
+          "nearSpecialRock": false,
+          "conditionVersion": "heartgold-soulsilver",
           "sourceRowId": 42,
           "note": null
         }
@@ -7462,6 +7858,14 @@
           "minFriendship": null,
           "itemId": null,
           "itemName": null,
+          "heldItemId": null,
+          "heldItemName": null,
+          "timeOfDay": null,
+          "relativePhysicalStats": null,
+          "locationId": null,
+          "locationName": null,
+          "nearSpecialRock": false,
+          "conditionVersion": "heartgold-soulsilver",
           "sourceRowId": 43,
           "note": null
         }
@@ -7687,6 +8091,14 @@
           "minFriendship": null,
           "itemId": null,
           "itemName": null,
+          "heldItemId": null,
+          "heldItemName": null,
+          "timeOfDay": null,
+          "relativePhysicalStats": null,
+          "locationId": null,
+          "locationName": null,
+          "nearSpecialRock": false,
+          "conditionVersion": "heartgold-soulsilver",
           "sourceRowId": 44,
           "note": null
         }
@@ -7813,6 +8225,14 @@
           "minFriendship": null,
           "itemId": 85,
           "itemName": "리프의돌",
+          "heldItemId": null,
+          "heldItemName": null,
+          "timeOfDay": null,
+          "relativePhysicalStats": null,
+          "locationId": null,
+          "locationName": null,
+          "nearSpecialRock": false,
+          "conditionVersion": "heartgold-soulsilver",
           "sourceRowId": 45,
           "note": null
         }
@@ -8014,6 +8434,14 @@
           "minFriendship": null,
           "itemId": null,
           "itemName": null,
+          "heldItemId": null,
+          "heldItemName": null,
+          "timeOfDay": null,
+          "relativePhysicalStats": null,
+          "locationId": null,
+          "locationName": null,
+          "nearSpecialRock": false,
+          "conditionVersion": "heartgold-soulsilver",
           "sourceRowId": 46,
           "note": null
         }
@@ -8243,6 +8671,14 @@
           "minFriendship": null,
           "itemId": null,
           "itemName": null,
+          "heldItemId": null,
+          "heldItemName": null,
+          "timeOfDay": null,
+          "relativePhysicalStats": null,
+          "locationId": null,
+          "locationName": null,
+          "nearSpecialRock": false,
+          "conditionVersion": "heartgold-soulsilver",
           "sourceRowId": 47,
           "note": null
         }
@@ -8369,6 +8805,14 @@
           "minFriendship": null,
           "itemId": null,
           "itemName": null,
+          "heldItemId": null,
+          "heldItemName": null,
+          "timeOfDay": null,
+          "relativePhysicalStats": null,
+          "locationId": null,
+          "locationName": null,
+          "nearSpecialRock": false,
+          "conditionVersion": "heartgold-soulsilver",
           "sourceRowId": 48,
           "note": null
         }
@@ -8594,6 +9038,14 @@
           "minFriendship": null,
           "itemId": null,
           "itemName": null,
+          "heldItemId": null,
+          "heldItemName": null,
+          "timeOfDay": null,
+          "relativePhysicalStats": null,
+          "locationId": null,
+          "locationName": null,
+          "nearSpecialRock": false,
+          "conditionVersion": "heartgold-soulsilver",
           "sourceRowId": 49,
           "note": null
         }
@@ -8842,6 +9294,14 @@
           "minFriendship": null,
           "itemId": null,
           "itemName": null,
+          "heldItemId": null,
+          "heldItemName": null,
+          "timeOfDay": null,
+          "relativePhysicalStats": null,
+          "locationId": null,
+          "locationName": null,
+          "nearSpecialRock": false,
+          "conditionVersion": "heartgold-soulsilver",
           "sourceRowId": 50,
           "note": null
         }
@@ -9091,13 +9551,22 @@
           "minFriendship": null,
           "itemId": null,
           "itemName": null,
+          "heldItemId": null,
+          "heldItemName": null,
+          "timeOfDay": null,
+          "relativePhysicalStats": null,
+          "locationId": null,
+          "locationName": null,
+          "nearSpecialRock": false,
+          "conditionVersion": "heartgold-soulsilver",
           "sourceRowId": 51,
           "note": null
         }
       ],
       "family": [
         81,
-        82
+        82,
+        462
       ],
       "sprite": "assets/sprites/81.png",
       "backSprite": "assets/sprites/81-back.png",
@@ -9223,10 +9692,30 @@
           "order": 0
         }
       ],
-      "evolutions": [],
+      "evolutions": [
+        {
+          "to": 462,
+          "trigger": "level-up",
+          "minLevel": null,
+          "minFriendship": null,
+          "itemId": null,
+          "itemName": null,
+          "heldItemId": null,
+          "heldItemName": null,
+          "timeOfDay": null,
+          "relativePhysicalStats": null,
+          "locationId": 10,
+          "locationName": "천관산",
+          "nearSpecialRock": false,
+          "conditionVersion": "diamond-pearl-platinum",
+          "sourceRowId": 230,
+          "note": null
+        }
+      ],
       "family": [
         81,
-        82
+        82,
+        462
       ],
       "sprite": "assets/sprites/82.png",
       "backSprite": "assets/sprites/82-back.png",
@@ -9448,6 +9937,14 @@
           "minFriendship": null,
           "itemId": null,
           "itemName": null,
+          "heldItemId": null,
+          "heldItemName": null,
+          "timeOfDay": null,
+          "relativePhysicalStats": null,
+          "locationId": null,
+          "locationName": null,
+          "nearSpecialRock": false,
+          "conditionVersion": "heartgold-soulsilver",
           "sourceRowId": 52,
           "note": null
         }
@@ -9691,6 +10188,14 @@
           "minFriendship": null,
           "itemId": null,
           "itemName": null,
+          "heldItemId": null,
+          "heldItemName": null,
+          "timeOfDay": null,
+          "relativePhysicalStats": null,
+          "locationId": null,
+          "locationName": null,
+          "nearSpecialRock": false,
+          "conditionVersion": "heartgold-soulsilver",
           "sourceRowId": 53,
           "note": null
         }
@@ -9949,6 +10454,14 @@
           "minFriendship": null,
           "itemId": null,
           "itemName": null,
+          "heldItemId": null,
+          "heldItemName": null,
+          "timeOfDay": null,
+          "relativePhysicalStats": null,
+          "locationId": null,
+          "locationName": null,
+          "nearSpecialRock": false,
+          "conditionVersion": "heartgold-soulsilver",
           "sourceRowId": 54,
           "note": null
         }
@@ -10181,6 +10694,14 @@
           "minFriendship": null,
           "itemId": 84,
           "itemName": "물의돌",
+          "heldItemId": null,
+          "heldItemName": null,
+          "timeOfDay": null,
+          "relativePhysicalStats": null,
+          "locationId": null,
+          "locationName": null,
+          "nearSpecialRock": false,
+          "conditionVersion": "heartgold-soulsilver",
           "sourceRowId": 55,
           "note": null
         }
@@ -10375,6 +10896,14 @@
           "minFriendship": null,
           "itemId": null,
           "itemName": null,
+          "heldItemId": null,
+          "heldItemName": null,
+          "timeOfDay": null,
+          "relativePhysicalStats": null,
+          "locationId": null,
+          "locationName": null,
+          "nearSpecialRock": false,
+          "conditionVersion": "heartgold-soulsilver",
           "sourceRowId": 56,
           "note": null
         }
@@ -10506,6 +11035,14 @@
           "minFriendship": null,
           "itemId": null,
           "itemName": null,
+          "heldItemId": null,
+          "heldItemName": null,
+          "timeOfDay": null,
+          "relativePhysicalStats": null,
+          "locationId": null,
+          "locationName": null,
+          "nearSpecialRock": false,
+          "conditionVersion": "heartgold-soulsilver",
           "sourceRowId": 57,
           "note": null
         }
@@ -10874,6 +11411,14 @@
           "minFriendship": null,
           "itemId": null,
           "itemName": null,
+          "heldItemId": null,
+          "heldItemName": null,
+          "timeOfDay": null,
+          "relativePhysicalStats": null,
+          "locationId": null,
+          "locationName": null,
+          "nearSpecialRock": false,
+          "conditionVersion": "heartgold-soulsilver",
           "sourceRowId": 58,
           "note": null
         }
@@ -11131,6 +11676,14 @@
           "minFriendship": null,
           "itemId": null,
           "itemName": null,
+          "heldItemId": null,
+          "heldItemName": null,
+          "timeOfDay": null,
+          "relativePhysicalStats": null,
+          "locationId": null,
+          "locationName": null,
+          "nearSpecialRock": false,
+          "conditionVersion": "heartgold-soulsilver",
           "sourceRowId": 59,
           "note": null
         }
@@ -11368,6 +11921,14 @@
           "minFriendship": null,
           "itemId": null,
           "itemName": null,
+          "heldItemId": null,
+          "heldItemName": null,
+          "timeOfDay": null,
+          "relativePhysicalStats": null,
+          "locationId": null,
+          "locationName": null,
+          "nearSpecialRock": false,
+          "conditionVersion": "heartgold-soulsilver",
           "sourceRowId": 60,
           "note": null
         }
@@ -11611,6 +12172,14 @@
           "minFriendship": null,
           "itemId": 85,
           "itemName": "리프의돌",
+          "heldItemId": null,
+          "heldItemName": null,
+          "timeOfDay": null,
+          "relativePhysicalStats": null,
+          "locationId": null,
+          "locationName": null,
+          "nearSpecialRock": false,
+          "conditionVersion": "heartgold-soulsilver",
           "sourceRowId": 61,
           "note": null
         }
@@ -11814,6 +12383,14 @@
           "minFriendship": null,
           "itemId": null,
           "itemName": null,
+          "heldItemId": null,
+          "heldItemName": null,
+          "timeOfDay": null,
+          "relativePhysicalStats": null,
+          "locationId": null,
+          "locationName": null,
+          "nearSpecialRock": false,
+          "conditionVersion": "heartgold-soulsilver",
           "sourceRowId": 62,
           "note": null
         }
@@ -12061,7 +12638,9 @@
       "evolutions": [],
       "family": [
         106,
-        107
+        107,
+        236,
+        237
       ],
       "sprite": "assets/sprites/106.png",
       "backSprite": "assets/sprites/106-back.png",
@@ -12179,7 +12758,9 @@
       "evolutions": [],
       "family": [
         106,
-        107
+        107,
+        236,
+        237
       ],
       "sprite": "assets/sprites/107.png",
       "backSprite": "assets/sprites/107-back.png",
@@ -12394,6 +12975,14 @@
           "minFriendship": null,
           "itemId": null,
           "itemName": null,
+          "heldItemId": null,
+          "heldItemName": null,
+          "timeOfDay": null,
+          "relativePhysicalStats": null,
+          "locationId": null,
+          "locationName": null,
+          "nearSpecialRock": false,
+          "conditionVersion": "heartgold-soulsilver",
           "sourceRowId": 65,
           "note": null
         }
@@ -12612,6 +13201,14 @@
           "minFriendship": null,
           "itemId": null,
           "itemName": null,
+          "heldItemId": null,
+          "heldItemName": null,
+          "timeOfDay": null,
+          "relativePhysicalStats": null,
+          "locationId": null,
+          "locationName": null,
+          "nearSpecialRock": false,
+          "conditionVersion": "heartgold-soulsilver",
           "sourceRowId": 66,
           "note": null
         }
@@ -13166,6 +13763,14 @@
           "minFriendship": null,
           "itemId": null,
           "itemName": null,
+          "heldItemId": null,
+          "heldItemName": null,
+          "timeOfDay": null,
+          "relativePhysicalStats": null,
+          "locationId": null,
+          "locationName": null,
+          "nearSpecialRock": false,
+          "conditionVersion": "heartgold-soulsilver",
           "sourceRowId": 68,
           "note": null
         }
@@ -13393,6 +13998,14 @@
           "minFriendship": null,
           "itemId": null,
           "itemName": null,
+          "heldItemId": null,
+          "heldItemName": null,
+          "timeOfDay": null,
+          "relativePhysicalStats": null,
+          "locationId": null,
+          "locationName": null,
+          "nearSpecialRock": false,
+          "conditionVersion": "heartgold-soulsilver",
           "sourceRowId": 69,
           "note": null
         }
@@ -13625,6 +14238,14 @@
           "minFriendship": null,
           "itemId": 84,
           "itemName": "물의돌",
+          "heldItemId": null,
+          "heldItemName": null,
+          "timeOfDay": null,
+          "relativePhysicalStats": null,
+          "locationId": null,
+          "locationName": null,
+          "nearSpecialRock": false,
+          "conditionVersion": "heartgold-soulsilver",
           "sourceRowId": 70,
           "note": null
         }
@@ -14184,9 +14805,30 @@
           "order": 0
         }
       ],
-      "evolutions": [],
+      "evolutions": [
+        {
+          "to": 466,
+          "trigger": "trade",
+          "minLevel": null,
+          "minFriendship": null,
+          "itemId": null,
+          "itemName": null,
+          "heldItemId": 299,
+          "heldItemName": "에레키부스터",
+          "timeOfDay": null,
+          "relativePhysicalStats": null,
+          "locationId": null,
+          "locationName": null,
+          "nearSpecialRock": false,
+          "conditionVersion": "heartgold-soulsilver",
+          "sourceRowId": 234,
+          "note": null
+        }
+      ],
       "family": [
-        125
+        125,
+        239,
+        466
       ],
       "sprite": "assets/sprites/125.png",
       "backSprite": "assets/sprites/125-back.png",
@@ -14286,9 +14928,30 @@
           "order": 0
         }
       ],
-      "evolutions": [],
+      "evolutions": [
+        {
+          "to": 467,
+          "trigger": "trade",
+          "minLevel": null,
+          "minFriendship": null,
+          "itemId": null,
+          "itemName": null,
+          "heldItemId": 300,
+          "heldItemName": "마그마부스터",
+          "timeOfDay": null,
+          "relativePhysicalStats": null,
+          "locationId": null,
+          "locationName": null,
+          "nearSpecialRock": false,
+          "conditionVersion": "heartgold-soulsilver",
+          "sourceRowId": 235,
+          "note": null
+        }
+      ],
       "family": [
-        126
+        126,
+        240,
+        467
       ],
       "sprite": "assets/sprites/126.png",
       "backSprite": "assets/sprites/126-back.png",
@@ -14555,6 +15218,14 @@
           "minFriendship": null,
           "itemId": null,
           "itemName": null,
+          "heldItemId": null,
+          "heldItemName": null,
+          "timeOfDay": null,
+          "relativePhysicalStats": null,
+          "locationId": null,
+          "locationName": null,
+          "nearSpecialRock": false,
+          "conditionVersion": "heartgold-soulsilver",
           "sourceRowId": 75,
           "note": null
         }
@@ -14908,6 +15579,14 @@
           "minFriendship": null,
           "itemId": 84,
           "itemName": "물의돌",
+          "heldItemId": null,
+          "heldItemName": null,
+          "timeOfDay": null,
+          "relativePhysicalStats": null,
+          "locationId": null,
+          "locationName": null,
+          "nearSpecialRock": false,
+          "conditionVersion": "heartgold-soulsilver",
           "sourceRowId": 76,
           "note": null
         },
@@ -14918,6 +15597,14 @@
           "minFriendship": null,
           "itemId": 83,
           "itemName": "천둥의돌",
+          "heldItemId": null,
+          "heldItemName": null,
+          "timeOfDay": null,
+          "relativePhysicalStats": null,
+          "locationId": null,
+          "locationName": null,
+          "nearSpecialRock": false,
+          "conditionVersion": "heartgold-soulsilver",
           "sourceRowId": 77,
           "note": null
         },
@@ -14928,7 +15615,87 @@
           "minFriendship": null,
           "itemId": 82,
           "itemName": "불꽃의돌",
+          "heldItemId": null,
+          "heldItemName": null,
+          "timeOfDay": null,
+          "relativePhysicalStats": null,
+          "locationId": null,
+          "locationName": null,
+          "nearSpecialRock": false,
+          "conditionVersion": "heartgold-soulsilver",
           "sourceRowId": 78,
+          "note": null
+        },
+        {
+          "to": 196,
+          "trigger": "level-up",
+          "minLevel": null,
+          "minFriendship": 220,
+          "itemId": null,
+          "itemName": null,
+          "heldItemId": null,
+          "heldItemName": null,
+          "timeOfDay": "day",
+          "relativePhysicalStats": null,
+          "locationId": null,
+          "locationName": null,
+          "nearSpecialRock": false,
+          "conditionVersion": "heartgold-soulsilver",
+          "sourceRowId": 109,
+          "note": "HGSS 친밀도 진화 기준 220 적용"
+        },
+        {
+          "to": 197,
+          "trigger": "level-up",
+          "minLevel": null,
+          "minFriendship": 220,
+          "itemId": null,
+          "itemName": null,
+          "heldItemId": null,
+          "heldItemName": null,
+          "timeOfDay": "night",
+          "relativePhysicalStats": null,
+          "locationId": null,
+          "locationName": null,
+          "nearSpecialRock": false,
+          "conditionVersion": "heartgold-soulsilver",
+          "sourceRowId": 110,
+          "note": "HGSS 친밀도 진화 기준 220 적용"
+        },
+        {
+          "to": 470,
+          "trigger": "level-up",
+          "minLevel": null,
+          "minFriendship": null,
+          "itemId": null,
+          "itemName": null,
+          "heldItemId": null,
+          "heldItemName": null,
+          "timeOfDay": null,
+          "relativePhysicalStats": null,
+          "locationId": 8,
+          "locationName": "영원의숲",
+          "nearSpecialRock": true,
+          "conditionVersion": "diamond-pearl-platinum",
+          "sourceRowId": 238,
+          "note": null
+        },
+        {
+          "to": 471,
+          "trigger": "level-up",
+          "minLevel": null,
+          "minFriendship": null,
+          "itemId": null,
+          "itemName": null,
+          "heldItemId": null,
+          "heldItemName": null,
+          "timeOfDay": null,
+          "relativePhysicalStats": null,
+          "locationId": 48,
+          "locationName": "217번도로",
+          "nearSpecialRock": true,
+          "conditionVersion": "diamond-pearl-platinum",
+          "sourceRowId": 239,
           "note": null
         }
       ],
@@ -14936,7 +15703,11 @@
         133,
         134,
         135,
-        136
+        136,
+        196,
+        197,
+        470,
+        471
       ],
       "sprite": "assets/sprites/133.png",
       "backSprite": "assets/sprites/133-back.png",
@@ -15046,7 +15817,11 @@
         133,
         134,
         135,
-        136
+        136,
+        196,
+        197,
+        470,
+        471
       ],
       "sprite": "assets/sprites/134.png",
       "backSprite": "assets/sprites/134-back.png",
@@ -15156,7 +15931,11 @@
         133,
         134,
         135,
-        136
+        136,
+        196,
+        197,
+        470,
+        471
       ],
       "sprite": "assets/sprites/135.png",
       "backSprite": "assets/sprites/135-back.png",
@@ -15266,7 +16045,11 @@
         133,
         134,
         135,
-        136
+        136,
+        196,
+        197,
+        470,
+        471
       ],
       "sprite": "assets/sprites/136.png",
       "backSprite": "assets/sprites/136-back.png",
@@ -15487,6 +16270,14 @@
           "minFriendship": null,
           "itemId": null,
           "itemName": null,
+          "heldItemId": null,
+          "heldItemName": null,
+          "timeOfDay": null,
+          "relativePhysicalStats": null,
+          "locationId": null,
+          "locationName": null,
+          "nearSpecialRock": false,
+          "conditionVersion": "heartgold-soulsilver",
           "sourceRowId": 79,
           "note": null
         }
@@ -15711,6 +16502,14 @@
           "minFriendship": null,
           "itemId": null,
           "itemName": null,
+          "heldItemId": null,
+          "heldItemName": null,
+          "timeOfDay": null,
+          "relativePhysicalStats": null,
+          "locationId": null,
+          "locationName": null,
+          "nearSpecialRock": false,
+          "conditionVersion": "heartgold-soulsilver",
           "sourceRowId": 80,
           "note": null
         }
@@ -16174,6 +16973,14 @@
           "minFriendship": null,
           "itemId": null,
           "itemName": null,
+          "heldItemId": null,
+          "heldItemName": null,
+          "timeOfDay": null,
+          "relativePhysicalStats": null,
+          "locationId": null,
+          "locationName": null,
+          "nearSpecialRock": false,
+          "conditionVersion": "heartgold-soulsilver",
           "sourceRowId": 82,
           "note": null
         }
@@ -16299,6 +17106,14 @@
           "minFriendship": null,
           "itemId": null,
           "itemName": null,
+          "heldItemId": null,
+          "heldItemName": null,
+          "timeOfDay": null,
+          "relativePhysicalStats": null,
+          "locationId": null,
+          "locationName": null,
+          "nearSpecialRock": false,
+          "conditionVersion": "heartgold-soulsilver",
           "sourceRowId": 83,
           "note": null
         }
@@ -16519,6 +17334,14 @@
           "minFriendship": 220,
           "itemId": null,
           "itemName": null,
+          "heldItemId": null,
+          "heldItemName": null,
+          "timeOfDay": null,
+          "relativePhysicalStats": null,
+          "locationId": null,
+          "locationName": null,
+          "nearSpecialRock": false,
+          "conditionVersion": "heartgold-soulsilver",
           "sourceRowId": 23,
           "note": "HGSS 친밀도 진화 기준 220 적용"
         }
@@ -16594,6 +17417,14 @@
           "minFriendship": 220,
           "itemId": null,
           "itemName": null,
+          "heldItemId": null,
+          "heldItemName": null,
+          "timeOfDay": null,
+          "relativePhysicalStats": null,
+          "locationId": null,
+          "locationName": null,
+          "nearSpecialRock": false,
+          "conditionVersion": "heartgold-soulsilver",
           "sourceRowId": 26,
           "note": "HGSS 친밀도 진화 기준 220 적용"
         }
@@ -16710,6 +17541,14 @@
           "minFriendship": null,
           "itemId": null,
           "itemName": null,
+          "heldItemId": null,
+          "heldItemName": null,
+          "timeOfDay": null,
+          "relativePhysicalStats": null,
+          "locationId": null,
+          "locationName": null,
+          "nearSpecialRock": false,
+          "conditionVersion": "heartgold-soulsilver",
           "sourceRowId": 72,
           "note": null
         }
@@ -16720,6 +17559,1241 @@
       ],
       "sprite": "assets/sprites/238.png",
       "backSprite": "assets/sprites/238-back.png"
+    },
+    "239": {
+      "id": 239,
+      "slug": "elekid",
+      "name": "에레키드",
+      "genus": "전류포켓몬",
+      "description": "양팔을 빙글빙글 휘둘러서 전기를 발생시킨다. 그러나 만들어낸 전기는 모아둘 수 없다.",
+      "descriptionVersionId": 23,
+      "descriptionVersion": "x",
+      "heightM": 0.6,
+      "weightKg": 23.5,
+      "typeIds": [
+        13
+      ],
+      "stats": {
+        "hp": 45,
+        "attack": 63,
+        "defense": 37,
+        "special-attack": 65,
+        "special-defense": 55,
+        "speed": 95
+      },
+      "baseFriendship": 70,
+      "growthRateId": 2,
+      "learnset": [
+        {
+          "level": 1,
+          "moveId": 98,
+          "order": 1
+        },
+        {
+          "level": 1,
+          "moveId": 43,
+          "order": 2
+        },
+        {
+          "level": 7,
+          "moveId": 84,
+          "order": 0
+        },
+        {
+          "level": 10,
+          "moveId": 67,
+          "order": 0
+        },
+        {
+          "level": 16,
+          "moveId": 129,
+          "order": 0
+        },
+        {
+          "level": 19,
+          "moveId": 351,
+          "order": 0
+        },
+        {
+          "level": 25,
+          "moveId": 113,
+          "order": 0
+        },
+        {
+          "level": 28,
+          "moveId": 9,
+          "order": 0
+        },
+        {
+          "level": 34,
+          "moveId": 435,
+          "order": 0
+        },
+        {
+          "level": 37,
+          "moveId": 85,
+          "order": 0
+        },
+        {
+          "level": 43,
+          "moveId": 103,
+          "order": 0
+        },
+        {
+          "level": 46,
+          "moveId": 87,
+          "order": 0
+        }
+      ],
+      "evolutions": [
+        {
+          "to": 125,
+          "trigger": "level-up",
+          "minLevel": 30,
+          "minFriendship": null,
+          "itemId": null,
+          "itemName": null,
+          "heldItemId": null,
+          "heldItemName": null,
+          "timeOfDay": null,
+          "relativePhysicalStats": null,
+          "locationId": null,
+          "locationName": null,
+          "nearSpecialRock": false,
+          "conditionVersion": "heartgold-soulsilver",
+          "sourceRowId": 73,
+          "note": null
+        }
+      ],
+      "family": [
+        125,
+        239,
+        466
+      ],
+      "sprite": "assets/sprites/239.png",
+      "backSprite": "assets/sprites/239-back.png"
+    },
+    "240": {
+      "id": 240,
+      "slug": "magby",
+      "name": "마그비",
+      "genus": "불씨포켓몬",
+      "description": "작은 몸이지만 체온은 600도다. 숨을 들이쉬고 내쉴 때마다 입과 코에서 불꽃이 샌다.",
+      "descriptionVersionId": 23,
+      "descriptionVersion": "x",
+      "heightM": 0.7,
+      "weightKg": 21.4,
+      "typeIds": [
+        10
+      ],
+      "stats": {
+        "hp": 45,
+        "attack": 75,
+        "defense": 37,
+        "special-attack": 70,
+        "special-defense": 55,
+        "speed": 83
+      },
+      "baseFriendship": 70,
+      "growthRateId": 2,
+      "learnset": [
+        {
+          "level": 1,
+          "moveId": 123,
+          "order": 1
+        },
+        {
+          "level": 1,
+          "moveId": 43,
+          "order": 2
+        },
+        {
+          "level": 7,
+          "moveId": 52,
+          "order": 0
+        },
+        {
+          "level": 10,
+          "moveId": 108,
+          "order": 0
+        },
+        {
+          "level": 16,
+          "moveId": 185,
+          "order": 0
+        },
+        {
+          "level": 19,
+          "moveId": 83,
+          "order": 0
+        },
+        {
+          "level": 25,
+          "moveId": 109,
+          "order": 0
+        },
+        {
+          "level": 28,
+          "moveId": 7,
+          "order": 0
+        },
+        {
+          "level": 34,
+          "moveId": 436,
+          "order": 0
+        },
+        {
+          "level": 37,
+          "moveId": 53,
+          "order": 0
+        },
+        {
+          "level": 43,
+          "moveId": 241,
+          "order": 0
+        },
+        {
+          "level": 46,
+          "moveId": 126,
+          "order": 0
+        }
+      ],
+      "evolutions": [
+        {
+          "to": 126,
+          "trigger": "level-up",
+          "minLevel": 30,
+          "minFriendship": null,
+          "itemId": null,
+          "itemName": null,
+          "heldItemId": null,
+          "heldItemName": null,
+          "timeOfDay": null,
+          "relativePhysicalStats": null,
+          "locationId": null,
+          "locationName": null,
+          "nearSpecialRock": false,
+          "conditionVersion": "heartgold-soulsilver",
+          "sourceRowId": 74,
+          "note": null
+        }
+      ],
+      "family": [
+        126,
+        240,
+        467
+      ],
+      "sprite": "assets/sprites/240.png",
+      "backSprite": "assets/sprites/240-back.png"
+    },
+    "236": {
+      "id": 236,
+      "slug": "tyrogue",
+      "name": "배루키",
+      "genus": "싸움포켓몬",
+      "description": "항상 기운이 넘친다. 강해지기 위해 계속 져도 상대에게 맞선다.",
+      "descriptionVersionId": 23,
+      "descriptionVersion": "x",
+      "heightM": 0.7,
+      "weightKg": 21.0,
+      "typeIds": [
+        2
+      ],
+      "stats": {
+        "hp": 35,
+        "attack": 35,
+        "defense": 35,
+        "special-attack": 35,
+        "special-defense": 35,
+        "speed": 35
+      },
+      "baseFriendship": 70,
+      "growthRateId": 2,
+      "learnset": [
+        {
+          "level": 1,
+          "moveId": 33,
+          "order": 1
+        },
+        {
+          "level": 1,
+          "moveId": 270,
+          "order": 2
+        },
+        {
+          "level": 1,
+          "moveId": 252,
+          "order": 3
+        },
+        {
+          "level": 1,
+          "moveId": 193,
+          "order": 4
+        }
+      ],
+      "evolutions": [
+        {
+          "to": 106,
+          "trigger": "level-up",
+          "minLevel": 20,
+          "minFriendship": null,
+          "itemId": null,
+          "itemName": null,
+          "heldItemId": null,
+          "heldItemName": null,
+          "timeOfDay": null,
+          "relativePhysicalStats": 1,
+          "locationId": null,
+          "locationName": null,
+          "nearSpecialRock": false,
+          "conditionVersion": "heartgold-soulsilver",
+          "sourceRowId": 63,
+          "note": null
+        },
+        {
+          "to": 107,
+          "trigger": "level-up",
+          "minLevel": 20,
+          "minFriendship": null,
+          "itemId": null,
+          "itemName": null,
+          "heldItemId": null,
+          "heldItemName": null,
+          "timeOfDay": null,
+          "relativePhysicalStats": -1,
+          "locationId": null,
+          "locationName": null,
+          "nearSpecialRock": false,
+          "conditionVersion": "heartgold-soulsilver",
+          "sourceRowId": 64,
+          "note": null
+        },
+        {
+          "to": 237,
+          "trigger": "level-up",
+          "minLevel": 20,
+          "minFriendship": null,
+          "itemId": null,
+          "itemName": null,
+          "heldItemId": null,
+          "heldItemName": null,
+          "timeOfDay": null,
+          "relativePhysicalStats": 0,
+          "locationId": null,
+          "locationName": null,
+          "nearSpecialRock": false,
+          "conditionVersion": "heartgold-soulsilver",
+          "sourceRowId": 126,
+          "note": null
+        }
+      ],
+      "family": [
+        106,
+        107,
+        236,
+        237
+      ],
+      "sprite": "assets/sprites/236.png",
+      "backSprite": "assets/sprites/236-back.png"
+    },
+    "237": {
+      "id": 237,
+      "slug": "hitmontop",
+      "name": "카포에라",
+      "genus": "물구나무포켓몬",
+      "description": "팽이처럼 회전하면서 싸운다. 원심력의 파워로 파괴력은 10배다.",
+      "descriptionVersionId": 23,
+      "descriptionVersion": "x",
+      "heightM": 1.4,
+      "weightKg": 48.0,
+      "typeIds": [
+        2
+      ],
+      "stats": {
+        "hp": 50,
+        "attack": 95,
+        "defense": 95,
+        "special-attack": 35,
+        "special-defense": 110,
+        "speed": 70
+      },
+      "baseFriendship": 70,
+      "growthRateId": 2,
+      "learnset": [
+        {
+          "level": 1,
+          "moveId": 279,
+          "order": 1
+        },
+        {
+          "level": 1,
+          "moveId": 27,
+          "order": 2
+        },
+        {
+          "level": 6,
+          "moveId": 116,
+          "order": 0
+        },
+        {
+          "level": 10,
+          "moveId": 228,
+          "order": 0
+        },
+        {
+          "level": 15,
+          "moveId": 98,
+          "order": 0
+        },
+        {
+          "level": 19,
+          "moveId": 167,
+          "order": 0
+        },
+        {
+          "level": 24,
+          "moveId": 229,
+          "order": 0
+        },
+        {
+          "level": 28,
+          "moveId": 68,
+          "order": 0
+        },
+        {
+          "level": 33,
+          "moveId": 364,
+          "order": 0
+        },
+        {
+          "level": 37,
+          "moveId": 97,
+          "order": 0
+        },
+        {
+          "level": 42,
+          "moveId": 360,
+          "order": 0
+        },
+        {
+          "level": 46,
+          "moveId": 197,
+          "order": 0
+        },
+        {
+          "level": 51,
+          "moveId": 370,
+          "order": 0
+        },
+        {
+          "level": 55,
+          "moveId": 283,
+          "order": 0
+        }
+      ],
+      "evolutions": [],
+      "family": [
+        106,
+        107,
+        236,
+        237
+      ],
+      "sprite": "assets/sprites/237.png",
+      "backSprite": "assets/sprites/237-back.png"
+    },
+    "462": {
+      "id": 462,
+      "slug": "magnezone",
+      "name": "자포코일",
+      "genus": "자기장포켓몬",
+      "description": "너무 강한 자력을 내어 자포코일끼리 끌어당겨 전혀 못 움직이기도 한다.",
+      "descriptionVersionId": 23,
+      "descriptionVersion": "x",
+      "heightM": 1.2,
+      "weightKg": 180.0,
+      "typeIds": [
+        13,
+        9
+      ],
+      "stats": {
+        "hp": 70,
+        "attack": 70,
+        "defense": 115,
+        "special-attack": 130,
+        "special-defense": 90,
+        "speed": 60
+      },
+      "baseFriendship": 70,
+      "growthRateId": 2,
+      "learnset": [
+        {
+          "level": 1,
+          "moveId": 243,
+          "order": 1
+        },
+        {
+          "level": 1,
+          "moveId": 112,
+          "order": 2
+        },
+        {
+          "level": 1,
+          "moveId": 319,
+          "order": 3
+        },
+        {
+          "level": 1,
+          "moveId": 33,
+          "order": 4
+        },
+        {
+          "level": 1,
+          "moveId": 84,
+          "order": 5
+        },
+        {
+          "level": 1,
+          "moveId": 48,
+          "order": 6
+        },
+        {
+          "level": 6,
+          "moveId": 84,
+          "order": 0
+        },
+        {
+          "level": 11,
+          "moveId": 48,
+          "order": 0
+        },
+        {
+          "level": 14,
+          "moveId": 49,
+          "order": 0
+        },
+        {
+          "level": 17,
+          "moveId": 86,
+          "order": 0
+        },
+        {
+          "level": 22,
+          "moveId": 209,
+          "order": 0
+        },
+        {
+          "level": 27,
+          "moveId": 199,
+          "order": 0
+        },
+        {
+          "level": 30,
+          "moveId": 443,
+          "order": 0
+        },
+        {
+          "level": 34,
+          "moveId": 103,
+          "order": 0
+        },
+        {
+          "level": 40,
+          "moveId": 435,
+          "order": 0
+        },
+        {
+          "level": 46,
+          "moveId": 429,
+          "order": 0
+        },
+        {
+          "level": 50,
+          "moveId": 393,
+          "order": 0
+        },
+        {
+          "level": 54,
+          "moveId": 360,
+          "order": 0
+        },
+        {
+          "level": 60,
+          "moveId": 192,
+          "order": 0
+        }
+      ],
+      "evolutions": [],
+      "family": [
+        81,
+        82,
+        462
+      ],
+      "sprite": "assets/sprites/462.png",
+      "backSprite": "assets/sprites/462-back.png"
+    },
+    "466": {
+      "id": 466,
+      "slug": "electivire",
+      "name": "에레키블",
+      "genus": "뇌전포켓몬",
+      "description": "전기를 가득 모으면 2개의 뿔 사이에서 세차게 푸르스름한 불티를 뿌린다.",
+      "descriptionVersionId": 23,
+      "descriptionVersion": "x",
+      "heightM": 1.8,
+      "weightKg": 138.6,
+      "typeIds": [
+        13
+      ],
+      "stats": {
+        "hp": 75,
+        "attack": 123,
+        "defense": 67,
+        "special-attack": 95,
+        "special-defense": 85,
+        "speed": 95
+      },
+      "baseFriendship": 70,
+      "growthRateId": 2,
+      "learnset": [
+        {
+          "level": 1,
+          "moveId": 7,
+          "order": 1
+        },
+        {
+          "level": 1,
+          "moveId": 98,
+          "order": 2
+        },
+        {
+          "level": 1,
+          "moveId": 43,
+          "order": 3
+        },
+        {
+          "level": 1,
+          "moveId": 84,
+          "order": 4
+        },
+        {
+          "level": 1,
+          "moveId": 67,
+          "order": 5
+        },
+        {
+          "level": 7,
+          "moveId": 84,
+          "order": 0
+        },
+        {
+          "level": 10,
+          "moveId": 67,
+          "order": 0
+        },
+        {
+          "level": 16,
+          "moveId": 129,
+          "order": 0
+        },
+        {
+          "level": 19,
+          "moveId": 351,
+          "order": 0
+        },
+        {
+          "level": 25,
+          "moveId": 113,
+          "order": 0
+        },
+        {
+          "level": 28,
+          "moveId": 9,
+          "order": 0
+        },
+        {
+          "level": 37,
+          "moveId": 435,
+          "order": 0
+        },
+        {
+          "level": 43,
+          "moveId": 85,
+          "order": 0
+        },
+        {
+          "level": 52,
+          "moveId": 103,
+          "order": 0
+        },
+        {
+          "level": 58,
+          "moveId": 87,
+          "order": 0
+        },
+        {
+          "level": 67,
+          "moveId": 416,
+          "order": 0
+        }
+      ],
+      "evolutions": [],
+      "family": [
+        125,
+        239,
+        466
+      ],
+      "sprite": "assets/sprites/466.png",
+      "backSprite": "assets/sprites/466-back.png"
+    },
+    "467": {
+      "id": 467,
+      "slug": "magmortar",
+      "name": "마그마번",
+      "genus": "폭염포켓몬",
+      "description": "팔 끝에서 섭씨 2000도의 불구슬을 발사한다. 화산의 분화구를 거처로 삼는다.",
+      "descriptionVersionId": 23,
+      "descriptionVersion": "x",
+      "heightM": 1.6,
+      "weightKg": 68.0,
+      "typeIds": [
+        10
+      ],
+      "stats": {
+        "hp": 75,
+        "attack": 95,
+        "defense": 67,
+        "special-attack": 125,
+        "special-defense": 95,
+        "speed": 83
+      },
+      "baseFriendship": 70,
+      "growthRateId": 2,
+      "learnset": [
+        {
+          "level": 1,
+          "moveId": 9,
+          "order": 1
+        },
+        {
+          "level": 1,
+          "moveId": 123,
+          "order": 2
+        },
+        {
+          "level": 1,
+          "moveId": 43,
+          "order": 3
+        },
+        {
+          "level": 1,
+          "moveId": 52,
+          "order": 4
+        },
+        {
+          "level": 1,
+          "moveId": 108,
+          "order": 5
+        },
+        {
+          "level": 7,
+          "moveId": 52,
+          "order": 0
+        },
+        {
+          "level": 10,
+          "moveId": 108,
+          "order": 0
+        },
+        {
+          "level": 16,
+          "moveId": 185,
+          "order": 0
+        },
+        {
+          "level": 19,
+          "moveId": 83,
+          "order": 0
+        },
+        {
+          "level": 25,
+          "moveId": 109,
+          "order": 0
+        },
+        {
+          "level": 28,
+          "moveId": 7,
+          "order": 0
+        },
+        {
+          "level": 37,
+          "moveId": 436,
+          "order": 0
+        },
+        {
+          "level": 43,
+          "moveId": 53,
+          "order": 0
+        },
+        {
+          "level": 52,
+          "moveId": 241,
+          "order": 0
+        },
+        {
+          "level": 58,
+          "moveId": 126,
+          "order": 0
+        },
+        {
+          "level": 67,
+          "moveId": 63,
+          "order": 0
+        }
+      ],
+      "evolutions": [],
+      "family": [
+        126,
+        240,
+        467
+      ],
+      "sprite": "assets/sprites/467.png",
+      "backSprite": "assets/sprites/467-back.png"
+    },
+    "196": {
+      "id": 196,
+      "slug": "espeon",
+      "name": "에브이",
+      "genus": "태양포켓몬",
+      "description": "상대의 움직임을 예지할 때 두 갈래로 갈라져 있는 꼬리의 끝이 미세하게 떨리고 있다.",
+      "descriptionVersionId": 23,
+      "descriptionVersion": "x",
+      "heightM": 0.9,
+      "weightKg": 26.5,
+      "typeIds": [
+        14
+      ],
+      "stats": {
+        "hp": 65,
+        "attack": 65,
+        "defense": 60,
+        "special-attack": 130,
+        "special-defense": 95,
+        "speed": 110
+      },
+      "baseFriendship": 70,
+      "growthRateId": 2,
+      "learnset": [
+        {
+          "level": 1,
+          "moveId": 39,
+          "order": 1
+        },
+        {
+          "level": 1,
+          "moveId": 33,
+          "order": 2
+        },
+        {
+          "level": 1,
+          "moveId": 270,
+          "order": 3
+        },
+        {
+          "level": 8,
+          "moveId": 28,
+          "order": 0
+        },
+        {
+          "level": 15,
+          "moveId": 93,
+          "order": 0
+        },
+        {
+          "level": 22,
+          "moveId": 98,
+          "order": 0
+        },
+        {
+          "level": 29,
+          "moveId": 129,
+          "order": 0
+        },
+        {
+          "level": 36,
+          "moveId": 60,
+          "order": 0
+        },
+        {
+          "level": 43,
+          "moveId": 248,
+          "order": 0
+        },
+        {
+          "level": 50,
+          "moveId": 387,
+          "order": 0
+        },
+        {
+          "level": 57,
+          "moveId": 244,
+          "order": 0
+        },
+        {
+          "level": 64,
+          "moveId": 94,
+          "order": 0
+        },
+        {
+          "level": 71,
+          "moveId": 234,
+          "order": 0
+        },
+        {
+          "level": 78,
+          "moveId": 384,
+          "order": 0
+        }
+      ],
+      "evolutions": [],
+      "family": [
+        133,
+        134,
+        135,
+        136,
+        196,
+        197,
+        470,
+        471
+      ],
+      "sprite": "assets/sprites/196.png",
+      "backSprite": "assets/sprites/196-back.png"
+    },
+    "197": {
+      "id": 197,
+      "slug": "umbreon",
+      "name": "블래키",
+      "genus": "달빛포켓몬",
+      "description": "달빛이 이브이의 유전자를 변화시켰다. 어둠에 숨어 먹이를 기다린다.",
+      "descriptionVersionId": 23,
+      "descriptionVersion": "x",
+      "heightM": 1.0,
+      "weightKg": 27.0,
+      "typeIds": [
+        17
+      ],
+      "stats": {
+        "hp": 95,
+        "attack": 65,
+        "defense": 110,
+        "special-attack": 60,
+        "special-defense": 130,
+        "speed": 65
+      },
+      "baseFriendship": 70,
+      "growthRateId": 2,
+      "learnset": [
+        {
+          "level": 1,
+          "moveId": 39,
+          "order": 1
+        },
+        {
+          "level": 1,
+          "moveId": 33,
+          "order": 2
+        },
+        {
+          "level": 1,
+          "moveId": 270,
+          "order": 3
+        },
+        {
+          "level": 8,
+          "moveId": 28,
+          "order": 0
+        },
+        {
+          "level": 15,
+          "moveId": 228,
+          "order": 0
+        },
+        {
+          "level": 22,
+          "moveId": 98,
+          "order": 0
+        },
+        {
+          "level": 29,
+          "moveId": 109,
+          "order": 0
+        },
+        {
+          "level": 36,
+          "moveId": 185,
+          "order": 0
+        },
+        {
+          "level": 43,
+          "moveId": 372,
+          "order": 0
+        },
+        {
+          "level": 50,
+          "moveId": 387,
+          "order": 0
+        },
+        {
+          "level": 57,
+          "moveId": 212,
+          "order": 0
+        },
+        {
+          "level": 64,
+          "moveId": 103,
+          "order": 0
+        },
+        {
+          "level": 71,
+          "moveId": 236,
+          "order": 0
+        },
+        {
+          "level": 78,
+          "moveId": 385,
+          "order": 0
+        }
+      ],
+      "evolutions": [],
+      "family": [
+        133,
+        134,
+        135,
+        136,
+        196,
+        197,
+        470,
+        471
+      ],
+      "sprite": "assets/sprites/197.png",
+      "backSprite": "assets/sprites/197-back.png"
+    },
+    "470": {
+      "id": 470,
+      "slug": "leafeon",
+      "name": "리피아",
+      "genus": "심록포켓몬",
+      "description": "맑은 날에 잠든 리피아는 광합성을 해서 깨끗한 공기를 만들고 있다.",
+      "descriptionVersionId": 23,
+      "descriptionVersion": "x",
+      "heightM": 1.0,
+      "weightKg": 25.5,
+      "typeIds": [
+        12
+      ],
+      "stats": {
+        "hp": 65,
+        "attack": 110,
+        "defense": 130,
+        "special-attack": 60,
+        "special-defense": 65,
+        "speed": 95
+      },
+      "baseFriendship": 70,
+      "growthRateId": 2,
+      "learnset": [
+        {
+          "level": 1,
+          "moveId": 39,
+          "order": 1
+        },
+        {
+          "level": 1,
+          "moveId": 33,
+          "order": 2
+        },
+        {
+          "level": 1,
+          "moveId": 270,
+          "order": 3
+        },
+        {
+          "level": 8,
+          "moveId": 28,
+          "order": 0
+        },
+        {
+          "level": 15,
+          "moveId": 75,
+          "order": 0
+        },
+        {
+          "level": 22,
+          "moveId": 98,
+          "order": 0
+        },
+        {
+          "level": 29,
+          "moveId": 235,
+          "order": 0
+        },
+        {
+          "level": 36,
+          "moveId": 345,
+          "order": 0
+        },
+        {
+          "level": 43,
+          "moveId": 202,
+          "order": 0
+        },
+        {
+          "level": 50,
+          "moveId": 387,
+          "order": 0
+        },
+        {
+          "level": 57,
+          "moveId": 320,
+          "order": 0
+        },
+        {
+          "level": 64,
+          "moveId": 241,
+          "order": 0
+        },
+        {
+          "level": 71,
+          "moveId": 348,
+          "order": 0
+        },
+        {
+          "level": 78,
+          "moveId": 14,
+          "order": 0
+        }
+      ],
+      "evolutions": [],
+      "family": [
+        133,
+        134,
+        135,
+        136,
+        196,
+        197,
+        470,
+        471
+      ],
+      "sprite": "assets/sprites/470.png",
+      "backSprite": "assets/sprites/470-back.png"
+    },
+    "471": {
+      "id": 471,
+      "slug": "glaceon",
+      "name": "글레이시아",
+      "genus": "신설포켓몬",
+      "description": "체온을 컨트롤하는 것으로 주위의 공기를 얼려서 다이아몬드 더스트를 날린다.",
+      "descriptionVersionId": 23,
+      "descriptionVersion": "x",
+      "heightM": 0.8,
+      "weightKg": 25.9,
+      "typeIds": [
+        15
+      ],
+      "stats": {
+        "hp": 65,
+        "attack": 60,
+        "defense": 110,
+        "special-attack": 130,
+        "special-defense": 95,
+        "speed": 65
+      },
+      "baseFriendship": 70,
+      "growthRateId": 2,
+      "learnset": [
+        {
+          "level": 1,
+          "moveId": 39,
+          "order": 1
+        },
+        {
+          "level": 1,
+          "moveId": 33,
+          "order": 2
+        },
+        {
+          "level": 1,
+          "moveId": 270,
+          "order": 3
+        },
+        {
+          "level": 8,
+          "moveId": 28,
+          "order": 0
+        },
+        {
+          "level": 15,
+          "moveId": 196,
+          "order": 0
+        },
+        {
+          "level": 22,
+          "moveId": 98,
+          "order": 0
+        },
+        {
+          "level": 29,
+          "moveId": 44,
+          "order": 0
+        },
+        {
+          "level": 36,
+          "moveId": 420,
+          "order": 0
+        },
+        {
+          "level": 43,
+          "moveId": 423,
+          "order": 0
+        },
+        {
+          "level": 50,
+          "moveId": 387,
+          "order": 0
+        },
+        {
+          "level": 57,
+          "moveId": 243,
+          "order": 0
+        },
+        {
+          "level": 64,
+          "moveId": 258,
+          "order": 0
+        },
+        {
+          "level": 71,
+          "moveId": 59,
+          "order": 0
+        },
+        {
+          "level": 78,
+          "moveId": 112,
+          "order": 0
+        }
+      ],
+      "evolutions": [],
+      "family": [
+        133,
+        134,
+        135,
+        136,
+        196,
+        197,
+        470,
+        471
+      ],
+      "sprite": "assets/sprites/471.png",
+      "backSprite": "assets/sprites/471-back.png"
     }
   },
   "moves": {
@@ -20760,6 +22834,31 @@
       },
       "statChanges": []
     },
+    "167": {
+      "id": 167,
+      "name": "트리플킥",
+      "slug": "triple-kick",
+      "typeId": 2,
+      "power": 10,
+      "accuracy": 90,
+      "pp": 10,
+      "priority": 0,
+      "damageClass": "physical",
+      "target": "opponent",
+      "targetId": 10,
+      "effectId": 105,
+      "effectChance": null,
+      "meta": {
+        "ailment": 0,
+        "ailmentChance": 0,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": 3,
+        "maxHits": 3
+      },
+      "statChanges": []
+    },
     "170": {
       "id": 170,
       "name": "마음의눈",
@@ -22114,6 +24213,31 @@
       },
       "statChanges": []
     },
+    "234": {
+      "id": 234,
+      "name": "아침햇살",
+      "slug": "morning-sun",
+      "typeId": 1,
+      "power": null,
+      "accuracy": null,
+      "pp": 5,
+      "priority": 0,
+      "damageClass": "status",
+      "target": "user",
+      "targetId": 7,
+      "effectId": 133,
+      "effectChance": null,
+      "meta": {
+        "ailment": 0,
+        "ailmentChance": 0,
+        "statChance": 0,
+        "healing": 50,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": []
+    },
     "235": {
       "id": 235,
       "name": "광합성",
@@ -22655,6 +24779,31 @@
       "meta": {
         "ailment": 4,
         "ailmentChance": 10,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": []
+    },
+    "258": {
+      "id": 258,
+      "name": "싸라기눈",
+      "slug": "hail",
+      "typeId": 15,
+      "power": null,
+      "accuracy": null,
+      "pp": 10,
+      "priority": 0,
+      "damageClass": "status",
+      "target": "opponent",
+      "targetId": 12,
+      "effectId": 165,
+      "effectChance": null,
+      "meta": {
+        "ailment": 0,
+        "ailmentChance": 0,
         "statChance": 0,
         "healing": 0,
         "drain": 0,
@@ -23733,6 +25882,31 @@
           "change": -2
         }
       ]
+    },
+    "320": {
+      "id": 320,
+      "name": "풀피리",
+      "slug": "grass-whistle",
+      "typeId": 12,
+      "power": null,
+      "accuracy": 55,
+      "pp": 15,
+      "priority": 0,
+      "damageClass": "status",
+      "target": "opponent",
+      "targetId": 10,
+      "effectId": 2,
+      "effectChance": null,
+      "meta": {
+        "ailment": 2,
+        "ailmentChance": 0,
+        "statChance": 0,
+        "healing": 0,
+        "drain": 0,
+        "minHits": null,
+        "maxHits": null
+      },
+      "statChanges": []
     },
     "321": {
       "id": 321,
@@ -27253,58 +29427,5 @@
       "99": 1027103,
       "100": 1059860
     }
-  },
-  "legacyStarterIds": [
-    25,
-    4,
-    1,
-    7,
-    50,
-    52,
-    238,
-    174,
-    173
-  ],
-  "hatchTable": [
-    {
-      "id": 25,
-      "weight": 11
-    },
-    {
-      "id": 4,
-      "weight": 11
-    },
-    {
-      "id": 1,
-      "weight": 11
-    },
-    {
-      "id": 7,
-      "weight": 11
-    },
-    {
-      "id": 50,
-      "weight": 11
-    },
-    {
-      "id": 52,
-      "weight": 11
-    },
-    {
-      "id": 238,
-      "weight": 11
-    },
-    {
-      "id": 174,
-      "weight": 11
-    },
-    {
-      "id": 173,
-      "weight": 11
-    },
-    {
-      "id": 147,
-      "weight": 1
-    }
-  ]
+  }
 }
