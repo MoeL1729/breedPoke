@@ -45,12 +45,6 @@ python -m http.server 8000
 
 브라우저에서 `http://localhost:8000`으로 접속하세요. Python이 없다면 VS Code Live Server 같은 정적 서버를 사용할 수 있습니다.
 
-## GitHub Pages
-
-압축을 해제한 `pokemon-days-egg-update` 폴더 **안의 파일과 폴더**를 GitHub 저장소 최상위에 업로드하면 됩니다.
-`index.html`, `app.js`, `engine.js`, `style.css`, `data/`, `assets/`가 같은 최상위에 있어야 합니다.
-저장소 Settings → Pages → Deploy from a branch → main → /(root) → Save.
-
 ## 검증
 
 Node.js 20 이상에서 별도 설치 없이:
