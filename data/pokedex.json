@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
   "meta": {
-    "title": "POKÉ DAYS version-pinned Pokédex",
+    "title": "POkegotchi version-pinned Pokédex",
     "versionGroup": "heartgold-soulsilver",
     "versionGroupId": 10,
     "generation": 4,
-    "retrievedAt": "2026-09-09T07:36:04.692257+00:00",
+    "retrievedAt": "2026-09-11T08:57:53.830602+00:00",
     "source": "PokeAPI community-maintained dataset (not an official Pokémon API)",
     "canonicalFields": [
       "species",
@@ -17,12 +17,13 @@
       "experience curves"
     ],
     "adaptedRules": [
+      "All first forms with three-stage chains in the current snapshot join the previous starters. Dratini learns Ember at level 7 as a game-only exception. A fighter with no learned damaging moves may use Struggle even while status PP remain.",
       "Release resets the entire local run to an unhatched egg after confirmation; optional backup before release.",
       "Sinnoh evolution locations and game day/night are selectable contexts. Trade evolution is simulated by an NPC returning the same partner, with the required held item purchased and consumed for 300 points. Tyrogue rolls attack and defense IVs (0-31) at hatching; those two IVs persist through evolution. Other IVs remain zero; EVs and natures are not modeled.",
       "Wild opponents: 146 Kanto species excluding Articuno, Zapdos, Moltres, Mewtwo and Mew. Kanto-only evolution stages; middle gates >=20; final gates >=36 and actual minimum evolution level; non-evolving species >=20 or >=30 for base stat total >=450. Enemy level is partner level minus 0 to 2.",
       "Game day advances by sleeping, not real-world date.",
       "Daily fatigue 100; battle +35; feeding +15; sleep resets.",
-      "One random starter hatches from an egg (Dratini 1%; Eevee 5%; thirteen other starters share 94% equally); only that partner is raised; initial level 10; feed friendship +12; sleep +3; level-up +5.",
+      "One random starter hatches from an egg (Dratini 5%; Eevee 5%; other starters share 90% equally); only that partner is raised; initial level 7; feed friendship +12; sleep +3; level-up +5.",
       "Battle reward XP = 40 + 3 × enemy level squared, 80 points; stone purchase and use costs 300.",
       "One-on-one battle engine simplifies utility, weather, trapping and some secondary move effects; no abilities, battle held items, EV/natures or breeding; Tyrogue-line attack/defense IVs are supported.",
       "PP is restored each encounter; learning slots remain capped at four.",
@@ -184,7 +185,19 @@
     81,
     240,
     236,
-    133
+    133,
+    10,
+    13,
+    16,
+    29,
+    32,
+    43,
+    60,
+    63,
+    66,
+    69,
+    74,
+    92
   ],
   "legacyStarterIds": [
     25,
@@ -200,64 +213,136 @@
   "hatchTable": [
     {
       "id": 25,
-      "weight": 94
+      "weight": 90
     },
     {
       "id": 4,
-      "weight": 94
+      "weight": 90
     },
     {
       "id": 1,
-      "weight": 94
+      "weight": 90
     },
     {
       "id": 7,
-      "weight": 94
+      "weight": 90
     },
     {
       "id": 50,
-      "weight": 94
+      "weight": 90
     },
     {
       "id": 52,
-      "weight": 94
+      "weight": 90
     },
     {
       "id": 238,
-      "weight": 94
+      "weight": 90
     },
     {
       "id": 174,
-      "weight": 94
+      "weight": 90
     },
     {
       "id": 173,
-      "weight": 94
+      "weight": 90
     },
     {
       "id": 239,
-      "weight": 94
+      "weight": 90
     },
     {
       "id": 81,
-      "weight": 94
+      "weight": 90
     },
     {
       "id": 240,
-      "weight": 94
+      "weight": 90
     },
     {
       "id": 236,
-      "weight": 94
+      "weight": 90
+    },
+    {
+      "id": 10,
+      "weight": 90
+    },
+    {
+      "id": 13,
+      "weight": 90
+    },
+    {
+      "id": 16,
+      "weight": 90
+    },
+    {
+      "id": 29,
+      "weight": 90
+    },
+    {
+      "id": 32,
+      "weight": 90
+    },
+    {
+      "id": 43,
+      "weight": 90
+    },
+    {
+      "id": 60,
+      "weight": 90
+    },
+    {
+      "id": 63,
+      "weight": 90
+    },
+    {
+      "id": 66,
+      "weight": 90
+    },
+    {
+      "id": 69,
+      "weight": 90
+    },
+    {
+      "id": 74,
+      "weight": 90
+    },
+    {
+      "id": 92,
+      "weight": 90
     },
     {
       "id": 147,
-      "weight": 13
+      "weight": 125
     },
     {
       "id": 133,
-      "weight": 65
+      "weight": 125
     }
+  ],
+  "starterLevel": 7,
+  "threeStageStarterIds": [
+    1,
+    4,
+    7,
+    10,
+    13,
+    16,
+    29,
+    32,
+    43,
+    60,
+    63,
+    66,
+    69,
+    74,
+    81,
+    92,
+    147,
+    173,
+    174,
+    239,
+    240
   ],
   "enemyIds": [
     1,
@@ -16913,6 +16998,13 @@
           "level": 5,
           "moveId": 86,
           "order": 0
+        },
+        {
+          "level": 7,
+          "moveId": 52,
+          "order": 99,
+          "gameOverride": true,
+          "note": "게임 추가 기술: 미뇽 불꽃세례"
         },
         {
           "level": 11,

@@ -16,7 +16,7 @@ export function initialMoves(db,id,level){
 }
 export function encounterPool(db,level){return db.enemyIds.filter(id=>{const e=db.pokemon[id].encounter;return level>=e.minLevel&&level<=e.maxLevel;});}
 const FIXED_DAMAGE=new Set(['seismic-toss','night-shade','dragon-rage','sonic-boom','super-fang','endeavor','counter','mirror-coat','fissure','guillotine','horn-drill']);
-export function makePet(db,id,level=10){return {speciesId:id,level,exp:db.experience[db.pokemon[id].growthRateId][level],hp:statsFor(db,id,level).hp,hunger:75,friendship:db.pokemon[id].baseFriendship,moves:initialMoves(db,id,level),wins:0};}
+export function makePet(db,id,level=db.starterLevel??7){return {speciesId:id,level,exp:db.experience[db.pokemon[id].growthRateId][level],hp:statsFor(db,id,level).hp,hunger:75,friendship:db.pokemon[id].baseFriendship,moves:initialMoves(db,id,level),wins:0};}
 export function freshState(db){return {schemaVersion:2,hatched:false,active:null,day:1,fatigue:0,coins:100,pets:{},journal:[{day:1,text:'작은 알 하나가 도착했어요. 어떤 친구가 기다릴까요?'}],battle:null,pending:[],progressing:false};}
 export function migrateState(db,state){
   if(state?.schemaVersion!==1)return state;
@@ -85,6 +85,7 @@ export class Game{
   recall(moveId,slot){if(!this.ready())throw Error('진행 중인 일을 먼저 마쳐주세요.');const p=this.pet;if(!this.species.learnset.some(m=>m.moveId===moveId&&m.level<=p.level)||p.moves.includes(moveId))throw Error('떠올릴 수 없는 기술입니다.');if(p.moves.length<4)p.moves.push(moveId);else{if(!Number.isInteger(slot)||slot<0||slot>3)throw Error('교체할 기술을 선택하세요.');p.moves[slot]=moveId;}this.log(`${this.species.name}, ${this.db.moves[moveId].name}을 떠올렸어요.`);}
   startBattle(random=Math.random){const error=this.can('battle');if(error)throw Error(error);this.s.fatigue+=35;this.pet.hunger=clamp(this.pet.hunger-18,0,100);const level=clamp(this.pet.level-Math.floor(random()*3),1,100);const candidates=encounterPool(this.db,level);const id=candidates[Math.floor(random()*candidates.length)];const enemy=makePet(this.db,id,level);this.s.battle={player:this.fighter(this.pet),enemy:this.fighter(enemy),turn:1};this.log(`야생 ${this.db.pokemon[id].name}와 만났어요.`);return this.s.battle;}
   fighter(p){return {speciesId:p.speciesId,level:p.level,ivs:{...(p.ivs??{})},hp:p.hp,maxHp:statsFor(this.db,p.speciesId,p.level,p.ivs).hp,moves:p.moves.map(id=>({id,pp:this.db.moves[id].pp})),stages:{attack:0,defense:0,'special-attack':0,'special-defense':0,speed:0,accuracy:0,evasion:0},status:null,statusTurns:0,confused:0,seeded:false,guard:false,charge:null,lastDamage:0,lastClass:null,recharge:false};}
+  canStruggle(f){return !this.usable(f).length||!f.moves.some(x=>this.db.moves[x.id].damageClass!=='status');}
   usable(f){return f.moves.filter(m=>m.pp>0);}
   effectiveStat(f,key){let n=(f.copiedStats??statsFor(this.db,f.speciesId,f.level,f.ivs))[key],stage=f.stages[key]||0;n*=stage>=0?(2+stage)/2:2/(2-stage);if(key==='speed'&&f.status==='paralysis')n*=.25;if(key==='attack'&&f.status==='burn')n*=.5;return n;}
   fighterTypes(f){return f.typeIds??this.db.pokemon[f.speciesId].typeIds;}
@@ -99,8 +100,8 @@ export class Game{
   }
   act(moveId,random=Math.random){
     const b=this.s.battle;if(!b)throw Error('전투 중이 아닙니다.');const p=b.player,e=b.enemy;
-    const usable=this.usable(p);if(moveId!==-1&&!usable.some(m=>m.id===moveId))throw Error('이 기술은 사용할 수 없습니다.');if(moveId===-1&&usable.length)throw Error('사용 가능한 기술이 남아 있어요.');
-    const enemyMoves=this.usable(e);let em=enemyMoves.length?enemyMoves[Math.floor(random()*enemyMoves.length)].id:-1;
+    const usable=this.usable(p);if(moveId!==-1&&!usable.some(m=>m.id===moveId))throw Error('이 기술은 사용할 수 없습니다.');if(moveId===-1&&!this.canStruggle(p))throw Error('사용 가능한 기술이 남아 있어요.');
+    const enemyMoves=this.usable(e);let em=!this.canStruggle(e)&&enemyMoves.length?enemyMoves[Math.floor(random()*enemyMoves.length)].id:-1;
     // Wild opponents prefer a damaging move, but still use their authentic learnset.
     const damaging=enemyMoves.filter(m=>this.db.moves[m.id].damageClass!=='status');if(damaging.length&&random()<.7)em=damaging[Math.floor(random()*damaging.length)].id;
     const pm=p.charge??moveId;em=e.charge??em;
