@@ -1,4 +1,4 @@
-import { Game, freshState, migrateState, validateState, statsFor, clamp } from './engine.js?v=pokegotchi-1';
+import { Game, freshState, migrateState, validateState, statsFor, clamp } from './engine.js?v=pokegotchi-2';
 const $=id=>document.getElementById(id);
 const esc=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const wait=ms=>new Promise(resolve=>setTimeout(resolve,ms));
@@ -65,7 +65,23 @@ function renderEvolutions(){
  $('evolution').querySelectorAll('[data-evolve]').forEach(b=>b.onclick=()=>confirmStone(Number(b.dataset.evolve)));
 }
 
-function hpCard(f){const sp=db.pokemon[f.speciesId],status={sleep:'잠듦',paralysis:'마비',burn:'화상',poison:'독',freeze:'얼음'};return `<strong>${esc(sp.name)}</strong><small>Lv.${f.level}</small><div class="bar"><i style="width:${f.hp/f.maxHp*100}%;background:${f.hp/f.maxHp<.25?'#cd8b7e':'#8fb574'}"></i></div><span class="hp-num">${status[f.status]||''} ${f.hp} / ${f.maxHp}</span><div class="types">${game.fighterTypes(f).map(badge).join('')}</div>`;}
+// Original pixel marks drawn as inline SVG: no external icon requests.
+const statusMarks={
+ poison:['독','#7937a0','매 턴 종료 시 최대 HP의 1/8 피해','M5 2h6v2h2v6h-2v3H5v-3H3V4h2z M5 5v2h2V5z M9 5v2h2V5z M7 9v2h2V9z'],
+ paralysis:['마비','#755400','속도 감소 · 25% 확률로 행동 불가','M8 1h5l-4 5h4L5 15l2-7H3z'],
+ burn:['화상','#a83720','매 턴 지속 피해 · 물리 공격력 감소','M8 1v4h3V3l3 6v4h-2v2H4v-2H2V9l3-5v4h2z'],
+ sleep:['잠듦','#3c5798','잠에서 깰 때까지 행동 불가','M2 3h7v2L4 9h5v2H1V9l5-4H2z M10 7h5v2l-3 3h3v2h-6v-2l3-3h-2z'],
+ freeze:['얼음','#14647a','얼어붙어 행동 불가 · 행동 시 20% 확률로 해동','M7 1h2v5l3-3 2 2-3 2h4v2h-4l3 3-2 2-3-3v4H7v-4l-3 3-2-2 3-3H1V7h4L2 4l2-2 3 3z'],
+ confusion:['혼란','#904064','혼란으로 자신을 공격할 수 있음','M3 2h10v2h2v9h-2v2H3v-2H1V6h2v5h2v2h6V6H6v3h3v2H4V4H3z'],
+ seeded:['씨뿌리기','#38652a','매 턴 종료 시 체력을 상대에게 빼앗김','M7 7H3V5H1V1h4v2h2v2h2V3h2V1h4v4h-2v2H9v6h3v2H4v-2h3z']
+};
+function statusBadges(f){
+ const active=[...(statusMarks[f.status]?[f.status]:[]),...(f.confused>0?['confusion']:[]),...(f.seeded?['seeded']:[])];
+ if(!active.length)return '';
+ return `<div class="battle-statuses" aria-label="현재 전투 상태">${active.map(key=>{const [label,color,detail,path]=statusMarks[key];return `<span class="battle-status" style="--status-color:${color}" tabindex="0" aria-label="${label}: ${detail}"><svg viewBox="0 0 16 16" width="20" height="20" aria-hidden="true" shape-rendering="crispEdges"><path fill="currentColor" fill-rule="evenodd" d="${path}"/></svg><b>${label}</b><span class="status-detail" aria-hidden="true">${detail}</span></span>`;}).join('')}</div>`;
+}
+function hpCard(f){const sp=db.pokemon[f.speciesId];return `<strong>${esc(sp.name)}</strong><small>Lv.${f.level}</small>${statusBadges(f)}<div class="bar"><i style="width:${f.hp/f.maxHp*100}%;background:${f.hp/f.maxHp<.25?'#cd8b7e':'#8fb574'}"></i></div><span class="hp-num">${f.hp} / ${f.maxHp}</span><div class="types">${game.fighterTypes(f).map(badge).join('')}</div>`;}
+
 function renderBattle(){const b=game.s.battle;if(!b)return;$('enemy').src=petSprite(b.enemy.speciesId);$('enemy').alt=db.pokemon[b.enemy.speciesId].name;$('enemy-card').innerHTML=hpCard(b.enemy);$('battle-player-hp').innerHTML=hpCard(b.player);
   $('battle-moves').innerHTML=b.player.moves.map((slot,i)=>{const m=db.moves[slot.id];return `<button class="battle-move move-tile" style="${typeSkin(m.typeId)}" data-move="${slot.id}" ${busy||slot.pp<=0?'disabled':''} aria-label="${esc(m.name)} · ${esc(db.types[m.typeId].name)} · PP ${slot.pp}">${moveFace(m,i,slot.pp,b.player.transformed?5:m.pp,game.moveMatchup(m,b.player,b.enemy))}<span class="move-accuracy">명중 ${m.accuracy??'필중'}</span></button>`;}).join('');
   if(game.canStruggle(b.player))$('battle-moves').innerHTML+='<button class="battle-move" data-move="-1" '+(busy?'disabled':'')+'><strong>발버둥</strong><small>공격기를 배우지 않았거나 PP가 소진되면 사용 가능 · 반동 피해</small></button>';
@@ -120,7 +136,7 @@ function confirmNewEgg(){
   $('cancel-new-egg').onclick=closeModal;
   $('confirm-new-egg').onclick=()=>{if(game.s.hatched)game.release();else game=new Game(db);save();closeModal();$('hatch-hint').textContent='알을 클릭해서 친구를 만나보세요';render();};
 }
-async function init(){try{const response=await fetch('data/pokedex.json?v=pokegotchi-1');if(!response.ok)throw Error('도감 데이터를 불러오지 못했어요.');db=await response.json();let state=null;try{const raw=localStorage.getItem(KEY);if(raw){state=JSON.parse(raw);if(state.schemaVersion===1){try{localStorage.setItem(KEY+'-legacy-backup',raw);}catch{}state=migrateState(db,state);}validateState(db,{...state,battle:null,pending:[],progressing:false});if(state.pending.some(e=>!['move','evolution'].includes(e.kind)||(e.kind==='move'&&!db.moves[e.moveId])||(e.kind==='evolution'&&!db.pokemon[e.to])))throw Error('성장 정보 오류');if(state.battle){for(const f of [state.battle.player,state.battle.enemy]){if(!db.pokemon[f.speciesId]||!Array.isArray(f.moves)||!f.moves.every(m=>db.moves[m.id]&&Number.isFinite(m.pp))||!Number.isFinite(f.hp)||!f.stages)throw Error('전투 정보 오류');}}}}catch{state=null;saveWarning='기존 저장을 읽을 수 없어 새로 시작했어요. 보관한 백업은 게임 안내에서 불러올 수 있어요.';}
+async function init(){try{const response=await fetch('data/pokedex.json?v=pokegotchi-2');if(!response.ok)throw Error('도감 데이터를 불러오지 못했어요.');db=await response.json();let state=null;try{const raw=localStorage.getItem(KEY);if(raw){state=JSON.parse(raw);if(state.schemaVersion===1){try{localStorage.setItem(KEY+'-legacy-backup',raw);}catch{}state=migrateState(db,state);}validateState(db,{...state,battle:null,pending:[],progressing:false});if(state.pending.some(e=>!['move','evolution'].includes(e.kind)||(e.kind==='move'&&!db.moves[e.moveId])||(e.kind==='evolution'&&!db.pokemon[e.to])))throw Error('성장 정보 오류');if(state.battle){for(const f of [state.battle.player,state.battle.enemy]){if(!db.pokemon[f.speciesId]||!Array.isArray(f.moves)||!f.moves.every(m=>db.moves[m.id]&&Number.isFinite(m.pp))||!Number.isFinite(f.hp)||!f.stages)throw Error('전투 정보 오류');}}}}catch{state=null;saveWarning='기존 저장을 읽을 수 없어 새로 시작했어요. 보관한 백업은 게임 안내에서 불러올 수 있어요.';}
     game=new Game(db,state??freshState(db));$('battle').onclick=startBattle;$('feed').onclick=()=>care('feed');$('sleep').onclick=()=>care('sleep');$('flee').onclick=()=>{if(busy)return;game.flee();save();render();say('쉼터로 돌아왔어요. 피로도는 그대로 유지돼요.');};$('help').onclick=showHelp;$('sources').onclick=showSources;$('dex-button').onclick=()=>showDex();$('learnset').onclick=()=>showLearnset();$('export-save').onclick=exportSave;
     render();if(!game.s.hatched){$('hatch-egg').onclick=hatchEgg;save();return;}save();if(game.s.battle)say('진행 중이던 전투를 이어서 시작해요. 기술을 선택하세요.');else say(saveWarning||`${game.species.name}가 주인님을 기다리고 있어요. 오늘은 함께 무엇을 할까요?`);if(game.s.pending.length||game.s.progressing)pump();
   }catch(e){say(e.message+' 새로고침해서 다시 시도해 주세요.');$('actions').innerHTML='<p class="error-view">게임 데이터를 불러오지 못했습니다. <button onclick="location.reload()">다시 시도</button></p>';}}
