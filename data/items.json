@@ -1,0 +1,369 @@
+{
+  "version": "2.1.0",
+  "basis": "HGSS items; Clear Amulet and Covert Cloak from Generation IX. Game prices and simplified engine interactions.",
+  "sources": [
+    "https://bulbapedia.bulbagarden.net/wiki/Type-enhancing_item",
+    "https://bulbapedia.bulbagarden.net/wiki/Muscle_Band",
+    "https://bulbapedia.bulbagarden.net/wiki/Wise_Glasses",
+    "https://bulbapedia.bulbagarden.net/wiki/Expert_Belt",
+    "https://bulbapedia.bulbagarden.net/wiki/Life_Orb",
+    "https://bulbapedia.bulbagarden.net/wiki/Shell_Bell",
+    "https://bulbapedia.bulbagarden.net/wiki/Sitrus_Berry",
+    "https://bulbapedia.bulbagarden.net/wiki/Lum_Berry",
+    "https://bulbapedia.bulbagarden.net/wiki/Chesto_Berry",
+    "https://bulbapedia.bulbagarden.net/wiki/Clear_Amulet",
+    "https://bulbapedia.bulbagarden.net/wiki/Covert_Cloak",
+    "https://bulbapedia.bulbagarden.net/wiki/Hyper_Potion",
+    "https://bulbapedia.bulbagarden.net/wiki/Max_Potion",
+    "https://bulbapedia.bulbagarden.net/wiki/Full_Restore",
+    "https://bulbapedia.bulbagarden.net/wiki/Full_Heal"
+  ],
+  "items": {
+    "poke-ball": {
+      "name": "몬스터볼",
+      "kind": "ball",
+      "price": 40,
+      "bonus": 1,
+      "description": "야생 포켓몬을 포획해요."
+    },
+    "great-ball": {
+      "name": "수퍼볼",
+      "kind": "ball",
+      "price": 80,
+      "bonus": 1.5,
+      "description": "몬스터볼보다 높은 포획 보정."
+    },
+    "ultra-ball": {
+      "name": "하이퍼볼",
+      "kind": "ball",
+      "price": 120,
+      "bonus": 2,
+      "description": "더 높은 포획 보정."
+    },
+    "potion": {
+      "name": "상처약",
+      "kind": "medicine",
+      "price": 60,
+      "heal": 20,
+      "description": "HP 20 회복. 전투 중 사용하면 한 턴 소모."
+    },
+    "super-potion": {
+      "name": "좋은상처약",
+      "kind": "medicine",
+      "price": 120,
+      "heal": 50,
+      "description": "HP 50 회복. 전투 중 사용하면 한 턴 소모."
+    },
+    "quick-claw": {
+      "name": "선제공격손톱",
+      "kind": "held",
+      "price": 600,
+      "description": "같은 우선도에서 20% 확률로 먼저 공격."
+    },
+    "leftovers": {
+      "name": "먹다남은음식",
+      "kind": "held",
+      "price": 1000,
+      "description": "매 턴 종료 시 최대 HP의 1/16 회복."
+    },
+    "oran-berry": {
+      "name": "오랭열매",
+      "kind": "held",
+      "price": 30,
+      "description": "HP가 절반 이하가 되면 10 회복 후 소모."
+    },
+    "hyper-potion": {
+      "name": "고급상처약",
+      "kind": "medicine",
+      "price": 240,
+      "description": "HP 200 회복 (HGSS 기준).",
+      "heal": 200
+    },
+    "max-potion": {
+      "name": "풀회복약",
+      "kind": "medicine",
+      "price": 360,
+      "description": "HP 전부 회복.",
+      "heal": 9999
+    },
+    "full-restore": {
+      "name": "회복약",
+      "kind": "medicine",
+      "price": 450,
+      "description": "HP 전부 회복하고 상태이상·혼란 치료.",
+      "heal": 9999,
+      "cure": "all"
+    },
+    "antidote": {
+      "name": "해독제",
+      "kind": "medicine",
+      "price": 40,
+      "description": "전투 중 독 치료. 한 턴 소모.",
+      "cure": "poison"
+    },
+    "burn-heal": {
+      "name": "화상치료제",
+      "kind": "medicine",
+      "price": 40,
+      "description": "전투 중 화상 치료. 한 턴 소모.",
+      "cure": "burn"
+    },
+    "ice-heal": {
+      "name": "얼음상태치료제",
+      "kind": "medicine",
+      "price": 40,
+      "description": "전투 중 얼음 치료. 한 턴 소모.",
+      "cure": "freeze"
+    },
+    "awakening": {
+      "name": "잠깨는약",
+      "kind": "medicine",
+      "price": 40,
+      "description": "전투 중 잠듦 치료. 한 턴 소모.",
+      "cure": "sleep"
+    },
+    "paralyze-heal": {
+      "name": "마비치료제",
+      "kind": "medicine",
+      "price": 40,
+      "description": "전투 중 마비 치료. 한 턴 소모.",
+      "cure": "paralysis"
+    },
+    "full-heal": {
+      "name": "만병통치제",
+      "kind": "medicine",
+      "price": 100,
+      "description": "전투 중 모든 상태이상·혼란 치료. 한 턴 소모.",
+      "cure": "all"
+    },
+    "muscle-band": {
+      "name": "힘의머리띠",
+      "kind": "held",
+      "price": 700,
+      "description": "물리 기술 위력 10% 증가."
+    },
+    "wise-glasses": {
+      "name": "박식안경",
+      "kind": "held",
+      "price": 700,
+      "description": "특수 기술 위력 10% 증가."
+    },
+    "expert-belt": {
+      "name": "달인의띠",
+      "kind": "held",
+      "price": 900,
+      "description": "효과가 굉장한 공격 피해 20% 증가."
+    },
+    "life-orb": {
+      "name": "생명의구슬",
+      "kind": "held",
+      "price": 1200,
+      "description": "공격 피해 30% 증가. 명중 후 최대 HP 10% 소모."
+    },
+    "shell-bell": {
+      "name": "조개껍질방울",
+      "kind": "held",
+      "price": 900,
+      "description": "공격으로 준 실제 피해의 1/8만큼 HP 회복."
+    },
+    "clear-amulet": {
+      "name": "클리어참",
+      "kind": "held",
+      "price": 1000,
+      "description": "상대가 능력치 랭크를 낮추는 효과 방지 (9세대)."
+    },
+    "covert-cloak": {
+      "name": "은밀망토",
+      "kind": "held",
+      "price": 1000,
+      "description": "공격 기술의 추가 상태이상·능력치 변화 방지. 변화기는 통과 (9세대)."
+    },
+    "sitrus-berry": {
+      "name": "자뭉열매",
+      "kind": "held",
+      "price": 80,
+      "description": "HP 절반 이하에서 최대 HP 1/4 회복 후 소모."
+    },
+    "lum-berry": {
+      "name": "리샘열매",
+      "kind": "held",
+      "price": 100,
+      "description": "상태이상·혼란을 자동 치료하고 소모.",
+      "cure": "all"
+    },
+    "chesto-berry": {
+      "name": "유루열매",
+      "kind": "held",
+      "price": 40,
+      "description": "잠듦을 자동 치료하고 소모.",
+      "cure": "sleep"
+    },
+    "silk-scarf": {
+      "name": "실크스카프",
+      "kind": "held",
+      "price": 500,
+      "description": "노말 기술 위력 20% 증가. 전투 장착용.",
+      "boostType": 1
+    },
+    "black-belt": {
+      "name": "검은띠",
+      "kind": "held",
+      "price": 500,
+      "description": "격투 기술 위력 20% 증가. 전투 장착용.",
+      "boostType": 2
+    },
+    "sharp-beak": {
+      "name": "예리한부리",
+      "kind": "held",
+      "price": 500,
+      "description": "비행 기술 위력 20% 증가. 전투 장착용.",
+      "boostType": 3
+    },
+    "poison-barb": {
+      "name": "독바늘",
+      "kind": "held",
+      "price": 500,
+      "description": "독 기술 위력 20% 증가. 전투 장착용.",
+      "boostType": 4
+    },
+    "soft-sand": {
+      "name": "부드러운모래",
+      "kind": "held",
+      "price": 500,
+      "description": "땅 기술 위력 20% 증가. 전투 장착용.",
+      "boostType": 5
+    },
+    "hard-stone": {
+      "name": "딱딱한돌",
+      "kind": "held",
+      "price": 500,
+      "description": "바위 기술 위력 20% 증가. 전투 장착용.",
+      "boostType": 6
+    },
+    "silver-powder": {
+      "name": "은빛가루",
+      "kind": "held",
+      "price": 500,
+      "description": "벌레 기술 위력 20% 증가. 전투 장착용.",
+      "boostType": 7
+    },
+    "spell-tag": {
+      "name": "저주의부적",
+      "kind": "held",
+      "price": 500,
+      "description": "고스트 기술 위력 20% 증가. 전투 장착용.",
+      "boostType": 8
+    },
+    "metal-coat": {
+      "name": "금속코트",
+      "kind": "held",
+      "price": 500,
+      "description": "강철 기술 위력 20% 증가. 전투 장착용.",
+      "boostType": 9
+    },
+    "charcoal": {
+      "name": "목탄",
+      "kind": "held",
+      "price": 500,
+      "description": "불꽃 기술 위력 20% 증가. 전투 장착용.",
+      "boostType": 10
+    },
+    "mystic-water": {
+      "name": "신비의물방울",
+      "kind": "held",
+      "price": 500,
+      "description": "물 기술 위력 20% 증가. 전투 장착용.",
+      "boostType": 11
+    },
+    "miracle-seed": {
+      "name": "기적의씨",
+      "kind": "held",
+      "price": 500,
+      "description": "풀 기술 위력 20% 증가. 전투 장착용.",
+      "boostType": 12
+    },
+    "magnet": {
+      "name": "자석",
+      "kind": "held",
+      "price": 500,
+      "description": "전기 기술 위력 20% 증가. 전투 장착용.",
+      "boostType": 13
+    },
+    "twisted-spoon": {
+      "name": "휘어진스푼",
+      "kind": "held",
+      "price": 500,
+      "description": "에스퍼 기술 위력 20% 증가. 전투 장착용.",
+      "boostType": 14
+    },
+    "never-melt-ice": {
+      "name": "녹지않는얼음",
+      "kind": "held",
+      "price": 500,
+      "description": "얼음 기술 위력 20% 증가. 전투 장착용.",
+      "boostType": 15
+    },
+    "dragon-fang": {
+      "name": "용의이빨",
+      "kind": "held",
+      "price": 500,
+      "description": "드래곤 기술 위력 20% 증가. 전투 장착용.",
+      "boostType": 16
+    },
+    "black-glasses": {
+      "name": "검은안경",
+      "kind": "held",
+      "price": 500,
+      "description": "악 기술 위력 20% 증가. 전투 장착용.",
+      "boostType": 17
+    },
+    "trade-pass": {
+      "name": "NPC 교환권",
+      "kind": "trade",
+      "price": 150,
+      "description": "교환 진화 시 1장 소모. 필요한 진화 도구도 준비하세요."
+    },
+    "evo-83": {
+      "name": "천둥의돌",
+      "kind": "evolution",
+      "price": 300,
+      "description": "해당 진화 조건에서 사용하는 도구."
+    },
+    "evo-81": {
+      "name": "달의돌",
+      "kind": "evolution",
+      "price": 300,
+      "description": "해당 진화 조건에서 사용하는 도구."
+    },
+    "evo-82": {
+      "name": "불꽃의돌",
+      "kind": "evolution",
+      "price": 300,
+      "description": "해당 진화 조건에서 사용하는 도구."
+    },
+    "evo-85": {
+      "name": "리프의돌",
+      "kind": "evolution",
+      "price": 300,
+      "description": "해당 진화 조건에서 사용하는 도구."
+    },
+    "evo-84": {
+      "name": "물의돌",
+      "kind": "evolution",
+      "price": 300,
+      "description": "해당 진화 조건에서 사용하는 도구."
+    },
+    "evo-299": {
+      "name": "에레키부스터",
+      "kind": "evolution",
+      "price": 300,
+      "description": "해당 진화 조건에서 사용하는 도구."
+    },
+    "evo-300": {
+      "name": "마그마부스터",
+      "kind": "evolution",
+      "price": 300,
+      "description": "해당 진화 조건에서 사용하는 도구."
+    }
+  }
+}

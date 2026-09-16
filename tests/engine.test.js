@@ -33,7 +33,7 @@ test('friendship needs 220 AND a level-up, eating alone never evolves',()=>{
  const h=started(173);h.pet.friendship=100;h.awardXP(h.nextXp()-h.pet.exp);settle(h);assert.equal(h.pet.speciesId,173);
 });
 test('stone is required for Pikachu and retains old moves; not automatic at a level',()=>{
- const g=started();g.awardXP(db.experience[g.species.growthRateId][20]-g.pet.exp);settle(g);assert.equal(g.pet.speciesId,25);assert.throws(()=>g.stone());g.s.coins=300;const moves=[...g.pet.moves];g.stone();assert.equal(g.pet.speciesId,26);assert.equal(g.s.coins,0);assert.deepEqual(g.pet.moves,moves);
+ const g=started();g.awardXP(db.experience[g.species.growthRateId][20]-g.pet.exp);settle(g);assert.equal(g.pet.speciesId,25);assert.throws(()=>g.stone());g.s.coins=300;g.buy('evo-'+g.species.evolutions.find(e=>e.trigger==='use-item').itemId);const moves=[...g.pet.moves];g.stone();assert.equal(g.pet.speciesId,26);assert.equal(g.s.coins,0);assert.deepEqual(g.pet.moves,moves);
 });
 test('move reminder only permits current species moves at or below current level',()=>{
  const g=started();assert.throws(()=>g.recall(85,0));g.pet.moves=g.pet.moves.slice(1);g.recall(84,0);assert.ok(g.pet.moves.includes(84));assert.ok(g.pet.moves.length<=4);assert.throws(()=>g.recall(84,0));
@@ -58,9 +58,9 @@ test('all twenty-eight weighted random buckets hatch exactly one partner; repeat
  for(let i=0;i<db.starterIds.length;i++){const g=new Game(db);const id=g.hatch(()=>rollFor(db.starterIds[i]));assert.equal(id,db.starterIds[i]);assert.equal(Object.keys(g.s.pets).length,1);assert.equal(g.hatch(()=>.99),false);assert.equal(g.s.active,id);assert.equal(g.switch(db.starterIds[(i+1)%db.starterIds.length]),false);const resumed=new Game(db,JSON.parse(JSON.stringify(g.s)));assert.equal(resumed.hatch(()=>0),false);assert.equal(resumed.s.active,id);assert.equal(validateState(db,resumed.s),resumed.s);}
 });
 test('legacy save retains the active evolved Pokemon and progression only',()=>{
- const legacy={schemaVersion:1,active:4,day:17,fatigue:70,coins:700,pets:Object.fromEntries(db.legacyStarterIds.map(id=>[id,makePet(db,id)])),journal:[],battle:null,pending:[],progressing:false};legacy.pets[4]=makePet(db,5,22);const before=structuredClone(legacy.pets[4]);const g=new Game(db,legacy);assert.equal(g.s.schemaVersion,2);assert.equal(g.s.hatched,true);assert.deepEqual(g.pet,before);assert.deepEqual(Object.keys(g.s.pets),['4']);assert.equal(g.s.day,17);assert.equal(g.s.fatigue,70);assert.equal(g.s.coins,700);assert.equal(validateState(db,g.s),g.s);assert.equal(Object.keys(legacy.pets).length,9);
+ const legacy={schemaVersion:1,active:4,day:17,fatigue:70,coins:700,pets:Object.fromEntries(db.legacyStarterIds.map(id=>[id,makePet(db,id)])),journal:[],battle:null,pending:[],progressing:false};legacy.pets[4]=makePet(db,5,22);const before=structuredClone(legacy.pets[4]);const g=new Game(db,legacy);assert.equal(g.s.schemaVersion,3);assert.equal(g.s.hatched,true);assert.deepEqual(g.pet,{...before,originSpeciesId:4});assert.deepEqual(Object.keys(g.s.pets),['4']);assert.equal(g.s.day,17);assert.equal(g.s.fatigue,70);assert.equal(g.s.coins,700);assert.equal(validateState(db,g.s),g.s);assert.equal(Object.keys(legacy.pets).length,9);
 });
-test('single-partner saves reject additional Pokemon',()=>{const g=started();g.s.pets[4]=makePet(db,4);assert.throws(()=>validateState(db,g.s));});
+test('party saves allow up to three Pokemon',()=>{const g=started();g.s.pets[4]=makePet(db,4);g.s.pets[7]=makePet(db,7);assert.equal(validateState(db,g.s),g.s);g.s.pets[1]=makePet(db,1);assert.throws(()=>validateState(db,g.s));});
 
 test('all 146 Kanto opponents are reachable; excluded species and babies never spawn',()=>{
  const expected=Array.from({length:151},(_,i)=>i+1).filter(i=>![144,145,146,150,151].includes(i));
@@ -140,9 +140,9 @@ test('rare partner evolves at 30 and 55 with four moves and survives backup rest
 });
 
 
-test('release clears all progress and returns an unhatched, saved-compatible egg',()=>{
+test('release of last partner keeps bag and currency and returns an egg',()=>{
  const g=started(133);g.s.coins=900;g.s.day=17;g.s.fatigue=80;g.pet.friendship=220;g.setEvolutionContext('night',8);
- g.release();assert.equal(g.s.hatched,false);assert.equal(g.s.active,null);assert.deepEqual(g.s.pets,{});assert.equal(g.s.coins,100);assert.equal(g.s.day,1);assert.equal(g.s.fatigue,0);assert.equal(g.s.evolutionContext,undefined);assert.equal(validateState(db,g.s),g.s);
+ g.release();assert.equal(g.s.hatched,false);assert.equal(g.s.active,null);assert.deepEqual(g.s.pets,{});assert.equal(g.s.coins,900);assert.equal(g.s.day,17);assert.equal(g.s.fatigue,80);assert.deepEqual(g.s.evolutionContext,{timeOfDay:'night',locationId:8});assert.equal(validateState(db,g.s),g.s);
  const restored=new Game(db,JSON.parse(JSON.stringify(g.s)));assert.equal(restored.hatch(()=>rollFor(133)),133);assert.equal(restored.hatch(()=>0),false);
  const busy=started();busy.startBattle(()=>.5);assert.throws(()=>busy.release());busy.flee();busy.s.pending=[{kind:'move',moveId:85}];assert.throws(()=>busy.release());
 });
@@ -150,7 +150,7 @@ test('Elekid and Magby evolve at 30, then consume required item in NPC trade',()
  for(const [id,mid,last,item] of [[239,125,466,299],[240,126,467,300]]){
   const g=started(id);g.awardXP(db.experience[g.species.growthRateId][29]-g.pet.exp);settle(g);assert.equal(g.pet.speciesId,id);
   g.awardXP(g.nextXp()-g.pet.exp);settle(g);assert.equal(g.pet.speciesId,mid);const e=g.species.evolutions.find(x=>x.to===last);assert.equal(e.trigger,'trade');assert.equal(e.heldItemId,item);
-  const old=structuredClone(g.s);assert.throws(()=>g.trade(last));assert.deepEqual(g.s,old);g.s.coins=300;g.trade(last);assert.equal(g.pet.speciesId,last);assert.equal(g.s.coins,0);assert.equal(g.pet.heldItemId,undefined);assert.equal(validateState(db,g.s),g.s);
+  const old=structuredClone(g.s);assert.throws(()=>g.trade(last));assert.deepEqual(g.s,old);g.s.coins=450;g.buy('evo-'+item);g.buy('trade-pass');g.trade(last);assert.equal(g.pet.speciesId,last);assert.equal(g.s.coins,0);assert.equal(g.pet.heldItemId,undefined);assert.equal(validateState(db,g.s),g.s);
  }
 });
 test('Magnemite evolves at 30; Magneton only levels into Magnezone at Mt Coronet',()=>{
@@ -160,7 +160,7 @@ test('Magnemite evolves at 30; Magneton only levels into Magnezone at Mt Coronet
 });
 test('all seven Gen-IV Eevee branches follow stones, friendship/time, or Sinnoh rocks',()=>{
  assert.deepEqual(db.pokemon[133].evolutions.map(x=>x.to).sort((a,b)=>a-b),[134,135,136,196,197,470,471]);assert.ok(!db.pokemon[700]);
- for(const to of [134,135,136]){const g=started(133);g.s.coins=300;g.stone(to);assert.equal(g.pet.speciesId,to);assert.equal(g.s.coins,0);}
+ for(const to of [134,135,136]){const g=started(133);g.s.coins=300;g.buy('evo-'+g.species.evolutions.find(e=>e.to===to).itemId);g.stone(to);assert.equal(g.pet.speciesId,to);assert.equal(g.s.coins,0);}
  for(const [time,location,to] of [['day',null,196],['night',null,197],['day',8,470],['night',48,471]]){
   const g=started(133);g.pet.friendship=220;g.setEvolutionContext(time,location);assert.equal(g.pet.speciesId,133);g.awardXP(g.nextXp()-g.pet.exp);settle(g);assert.equal(g.pet.speciesId,to);assert.ok(g.pet.moves.length<=4);
  }
