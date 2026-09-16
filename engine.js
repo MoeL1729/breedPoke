@@ -137,7 +137,7 @@ export class Game{
     const meta=m.meta||{};
     if(slug==='transform'){
       if(a.transformed||d.transformed){logs.push('변신에 실패했어요.');return;}
-      a.transformed=true;a.typeIds=[...this.fighterTypes(d)];
+      a.transformed=true;a.transformedSpeciesId=d.speciesId;a.typeIds=[...this.fighterTypes(d)];
       a.copiedStats={...statsFor(this.db,d.speciesId,d.level,d.ivs)};
       a.stages={...d.stages};a.moves=d.moves.map(x=>({id:x.id,pp:5}));
       logs.push('상대의 타입·능력치·기술을 복사했어요. HP와 레벨은 유지돼요.');return;

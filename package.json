@@ -1,10 +1,10 @@
 {
   "name": "pokegotchi",
-  "version": "1.6.1",
+  "version": "1.7.1",
   "private": true,
   "type": "module",
   "description": "Version-pinned HGSS pixel Pokemon raising game",
   "scripts": {
-    "test": "node --test tests/engine.test.js"
+    "test": "node --test tests/*.test.js"
   }
 }

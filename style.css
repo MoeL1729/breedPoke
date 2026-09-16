@@ -35,3 +35,32 @@ main{max-width:1380px;padding:24px 26px 0;background:#dce5ed;border:3px solid #1
 .status-detail{display:none;position:absolute;top:calc(100% + 7px);left:0;width:180px;max-width:65vw;padding:9px;background:#202d46;color:white;border:2px solid white;box-shadow:2px 2px 0 #202d46;font:12px/1.6 'Noto Sans KR',sans-serif;z-index:20;pointer-events:none}
 .battle-status:hover .status-detail,.battle-status:focus .status-detail{display:block}
 .battle-status:focus-visible{outline:3px solid #f9bb48;outline-offset:3px}
+
+/* Mobile battle: each fighter and HP card owns a separate grid cell. */
+@media(max-width:740px){
+ .scene.fighting{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-rows:auto auto;align-items:center;gap:16px 8px;padding:20px 10px 28px;aspect-ratio:auto;min-height:310px}
+ .scene.fighting .battle-hp{position:relative;inset:auto;width:100%;min-width:0;height:auto;padding:8px;align-self:center;margin:0;box-sizing:border-box}
+ .scene.fighting .enemy-hp{grid-column:1;grid-row:1}
+ .scene.fighting .player-hp{grid-column:2;grid-row:2}
+ .scene.fighting #pet,.scene.fighting #enemy{position:relative;inset:auto;transform:none;width:100%;height:auto;aspect-ratio:1;max-width:144px;justify-self:center;object-fit:contain;animation:mobile-bob 2s steps(2) infinite}
+ .scene.fighting #enemy{grid-column:2;grid-row:1}
+ .scene.fighting #pet{grid-column:1;grid-row:2}
+ .scene.fighting #pet.attacking,.scene.fighting #enemy.attacking{animation:mobile-strike .25s ease}
+ .scene.fighting .battle-hp strong{font-size:12px}
+ .scene.fighting .battle-hp small{font-size:10px}
+ .scene.fighting .battle-hp .bar{height:6px;margin-top:6px}
+ .scene.fighting .battle-hp .hp-num{margin-top:3px;font-size:10px}
+ .scene.fighting .battle-hp .types{gap:4px;margin:5px 0 0}
+ .scene.fighting .battle-hp .type-badge{gap:3px;font-size:10px!important}
+ .scene.fighting .battle-hp .type-image{width:30px;height:10px}
+ .scene.fighting .battle-statuses{gap:4px;margin:5px 0}
+ .scene.fighting .battle-status{padding:2px 4px;gap:3px;box-shadow:1px 1px #202d46}
+ .scene.fighting .battle-status svg{width:14px;height:14px}
+ .scene.fighting .battle-status b{font-size:10px}
+ .scene.fighting .player-hp .status-detail{left:auto;right:0}
+ .scene.fighting .scene-location{font-size:8px;bottom:8px;left:10px}
+}
+@keyframes mobile-bob{50%{transform:translateY(-3px)}}
+@keyframes mobile-strike{50%{transform:translateY(-8px)}}
+
+.type-unknown{display:inline-flex;align-items:center;justify-content:center;min-height:16px;background:#607978;color:#fff;border:1px solid #344b4a;font:bold 10px/1 monospace;letter-spacing:1px;vertical-align:middle}

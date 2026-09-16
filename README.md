@@ -1,3 +1,7 @@
+> 1.7.1 긴급 수정: 고오스가 저주를 배운 뒤 화면이 멈추는 문제 해결. app.js, index.html, style.css, data/pokedex.json 교체 후 새로고침하세요. 저장 데이터/브라우저 사이트 데이터는 삭제하지 마세요.
+
+> 최신 1.7.0: 메타몽·미뇽·이브이 각 5%, 나머지 25종 각 3.4%. 모바일 전투 겹침 수정. 아래 과거 버전 기록보다 이 규칙이 우선합니다. 배포 시 index.html, app.js, engine.js, style.css, data/pokedex.json을 교체하세요. assets는 이전 UI 버전과 동일합니다.
+
 > 1.6.1 패치: 전투 상태 픽셀 마크 추가. ZIP 내용 전체를 기존 저장소 루트에 덮어쓴 뒤 Commit/Push 하세요. 기존 주소와 브라우저를 유지하면 저장이 이어집니다.
 
 # POkegotchi v1.6
