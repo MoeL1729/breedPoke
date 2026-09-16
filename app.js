@@ -14,7 +14,7 @@ function moveFace(m,index,pp=m.pp,maxPP=m.pp,matchup=''){
  return `<div class="move-title"><span class="move-slot">${String(index+1).padStart(2,'0')}</span><strong>${esc(m.name)}</strong></div><div class="move-type-row">${badge(m.typeId)}<span class="move-kind">${kind}</span></div><div class="move-values"><span>위력 <b>${m.power??'—'}</b></span><span>PP <b>${pp}/${maxPP}</b></span></div>${matchup?`<div class="move-matchup">${esc(matchup)}</div>`:''}`;
 }
 
-const petSprite=(id,back=false,shiny=false)=>`assets/sprites/${shiny?'shiny/':''}${id}${back?'-back':''}.png`;
+const petSprite=(id,back=false,shiny=false)=>`assets/${shiny?'shiny':'sprites'}/${id}${back?'-back':''}.png`;
 const shinyMark=p=>p.shiny?'<span class="shiny-mark" title="이로치" aria-label="이로치">★</span>':'';
 function save(){try{localStorage.setItem(KEY,JSON.stringify(game.s));$('save-status').textContent='이 브라우저에 자동 저장';}catch{$('save-status').textContent='저장 불가 · 백업을 내려받으세요';saveWarning='브라우저 저장을 사용할 수 없어요. 아래 저장 백업으로 진행 상황을 보관하세요.';}}
 function say(text){$('message').textContent=text;}
