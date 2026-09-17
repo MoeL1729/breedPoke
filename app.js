@@ -1,4 +1,4 @@
-import { Game, freshState, migrateState, validateState, statsFor, clamp, ITEMS, shopCatalog, captureChance, SHINY_CHANCE, medicineUsable } from './engine.js?v=pokegotchi-210';
+import { Game, freshState, migrateState, validateState, statsFor, clamp, ITEMS, shopCatalog, captureChance, SHINY_CHANCE, medicineUsable } from './engine.js?v=pokegotchi-220';
 const $=id=>document.getElementById(id);
 const esc=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const wait=ms=>new Promise(resolve=>setTimeout(resolve,ms));
@@ -49,6 +49,7 @@ function render(){
 }
 const evolutionLocations={8:'영원의숲 · 이끼 낀 바위',10:'천관산 · 특수 자기장',48:'217번도로 · 얼음 바위'};
 function evolutionText(e){
+ if(e.personalityBranch)return `레벨 ${e.minLevel} 이상 · 개체별 고정 분기 (각 50%)`;
  if(e.trigger==='use-item')return esc(e.itemName)+' 사용';
  if(e.trigger==='trade')return e.heldItemName?`${esc(e.heldItemName)} 지닌 채 교환`:'교환으로 진화';
  if(e.locationId)return `${esc(evolutionLocations[e.locationId]??e.locationName)} 근처에서 레벨업 (D/P/Pt 조건)`;
@@ -161,7 +162,7 @@ async function hatchEgg(){
   await wait(1500);
   $('hatch-egg').classList.remove('hatching');busy=false;render();
   speak('반가워! 앞으로 잘 부탁해.');say(game.s.journal[0].text);
-  modal(`<div class="hatch-reveal"><p class="eyebrow">${game.pet.shiny?'★ SHINY FRIEND':[132,133,147].includes(game.pet.speciesId)?'RARE FRIEND · 5%':'HELLO, LITTLE FRIEND'}</p><img class="pixel" src="${petSprite(game.pet.speciesId,false,game.pet.shiny)}" alt="${esc(game.species.name)}"><h2 class="modal-title">${esc(game.species.name)}가 태어났어요!</h2><p class="modal-copy">이제 이 친구와 함께 먹고, 쉬고, 모험해요.<br>둘만의 첫날을 시작해 볼까요?</p><button class="primary" id="meet-pet">함께 시작하기</button></div>`,'A NEW FRIEND');
+  modal(`<div class="hatch-reveal"><p class="eyebrow">${game.pet.shiny?'★ SHINY FRIEND':[132,133,147].includes(game.pet.speciesId)?'RARE FRIEND · 2%':'HELLO, LITTLE FRIEND'}</p><img class="pixel" src="${petSprite(game.pet.speciesId,false,game.pet.shiny)}" alt="${esc(game.species.name)}"><h2 class="modal-title">${esc(game.species.name)}가 태어났어요!</h2><p class="modal-copy">이제 이 친구와 함께 먹고, 쉬고, 모험해요.<br>둘만의 첫날을 시작해 볼까요?</p><button class="primary" id="meet-pet">함께 시작하기</button></div>`,'A NEW FRIEND');
   $('meet-pet').onclick=closeModal;
 }
 function confirmNewEgg(){
@@ -169,7 +170,7 @@ function confirmNewEgg(){
  modal(`<h2 class="modal-title">${esc(game.species.name)}를 놓아줄까요?</h2><p class="modal-copy">선택한 친구의 육성 기록은 삭제됩니다. 다른 친구·가방·포인트·날짜는 유지하고 지닌 도구는 돌려받아요.${Object.keys(game.s.pets).length===1?' 마지막 친구를 놓아주면 새 알을 받습니다.':''}</p><div class="modal-actions"><button id="backup-before-reset" class="secondary">현재 저장 백업</button><button id="confirm-new-egg" class="primary">이 친구 놓아주기</button><button id="cancel-new-egg" class="secondary">취소</button></div>`,'GOODBYE');
  $('backup-before-reset').onclick=exportSave;$('cancel-new-egg').onclick=closeModal;$('confirm-new-egg').onclick=()=>{try{game.release();save();closeModal();render();}catch(e){say(e.message);}};
 }
-async function init(){try{const response=await fetch('data/pokedex.json?v=pokegotchi-210');if(!response.ok)throw Error('도감 데이터를 불러오지 못했어요.');db=await response.json();let state=null;try{const raw=localStorage.getItem(KEY);if(raw){state=JSON.parse(raw);if(state.schemaVersion!==3){try{localStorage.setItem(KEY+'-legacy-backup',raw);}catch{}state=migrateState(db,state);}validateState(db,{...state,battle:null,pending:[],progressing:false});if(state.pending.some(e=>!['move','evolution'].includes(e.kind)||(e.kind==='move'&&!db.moves[e.moveId])||(e.kind==='evolution'&&!db.pokemon[e.to])))throw Error('성장 정보 오류');if(state.battle){for(const f of [state.battle.player,state.battle.enemy]){if(!db.pokemon[f.speciesId]||!Array.isArray(f.moves)||!f.moves.every(m=>db.moves[m.id]&&Number.isFinite(m.pp))||!Number.isFinite(f.hp)||!f.stages)throw Error('전투 정보 오류');}}}}catch(error){throw Error('기존 저장은 그대로 보관했어요. '+error.message);}
+async function init(){try{const response=await fetch('data/pokedex.json?v=pokegotchi-220');if(!response.ok)throw Error('도감 데이터를 불러오지 못했어요.');db=await response.json();let state=null;try{const raw=localStorage.getItem(KEY);if(raw){state=JSON.parse(raw);if(state.schemaVersion!==3){try{localStorage.setItem(KEY+'-legacy-backup',raw);}catch{}state=migrateState(db,state);}validateState(db,{...state,battle:null,pending:[],progressing:false});if(state.pending.some(e=>!['move','evolution'].includes(e.kind)||(e.kind==='move'&&!db.moves[e.moveId])||(e.kind==='evolution'&&!db.pokemon[e.to])))throw Error('성장 정보 오류');if(state.battle){for(const f of [state.battle.player,state.battle.enemy]){if(!db.pokemon[f.speciesId]||!Array.isArray(f.moves)||!f.moves.every(m=>db.moves[m.id]&&Number.isFinite(m.pp))||!Number.isFinite(f.hp)||!f.stages)throw Error('전투 정보 오류');}}}}catch(error){throw Error('기존 저장은 그대로 보관했어요. '+error.message);}
     game=new Game(db,state??freshState(db));$('open-shop').onclick=()=>showShop();$('open-bag').onclick=()=>showBag();$('battle-bag').onclick=()=>showBag();$('battle-catch').onclick=()=>showBag(true);$('battle').onclick=startBattle;$('feed').onclick=()=>care('feed');$('sleep').onclick=()=>care('sleep');$('flee').onclick=()=>{if(busy)return;game.flee();save();render();say('쉼터로 돌아왔어요. 피로도는 그대로 유지돼요.');};$('help').onclick=showHelp;$('sources').onclick=showSources;$('dex-button').onclick=()=>showDex();$('learnset').onclick=()=>showLearnset();$('export-save').onclick=exportSave;
     render();if(!game.s.hatched){$('hatch-egg').onclick=hatchEgg;save();return;}save();if(game.s.battle)say('진행 중이던 전투를 이어서 시작해요. 기술을 선택하세요.');else say(saveWarning||`${game.species.name}가 주인님을 기다리고 있어요. 오늘은 함께 무엇을 할까요?`);if(game.s.pending.length||game.s.progressing)pump();
   }catch(e){say(e.message+' 새로고침해서 다시 시도해 주세요.');$('actions').innerHTML='<p class="error-view">게임 데이터를 불러오지 못했습니다. <button onclick="location.reload()">다시 시도</button></p>';}}

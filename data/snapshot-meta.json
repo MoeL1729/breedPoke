@@ -1,0 +1,203 @@
+{
+  "title": "POkegotchi version-pinned Pokédex",
+  "versionGroup": "heartgold-soulsilver",
+  "versionGroupId": 10,
+  "generation": 4,
+  "retrievedAt": "2026-09-17T03:09:29.589566+00:00",
+  "source": "PokeAPI community-maintained dataset (not an official Pokémon API)",
+  "canonicalFields": [
+    "species",
+    "learnset level-up HGSS only",
+    "evolution levels and items",
+    "generation-IV friendship threshold",
+    "generation-IV types and base stats",
+    "historical move power accuracy PP type",
+    "experience curves"
+  ],
+  "adaptedRules": [
+    "All first forms with three-stage chains in the current snapshot join the previous starters. Dratini learns Ember at level 7 as a game-only exception. A fighter with no learned damaging moves may use Struggle even while status PP remain.",
+    "Release removes only the selected partner and returns its held item. Currency, inventory, day and fatigue persist; releasing the last partner makes a new egg available.",
+    "Sinnoh evolution locations and game day/night are selectable contexts. NPC trade consumes a 150-point trade pass and, when required, a separately purchased 300-point evolution item. Tyrogue attack/defense IVs persist; other IVs are zero and EVs/natures are not modeled.",
+    "Wild opponents: 146 Kanto species excluding Articuno, Zapdos, Moltres, Mewtwo and Mew. Kanto-only evolution stages; middle gates >=20; final gates >=36 and actual minimum evolution level; non-evolving species >=20 or >=30 for base stat total >=450. Enemy level is partner level minus 0 to 2.",
+    "Game day advances by sleeping, not real-world date.",
+    "Daily fatigue 100; battle +35; feeding +15; sleep resets.",
+    "One starter hatches at level 7: Dratini, Eevee and Ditto each 2%; 39 other starters share 94% equally. Pichu replaces Pikachu for new eggs. Up to three partners including captures; shared fatigue. Feed friendship +12, sleep +3, level-up +5.",
+    "Battle win rewards active partner XP = floor(0.8 × (40 + 3 × enemy level squared)) and 80 points. Evolution stones must first be bought in the shop for 300 points each.",
+    "One-on-one battle simplifies utility, weather, trapping and some secondary effects. No abilities, EVs/natures or breeding. Held items listed in data/items.json are supported, including Gen IX Clear Amulet and Covert Cloak within modeled effects. Active partner fainting ends battle.",
+    "PP is restored each encounter; learning slots remain capped at four.",
+    "Move Reminder is free for the current species level-up learnset at or below current level.",
+    "Shiny chance is 0.04 per egg or wild encounter, independently rolled. Existing Pokemon are not rerolled.",
+    "HGSS catch probability uses HP, species capture rate, ball and status modifiers with integer rounding, then multiplies final success probability by 1.1 capped at 1.",
+    "Battle medicines, failed capture attempts and switching consume a turn. Potions restore 20 HP; Super Potions restore 50 HP. Status conditions end with battle.",
+    "Added all 14 three-stage roots introduced in Generation III and their Generation III evolutions (44 species), plus Pichu. HGSS learnsets and Gen IV stats/types are used. Wurmple branch is independently assigned once at creation, 50% Silcoon / 50% Cascoon, preserved in saves. Ralts follows Gardevoir; Gallade is outside this Generation III addition."
+  ],
+  "sources": [
+    {
+      "name": "Official battle guide: dual types, STAB, physical/special",
+      "url": "https://diamondpearl.pokemon.com/en-us/trainersguide/fundamentals/battling/"
+    },
+    {
+      "name": "PokeAPI documentation",
+      "url": "https://pokeapi.co/docs/v2"
+    },
+    {
+      "name": "PokeAPI source CSV",
+      "url": "https://github.com/PokeAPI/pokeapi/tree/master/data/v2/csv"
+    },
+    {
+      "name": "HGSS Pikachu learnset cross-check",
+      "url": "https://pokemondb.net/pokedex/pikachu/moves/4"
+    },
+    {
+      "name": "HGSS Charmander learnset cross-check",
+      "url": "https://pokemondb.net/pokedex/charmander/moves/4"
+    },
+    {
+      "name": "Generation II–VII friendship threshold",
+      "url": "https://bulbapedia.bulbagarden.net/wiki/Friendship_Evolution"
+    },
+    {
+      "name": "Pixel sprites",
+      "url": "https://github.com/PokeAPI/sprites"
+    },
+    {
+      "name": "Gen III/IV catch formula",
+      "url": "https://www.dragonflycave.com/mechanics/gen-iii-iv-capturing/"
+    },
+    {
+      "name": "Quick Claw",
+      "url": "https://bulbapedia.bulbagarden.net/wiki/Quick_Claw"
+    },
+    {
+      "name": "Shiny odds",
+      "url": "https://bulbapedia.bulbagarden.net/wiki/Shiny_Pok%C3%A9mon"
+    },
+    {
+      "name": "Gen III/IV catch formula",
+      "url": "https://www.dragonflycave.com/mechanics/gen-iii-iv-capturing/"
+    },
+    {
+      "name": "Quick Claw",
+      "url": "https://bulbapedia.bulbagarden.net/wiki/Quick_Claw"
+    },
+    {
+      "name": "Shiny odds",
+      "url": "https://bulbapedia.bulbagarden.net/wiki/Shiny_Pok%C3%A9mon"
+    },
+    {
+      "name": "Wurmple evolution branching",
+      "url": "https://bulbapedia.bulbagarden.net/wiki/Wurmple_(Pok%C3%A9mon)"
+    }
+  ],
+  "sourceFiles": [
+    {
+      "url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/data/v2/csv/version_groups.csv",
+      "sha256": "28da8d89d8eb4966941f81a9e62b3990510ed4d76dd774158246551a8e7707a7"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/data/v2/csv/versions.csv",
+      "sha256": "70083465865a6a69a9aad2be3fc3915078c6ff740f14a090b1367d8ec9cfc3cd"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/data/v2/csv/pokemon.csv",
+      "sha256": "16c81c33188b0eac403aa2f759fcbe9e42c611f722d263f5b5a6a5bff9f8ce6b"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/data/v2/csv/pokemon_species.csv",
+      "sha256": "9878f19c0637095cdd9a4134b4aac8fb2b64776d3bdc599aa68f15c3a011b87c"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/data/v2/csv/pokemon_species_names.csv",
+      "sha256": "820cde17074cdb1c2b0595c997fb8f998e773bd5da3bb525dec85703c86c5fd9"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/data/v2/csv/pokemon_evolution.csv",
+      "sha256": "b39006d85cdaa9c4a464312077ead6f45969d5be038dbe84e894a77d942e75de"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/data/v2/csv/pokemon_moves.csv",
+      "sha256": "22a807cef26891eeac0d0c900bd363e66baf421f7ee795bc7bc3e718f23b939e"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/data/v2/csv/moves.csv",
+      "sha256": "8aafd37bf78f19471495c05b201545180f50f0a08a2a2a844d69f9837dd39ac9"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/data/v2/csv/move_names.csv",
+      "sha256": "99e23ee38ea53d1473474d463b87651deac3cd4928750f8186feae66da45c147"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/data/v2/csv/move_changelog.csv",
+      "sha256": "86c1511f6a0e29dcc5a885c5b8f125ffd502afbec9f69c7f2b85a3e0e8b001f8"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/data/v2/csv/move_meta.csv",
+      "sha256": "93b92d5bddf4fc1536ca0a647c20453bf92e6389010f33ca6fc4c5e9c54363be"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/data/v2/csv/move_meta_stat_changes.csv",
+      "sha256": "489edd9ee45ea7e60c99c5a860c4c0957b337af21f8ae9bf03dd121fd548d5ab"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/data/v2/csv/stats.csv",
+      "sha256": "ee8c541b45b64f40f0eb2545c767294b5801ce8a1410e19d8c33a54e6f1c3b9c"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/data/v2/csv/pokemon_stats.csv",
+      "sha256": "fa2c44263a3706468682fefc3e0b3c4f5487fe9febed7d4ebcd6939c34b16aa8"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/data/v2/csv/pokemon_types.csv",
+      "sha256": "f1fc4bfd657a034ea3bf6972423b10276424aa068577b304a78a08996425ba05"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/data/v2/csv/pokemon_types_past.csv",
+      "sha256": "02553c38e3871f99c7ed809b944066fea3f42ef6bccd4daba19274aca01fbff0"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/data/v2/csv/type_names.csv",
+      "sha256": "685230c51074cf2f723debcf827a4df4c36ab0ec7e929c806ad65a3e40958705"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/data/v2/csv/types.csv",
+      "sha256": "37f039c8d722f47d51ba1c5c5ecf9b7007235b1a9a1af2827645c777b70307c8"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/data/v2/csv/type_efficacy.csv",
+      "sha256": "cdd7de4066680414d0a2433af805f139f425d6350cbf998ecab559a0fe8ff587"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/data/v2/csv/type_efficacy_past.csv",
+      "sha256": "0d8cb1251c7f987c7978d77d6c1b9ecfc54e04474b7584b8ecf96fef498fb9d4"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/data/v2/csv/experience.csv",
+      "sha256": "246d5d215bb90ee47206b57bfb9d9f639f73080ee8e99147382814e44e4f417b"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/data/v2/csv/pokemon_species_flavor_text.csv",
+      "sha256": "6244b7ba4fcac5f707c4792946e765e81782e75e3f547d269392a07e12754d62"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/data/v2/csv/pokemon_stats_past.csv",
+      "sha256": "0a074d9581369c1df13d8d4f4015fd7215b896c5dfb58107f3b529f7156950d2"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/data/v2/csv/item_names.csv",
+      "sha256": "7b1b4fe6edf7946110050a5dddabf62c3a1dc3e1616099c4ae97abcb5ebd0f97"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/data/v2/csv/items.csv",
+      "sha256": "f08cd6dc30b447cb91cbe9232c79052e8521f32f6105bb1489b5bfabf4ca3241"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/data/v2/csv/move_meta_ailments.csv",
+      "sha256": "4c6e3ce3afe276478a45730de3d15f65496f646ce927c3e374b32295fbe24ed4"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/data/v2/csv/location_names.csv",
+      "sha256": "4f901da13ab1fcd4cfeee99dd653652c2bd10afe21739f47a99ee906a99a004e"
+    }
+  ],
+  "gameVersion": "2.2.0"
+}

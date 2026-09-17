@@ -4,10 +4,10 @@ import fs from 'node:fs';
 import {Game, makePet, initialMoves, statsFor, validateState, encounterPool} from '../engine.js';
 const db=JSON.parse(fs.readFileSync(new URL('../data/pokedex.json',import.meta.url),'utf8'));
 function rollFor(id){const table=db.hatchTable;let prior=0;for(const row of table){if(row.id===id)return (prior+row.weight/2)/table.reduce((n,x)=>n+x.weight,0);prior+=row.weight;}throw Error('unknown starter');}
-function started(id=25,level=10){const g=new Game(db);g.hatch(()=>rollFor(id));g.s.pets[id]={...makePet(db,id,level),ivs:g.pet.ivs};return g;}
+function started(id=25,level=10){const g=new Game(db);g.hatch(()=>rollFor(id===25?172:id));if(id===25){g.s.pets[25]=g.pet;delete g.s.pets[g.s.active];g.s.active=25;}g.s.pets[id]={...makePet(db,id,level),ivs:g.pet.ivs};return g;}
 function settle(g,accept=true){let count=0;while(g.s.pending.length||g.s.progressing){assert.ok(++count<500);const e=g.s.pending[0]??g.progress();if(!e)break;if(e.kind==='move')g.chooseMove(0);else g.chooseEvolution(accept);}return g;}
 test('snapshot uses HGSS learnsets and historically accurate examples',()=>{
- assert.equal(db.meta.versionGroupId,10);assert.equal(Object.keys(db.pokemon).length,160);assert.equal(Object.keys(db.moves).length,373);
+ assert.equal(db.meta.versionGroupId,10);assert.equal(Object.keys(db.pokemon).length,205);assert.equal(Object.keys(db.moves).length,387);
  assert.equal(db.moves[33].power,35);assert.equal(db.moves[33].accuracy,95);assert.equal(db.moves[85].power,95);assert.equal(db.moves[204].typeId,1);
  assert.equal(db.pokemon[25].stats.defense,30);assert.equal(db.pokemon[26].stats.speed,100);assert.equal(db.pokemon[51].stats.attack,80);
  assert.deepEqual(db.pokemon[173].typeIds,[1]);assert.equal(db.pokemon[4].evolutions[0].minLevel,16);assert.equal(db.pokemon[5].evolutions[0].minLevel,36);
@@ -15,7 +15,7 @@ test('snapshot uses HGSS learnsets and historically accurate examples',()=>{
  assert.equal(db.pokemon[25].learnset.find(x=>x.moveId===98).level,13);
  for(const p of Object.values(db.pokemon)){assert.ok(p.learnset.length);for(const m of p.learnset)assert.ok(db.moves[m.moveId]);for(const e of p.evolutions)assert.ok(db.pokemon[e.to]);}
 });
-test('all twenty-eight partners start with up to four legitimate moves, with an attack or Struggle fallback',()=>{
+test('all forty-two partners start with up to four legitimate moves, with an attack or Struggle fallback',()=>{
  for(const id of db.starterIds){const g=started(id,7),p=g.pet;assert.ok(p.moves.length<=4);assert.ok(p.moves.some(m=>db.moves[m].damageClass!=='status')||g.canStruggle(g.fighter(p)));for(const m of p.moves)assert.ok(db.pokemon[id].learnset.some(l=>l.moveId===m&&l.level<=p.level));}
 });
 test('single-partner fatigue blocks over-budget actions, sleep advances game day and restores HP',()=>{
@@ -41,7 +41,7 @@ test('move reminder only permits current species moves at or below current level
 test('battle costs charged once; switching and care blocked; flee keeps fatigue',()=>{
  const g=started();g.startBattle(()=>.4);assert.equal(g.s.fatigue,35);assert.equal(g.switch(4),false);assert.throws(()=>g.feed());assert.throws(()=>g.sleep());const saved=JSON.parse(JSON.stringify(g.s));const resumed=new Game(db,saved);assert.equal(resumed.s.battle.turn,1);resumed.flee();assert.equal(resumed.s.fatigue,35);assert.equal(resumed.s.battle,null);
 });
-test('all twenty-eight partners can complete bounded battles without invalid HP or five moves',()=>{
+test('all forty-two partners can complete bounded battles without invalid HP or five moves',()=>{
  for(const id of db.starterIds){const g=started(id);g.startBattle(()=>.31);let count=0;while(g.s.battle){assert.ok(++count<65);const available=g.usable(g.s.battle.player),move=available.find(x=>db.moves[x.id].damageClass!=='status')??available[0];g.act(move?.id??-1,()=>.5);assert.ok(g.pet.hp>=0);assert.ok(g.pet.hp<=statsFor(db,g.pet.speciesId,g.pet.level).hp);}settle(g);assert.ok(g.pet.moves.length<=4);}
 });
 test('PP exhaustion enables Struggle, invalid moves cannot be used',()=>{
@@ -54,7 +54,7 @@ test('save validation rejects invalid bounds and accepts completed state',()=>{
 test('fresh game is an egg, with no owned Pokemon and no available care',()=>{
  const g=new Game(db);assert.equal(g.s.hatched,false);assert.equal(g.s.active,null);assert.deepEqual(g.s.pets,{});assert.equal(g.ready(),false);assert.throws(()=>g.feed());assert.throws(()=>g.startBattle());assert.throws(()=>g.sleep());assert.equal(validateState(db,g.s),g.s);
 });
-test('all twenty-eight weighted random buckets hatch exactly one partner; repeat clicks cannot reroll',()=>{
+test('all forty-two weighted random buckets hatch exactly one partner; repeat clicks cannot reroll',()=>{
  for(let i=0;i<db.starterIds.length;i++){const g=new Game(db);const id=g.hatch(()=>rollFor(db.starterIds[i]));assert.equal(id,db.starterIds[i]);assert.equal(Object.keys(g.s.pets).length,1);assert.equal(g.hatch(()=>.99),false);assert.equal(g.s.active,id);assert.equal(g.switch(db.starterIds[(i+1)%db.starterIds.length]),false);const resumed=new Game(db,JSON.parse(JSON.stringify(g.s)));assert.equal(resumed.hatch(()=>0),false);assert.equal(resumed.s.active,id);assert.equal(validateState(db,resumed.s),resumed.s);}
 });
 test('legacy save retains the active evolved Pokemon and progression only',()=>{
@@ -126,11 +126,11 @@ test('every new opponent completes a bounded battle with finite HP and legal ini
 });
 
 
-test('28 starter probabilities: Ditto, Dratini and Eevee 5 percent, others 3.4 percent',()=>{
- const counts={};for(let i=0;i<10000;i++){const g=new Game(db),id=g.hatch(()=>(i+.5)/10000);counts[id]=(counts[id]||0)+1;}
- assert.equal(counts[147],500);assert.equal(counts[133],500);assert.equal(counts[132],500);for(const id of db.starterIds.filter(i=>![147,133,132].includes(i)))assert.equal(counts[id],340);
- assert.equal(db.starterIds.length,28);assert.equal(new Set(db.starterIds).size,28);
- for(const [roll,id] of [[0,25],[.85,147],[.899999,147],[.90,133],[.949999,133],[.95,132],[.999999,132]]){const g=new Game(db);assert.equal(g.hatch(()=>roll),id);}
+test('42 starter probabilities: rare 2 percent each, common total 94 percent',()=>{
+ const total=db.hatchTable.reduce((n,x)=>n+x.weight,0);
+ assert.equal(db.starterIds.length,42);assert.equal(new Set(db.starterIds).size,42);
+ for(const row of db.hatchTable)assert.equal(row.weight/total,[147,133,132].includes(row.id)?.02:94/3900);
+ for(const [roll,id] of [[0,172],[.940001,147],[.959999,147],[.960001,133],[.979999,133],[.980001,132],[.999999,132]]){const g=new Game(db);assert.equal(g.hatch(()=>roll),id);}
 });
 test('rare partner evolves at 30 and 55 with four moves and survives backup restoration',()=>{
  const g=started(147);assert.equal(g.pet.level,10);assert.equal(validateState(db,g.s),g.s);
@@ -186,7 +186,7 @@ test('new evolution branches all carry HGSS level-up moves and valid images in t
 test('all three-stage roots are starters, and every fresh hatch has level 7 HP and XP',()=>{
  const targets=new Set(Object.values(db.pokemon).flatMap(p=>p.evolutions.map(e=>e.to)));
  for(const p of Object.values(db.pokemon))if(!targets.has(p.id)&&p.evolutions.some(e=>db.pokemon[e.to].evolutions.length))assert.ok(db.starterIds.includes(p.id));
- for(const id of db.starterIds){const g=new Game(db);g.hatch(()=>rollFor(id));assert.equal(g.pet.level,7);assert.equal(g.pet.exp,db.experience[g.species.growthRateId][7]);assert.equal(g.pet.hp,statsFor(db,id,7,g.pet.ivs).hp);assert.ok(g.pet.moves.length<=4);const f=g.fighter(g.pet);assert.ok(g.pet.moves.some(m=>db.moves[m].damageClass!=='status')||g.canStruggle(f));}
+ for(const id of db.starterIds){const g=new Game(db);g.hatch(()=>rollFor(id===25?172:id));if(id===25){g.s.pets[25]=g.pet;delete g.s.pets[g.s.active];g.s.active=25;}assert.equal(g.pet.level,7);assert.equal(g.pet.exp,db.experience[g.species.growthRateId][7]);assert.equal(g.pet.hp,statsFor(db,id,7,g.pet.ivs).hp);assert.ok(g.pet.moves.length<=4);const f=g.fighter(g.pet);assert.ok(g.pet.moves.some(m=>db.moves[m].damageClass!=='status')||g.canStruggle(f));}
 });
 test('Dratini hatches with Ember, old saves can recall it without forced replacement',()=>{
  const g=new Game(db);g.hatch(()=>rollFor(147));assert.ok(g.pet.moves.includes(52));assert.ok(db.pokemon[147].learnset.some(x=>x.moveId===52&&x.level===7&&x.gameOverride));

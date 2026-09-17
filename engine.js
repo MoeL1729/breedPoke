@@ -16,9 +16,10 @@ export function initialMoves(db,id,level){
 }
 export function encounterPool(db,level){return db.enemyIds.filter(id=>{const e=db.pokemon[id].encounter;return level>=e.minLevel&&level<=e.maxLevel;});}
 const FIXED_DAMAGE=new Set(['seismic-toss','night-shade','dragon-rage','sonic-boom','super-fang','endeavor','counter','mirror-coat','fissure','guillotine','horn-drill']);
-export function makePet(db,id,level=db.starterLevel??7){return {speciesId:id,level,exp:db.experience[db.pokemon[id].growthRateId][level],hp:statsFor(db,id,level).hp,hunger:75,friendship:db.pokemon[id].baseFriendship,moves:initialMoves(db,id,level),wins:0,originSpeciesId:id,shiny:false,heldItem:null};}
+export function makePet(db,id,level=db.starterLevel??7,random=Math.random){return {...(id===265?{evolutionBranch:random()<.5?266:268}:{}),speciesId:id,level,exp:db.experience[db.pokemon[id].growthRateId][level],hp:statsFor(db,id,level).hp,hunger:75,friendship:db.pokemon[id].baseFriendship,moves:initialMoves(db,id,level),wins:0,originSpeciesId:id,shiny:false,heldItem:null};}
 export const SHINY_CHANCE=0.04;
 export const MAX_PARTY=3;
+export const battleExperience=level=>Math.floor((40+3*level*level)*.8);
 export const ITEMS={
  'poke-ball':{name:'몬스터볼',kind:'ball',price:40,bonus:1,description:'야생 포켓몬을 포획해요.'},
  'great-ball':{name:'수퍼볼',kind:'ball',price:80,bonus:1.5,description:'몬스터볼보다 높은 포획 보정.'},
@@ -107,6 +108,7 @@ export function validateState(db,input){
   const sp=db.pokemon[p?.speciesId],origin=db.pokemon[p?.originSpeciesId];
   if(!sp||!origin||!origin.family.includes(p.speciesId)||typeof p.shiny!=='boolean'||(p.heldItem!==null&&ITEMS[p.heldItem]?.kind!=='held')||!Number.isInteger(p.level)||p.level<1||p.level>100||!Array.isArray(p.moves)||p.moves.length<1||p.moves.length>4||new Set(p.moves).size!==p.moves.length||p.moves.some(m=>!db.moves[m]))fail();
   if(![p.hp,p.hunger,p.friendship,p.exp,p.wins].every(Number.isFinite)||p.hp<0||p.hp>statsFor(db,p.speciesId,p.level,p.ivs).hp||p.hunger<0||p.hunger>100||p.friendship<0||p.friendship>255||p.exp<0||p.wins<0)fail();
+  if(p.originSpeciesId===265&&![266,268].includes(p.evolutionBranch))fail();
   if(p.ivs&&Object.entries(p.ivs).some(([k,v])=>!['attack','defense'].includes(k)||!Number.isInteger(v)||v<0||v>31))fail();
  }
  const catalog=shopCatalog(db);
@@ -135,6 +137,7 @@ export class Game{
   }
   evolutionEligible(e){
     const p=this.pet,c=this.s.evolutionContext??{timeOfDay:'day',locationId:null};
+    if(e.personalityBranch&&p.evolutionBranch!==e.personalityBranch)return false;
     if(e.trigger!=='level-up'||p.level<(e.minLevel||1)||p.friendship<(e.minFriendship||0))return false;
     if(e.timeOfDay&&e.timeOfDay!==c.timeOfDay)return false;
     if(e.locationId&&e.locationId!==c.locationId)return false;
@@ -257,7 +260,7 @@ export class Game{
  for(const [a,d] of [[p,e],[e,p]]){if(a.hp<=0)continue;if(a.status==='poison'||a.status==='burn'){const n=Math.max(1,Math.floor(a.maxHp/8));a.hp=Math.max(0,a.hp-n);logs.push(`${this.db.pokemon[a.speciesId].name}: ${a.status==='poison'?'독':'화상'}으로 ${n} 피해!`);}if(a.seeded&&a.hp>0&&d.hp>0){const n=Math.min(a.hp,Math.max(1,Math.floor(a.maxHp/8)));a.hp-=n;d.hp=Math.min(d.maxHp,d.hp+n);logs.push('씨뿌리기가 체력을 흡수했어요.');}if(a.hp>0&&a.hp<a.maxHp&&a.heldItem==='leftovers'){a.hp=Math.min(a.maxHp,a.hp+Math.max(1,Math.floor(a.maxHp/16)));logs.push('먹다남은음식으로 HP를 회복했어요.');}this.heldRecovery(a,logs);}
  this.syncPlayer();b.turn++;
  let result=null;if(p.hp<=0)result='lose';else if(e.hp<=0)result='win';else if(b.turn>60)result='draw';
- if(result){this.s.battle=null;if(result==='win'){this.pet.wins++;this.s.coins+=80;const xp=40+e.level*e.level*3;this.log(`전투 승리! 경험치 +${xp}, 모험 포인트 +80 P`);this.awardXP(xp);logs.push(`승리! 경험치 ${xp}와 80 P를 받았어요.`);}else if(result==='lose'){this.pet.friendship=clamp(this.pet.friendship-3,0,255);this.log('전투에서 졌어요. 다른 친구와 다시 도전하거나 회복하세요.');logs.push('전투 중인 친구가 기절해 쉼터로 돌아왔어요.');}else{this.log('긴 전투를 무승부로 마쳤어요.');logs.push('60턴이 지나 무승부로 마쳤어요.');}}
+ if(result){this.s.battle=null;if(result==='win'){this.pet.wins++;this.s.coins+=80;const xp=battleExperience(e.level);this.log(`전투 승리! 경험치 +${xp}, 모험 포인트 +80 P`);this.awardXP(xp);logs.push(`승리! 경험치 ${xp}와 80 P를 받았어요.`);}else if(result==='lose'){this.pet.friendship=clamp(this.pet.friendship-3,0,255);this.log('전투에서 졌어요. 다른 친구와 다시 도전하거나 회복하세요.');logs.push('전투 중인 친구가 기절해 쉼터로 돌아왔어요.');}else{this.log('긴 전투를 무승부로 마쳤어요.');logs.push('60턴이 지나 무승부로 마쳤어요.');}}
  return {logs,events,result};
  }
  flee(){if(!this.s.battle)return;this.syncPlayer();this.s.battle=null;this.log('전투에서 돌아왔어요. 소모한 피로도는 유지돼요.');}

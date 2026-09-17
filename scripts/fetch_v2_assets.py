@@ -7,7 +7,7 @@ rates={r['id']:int(r['capture_rate']) for r in csv.DictReader(raw.splitlines())}
 for id,sp in d['pokemon'].items():sp['captureRate']=rates[id]
 d['meta']['sources'] += [{'name':'Gen III/IV catch formula','url':'https://www.dragonflycave.com/mechanics/gen-iii-iv-capturing/'},{'name':'Quick Claw','url':'https://bulbapedia.bulbagarden.net/wiki/Quick_Claw'},{'name':'Shiny odds','url':'https://bulbapedia.bulbagarden.net/wiki/Shiny_Pok%C3%A9mon'}]
 p.write_text(json.dumps(d,ensure_ascii=False,indent=2))
-folder=ROOT/'assets/sprites/shiny';folder.mkdir(exist_ok=True)
+folder=ROOT/'assets/shiny';folder.mkdir(exist_ok=True)
 base='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-iv/heartgold-soulsilver/'
 jobs=[(id,back) for id in d['pokemon'] for back in [False,True]]
 def fetch(job):

@@ -4,9 +4,10 @@ import csv,json,hashlib
 from datetime import datetime,timezone
 from fetch_data import CACHE,BASE,fetch,FILES,ROOT
 ENEMY_IDS=[i for i in range(1,152) if i not in [144,145,146,150,151]]
-IDS=ENEMY_IDS+[173,174,238,239,240,236,237,462,466,467,196,197,470,471]
+HOENN_IDS=list(range(252,261))+list(range(265,276))+list(range(280,283))+list(range(287,290))+list(range(293,296))+list(range(304,307))+list(range(328,331))+list(range(363,366))+list(range(371,377))
+IDS=ENEMY_IDS+[172]+HOENN_IDS+[173,174,238,239,240,236,237,462,466,467,196,197,470,471]
 LEGACY_STARTERS=[25,4,1,7,50,52,238,174,173]
-PREVIOUS_STARTERS=LEGACY_STARTERS+[147,239,81,240,236,133]
+PREVIOUS_STARTERS=[172 if i==25 else i for i in LEGACY_STARTERS]+[147,239,81,240,236,133]
 EXTRA=['pokemon_stats_past','item_names','items','move_meta_ailments','location_names']
 t={n:fetch(n)[1] for n in FILES+EXTRA}
 num=lambda x: int(x) if x not in ('',None) else None
@@ -62,8 +63,10 @@ for i in IDS:
   for x in rows:
    item=num(x['trigger_item_id']);friend=num(x['minimum_happiness'])
    evol.append({'to':dest,'trigger':'use-item' if item else 'trade' if x['evolution_trigger_id']=='2' else 'level-up','minLevel':num(x['minimum_level']),'minFriendship':220 if friend else None,'itemId':item,'itemName':itemNames.get(item),'heldItemId':num(x['held_item_id']),'heldItemName':itemNames.get(num(x['held_item_id'])),'timeOfDay':x['time_of_day'] or None,'relativePhysicalStats':num(x['relative_physical_stats']),'locationId':num(x['location_id']),'locationName':locationNames.get(num(x['location_id'])) or {8:'영원의숲',10:'천관산',48:'217번도로'}.get(num(x['location_id'])),'nearSpecialRock':x['near_special_rock']=='1','conditionVersion':'diamond-pearl-platinum' if x['location_id'] else 'heartgold-soulsilver','sourceRowId':int(x['id']),'note':'HGSS 친밀도 진화 기준 220 적용' if friend else None})
+ if i==265:
+  for e in evol:e['personalityBranch']=e['to'];e['note']='개체별 고정 분기: 실쿤 또는 카스쿤 각각 50%'
  # Earlier games use 70 base friendship for these species; Cleffa/Clefairy/Clefable start at 140.
- friend=140 if i in [113,173,35,36] else 70
+ friend=140 if i in [113,173,35,36] else (35 if i in [280,281,282,304,305,306,371,372,373,374,375,376] else 70)
  pokemon[i]={'id':i,'slug':s['identifier'],'name':names[i]['name'],'genus':names[i]['genus'],'description':' '.join(f['flavor_text'].split()) if f else '', 'descriptionVersionId':int(f['version_id']) if f else None,'descriptionVersion':next((v['identifier'] for v in t['versions'] if f and v['id']==f['version_id']),None),'heightM':int(r['height'])/10,'weightKg':int(r['weight'])/10,'typeIds':[int(x['type_id']) for x in sorted(typ,key=lambda x:int(x['slot']))],'stats':base,'captureRate':int(s['capture_rate']),'baseFriendship':friend,'growthRateId':int(s['growth_rate_id']),'learnset':learn[i],'evolutions':evol,'family':[j for j in IDS if species[j]['evolution_chain_id']==s['evolution_chain_id']],'sprite':f'assets/sprites/{i}.png','backSprite':f'assets/sprites/{i}-back.png'}
 # Encounter stages use the Kanto-only family tree: later-generation babies/evolutions
 # do not shift Kanto stages. These are game encounter gates, not evolution rules.
@@ -87,7 +90,7 @@ targets={e['to'] for p in pokemon.values() for e in p['evolutions']}
 THREE_STAGE_ROOTS=[i for i in IDS if i not in targets and any(pokemon[e['to']]['evolutions'] for e in pokemon[i]['evolutions'])]
 STARTERS=list(dict.fromkeys(PREVIOUS_STARTERS+THREE_STAGE_ROOTS+[132]))
 COMMON_STARTERS=[i for i in STARTERS if i not in [147,133,132]]
-HATCH_TABLE=[{'id':i,'weight':85} for i in COMMON_STARTERS]+[{'id':147,'weight':5*len(COMMON_STARTERS)},{'id':133,'weight':5*len(COMMON_STARTERS)},{'id':132,'weight':5*len(COMMON_STARTERS)}]
+HATCH_TABLE=[{'id':i,'weight':94} for i in COMMON_STARTERS]+[{'id':147,'weight':2*len(COMMON_STARTERS)},{'id':133,'weight':2*len(COMMON_STARTERS)},{'id':132,'weight':2*len(COMMON_STARTERS)}]
 # User-requested game exception, kept separate from the canonical HGSS records.
 pokemon[147]['learnset'].append({'level':7,'moveId':52,'order':99,'gameOverride':True,'note':'게임 추가 기술: 미뇽 불꽃세례'})
 pokemon[147]['learnset'].sort(key=lambda r:(r['level'],r['order'],r['moveId']))
@@ -106,6 +109,11 @@ for r in t['experience']:
  g=int(r['growth_rate_id'])
  if g in exp:exp[g][int(r['level'])]=int(r['experience'])
 result={'schemaVersion':1,'meta':{'title':'POkegotchi version-pinned Pokédex','versionGroup':'heartgold-soulsilver','versionGroupId':GROUP,'generation':GEN,'retrievedAt':datetime.now(timezone.utc).isoformat(),'source':'PokeAPI community-maintained dataset (not an official Pokémon API)','canonicalFields':['species','learnset level-up HGSS only','evolution levels and items','generation-IV friendship threshold','generation-IV types and base stats','historical move power accuracy PP type','experience curves'],'adaptedRules':['All first forms with three-stage chains in the current snapshot join the previous starters. Dratini learns Ember at level 7 as a game-only exception. A fighter with no learned damaging moves may use Struggle even while status PP remain.','Release resets the entire local run to an unhatched egg after confirmation; optional backup before release.','Sinnoh evolution locations and game day/night are selectable contexts. Trade evolution is simulated by an NPC returning the same partner, with the required held item purchased and consumed for 300 points. Tyrogue rolls attack and defense IVs (0-31) at hatching; those two IVs persist through evolution. Other IVs remain zero; EVs and natures are not modeled.','Wild opponents: 146 Kanto species excluding Articuno, Zapdos, Moltres, Mewtwo and Mew. Kanto-only evolution stages; middle gates >=20; final gates >=36 and actual minimum evolution level; non-evolving species >=20 or >=30 for base stat total >=450. Enemy level is partner level minus 0 to 2.','Game day advances by sleeping, not real-world date.','Daily fatigue 100; battle +35; feeding +15; sleep resets.','One random starter hatches from an egg (Dratini 5%; Eevee 5%; Ditto 5%; other starters share 85% equally); only that partner is raised; initial level 7; feed friendship +12; sleep +3; level-up +5.','Battle reward XP = 40 + 3 × enemy level squared, 80 points; stone purchase and use costs 300.','One-on-one battle engine simplifies utility, weather, trapping and some secondary move effects; no abilities, battle held items, EV/natures or breeding; Tyrogue-line attack/defense IVs are supported.','PP is restored each encounter; learning slots remain capped at four.','Move Reminder is free for the current species level-up learnset at or below current level.'],'sources':[{'name':'Official battle guide: dual types, STAB, physical/special','url':'https://diamondpearl.pokemon.com/en-us/trainersguide/fundamentals/battling/'},{'name':'PokeAPI documentation','url':'https://pokeapi.co/docs/v2'},{'name':'PokeAPI source CSV','url':'https://github.com/PokeAPI/pokeapi/tree/master/data/v2/csv'},{'name':'HGSS Pikachu learnset cross-check','url':'https://pokemondb.net/pokedex/pikachu/moves/4'},{'name':'HGSS Charmander learnset cross-check','url':'https://pokemondb.net/pokedex/charmander/moves/4'},{'name':'Generation II–VII friendship threshold','url':'https://bulbapedia.bulbagarden.net/wiki/Friendship_Evolution'},{'name':'Pixel sprites','url':'https://github.com/PokeAPI/sprites'}],'sourceFiles':[{'url':BASE+n+'.csv','sha256':hashlib.sha256((CACHE/(n+'.csv')).read_bytes()).hexdigest()} for n in FILES+EXTRA]},'starterIds':STARTERS,'legacyStarterIds':LEGACY_STARTERS,'hatchTable':HATCH_TABLE,'starterLevel':7,'threeStageStarterIds':THREE_STAGE_ROOTS,'enemyIds':ENEMY_IDS,'pokemon':pokemon,'moves':moves,'types':types,'typeChart':chart,'experience':exp}
+result['hoennStarterIds']=[i for i in THREE_STAGE_ROOTS if i in HOENN_IDS]
+# Retain release metadata rather than reverting to historical one-partner rules.
+meta_path=ROOT/'data/snapshot-meta.json'
+if meta_path.exists():
+ current=json.loads(meta_path.read_text());current['sourceFiles']=result['meta']['sourceFiles'];current['retrievedAt']=result['meta']['retrievedAt'];result['meta']=current
 out=ROOT/'data/pokedex.json';out.write_text(json.dumps(result,ensure_ascii=False,indent=2))
 print('Saved',out,'species',len(pokemon),'moves',len(moves),'learnset rows',sum(len(p['learnset']) for p in pokemon.values()))
 for i in STARTERS:print(pokemon[i]['name'],pokemon[i]['evolutions'],[(x['level'],moves[x['moveId']]['name']) for x in learn[i]][:6])
