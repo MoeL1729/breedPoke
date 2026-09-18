@@ -151,13 +151,7 @@
 
 현재 게임에는 성별·헤롱헤롱·더블배틀·벽·대타출동 시스템이 없습니다. 투쟁심·헤롱헤롱바디·힐러·프렌드가드·텔레파시·틈새포착 등 관련 특성의 해당 효과는 적용되지 않으며 게임 상세 화면에 이를 안내합니다. 발광의 필드 효과도 없습니다. 급소의 세부 랭크 무시, 다단 공격의 개별 부가 효과·타격별 재계산 등 복잡한 원작 처리 전체를 재현한 대전 시뮬레이터는 아닙니다. 부가효과 확률·다단 공격 분포 등 기존 간소화 규칙이 남아 있습니다.
 
-### GitHub Pages 업데이트
 
-압축을 풀고 기존 저장소 루트에 다음 파일을 덮어쓰거나 추가하세요:
-`index.html`, `app.js`, `engine.js`, **`abilities.js`(신규)**, `style.css`, **`data/pokedex.json`**.
-기존 2.4.0 사용자라면 이번 업데이트는 이미지 변경이 없으므로 assets를 다시 올리지 않아도 됩니다. 그보다 이전 버전이라면 전체 파일을 업로드하세요. node_modules나 빌드 서버는 필요하지 않습니다. 이 패키지는 GitHub에 자동 커밋되지 않습니다.
-
-데이터 재생성: `python scripts/build_abilities.py`. 생성된 JSON은 게임에 포함되어 실행 중 외부 API를 호출하지 않습니다. 특성 데이터 캐시는 .data-cache/abilities에 저장됩니다.
 
 출처: [PokeAPI](https://pokeapi.co/docs/v2/#abilities), [특성 슬롯 변경 이력](https://github.com/PokeAPI/pokeapi/blob/master/data/v2/csv/pokemon_abilities_past.csv), [특성캡슐](https://bulbapedia.bulbagarden.net/wiki/Ability_Capsule), [특성패치](https://bulbapedia.bulbagarden.net/wiki/Ability_Patch), [Pokémon Showdown 7세대 규칙 참고](https://github.com/smogon/pokemon-showdown/blob/master/data/mods/gen7/abilities.ts).
 
