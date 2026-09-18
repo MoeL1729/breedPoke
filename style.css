@@ -88,3 +88,7 @@ main{max-width:1380px;padding:24px 26px 0;background:#dce5ed;border:3px solid #1
 @keyframes trainer-enter{from{transform:translateX(120%);opacity:0}to{transform:translateX(0);opacity:1}}@keyframes trainer-exit{to{transform:translateX(-150%);opacity:0}}@keyframes trainer-caption{to{opacity:0}}
 @media(max-width:740px){.intro-actor{gap:14px}.intro-actor img{width:144px;height:144px}.intro-copy{padding:10px 14px}.intro-copy strong{font-size:20px}.intro-copy p{font-size:12px}}
 @media(prefers-reduced-motion:reduce){.intro-actor,.intro-copy{animation:none}}
+
+/* Separate symbols let rare color and hidden ability be read together. */
+.hidden-mark{color:#16763c;text-shadow:0 1px #b9f4b9;margin-right:3px;font-weight:900}.pet-ability{display:block;max-width:100%;background:#eaf4df;border:1px solid #98b789;border-radius:6px;padding:7px 10px;margin:8px 0;color:#274934;font-size:12px;text-align:left}.battle-ability{font-size:10px;color:#47604d;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;grid-column:1/-1}.ability-detail{padding:10px 12px;margin:8px 0;border:1px solid #d4ddcb;background:#f7faef;border-radius:8px}.ability-detail h3{font-size:15px;margin:0 0 6px}.ability-detail h3 small{font-size:10px;font-weight:normal}.ability-detail p{font-size:12px;line-height:1.7;margin:4px 0}.ability-note{color:#59634c}.ability-odds{font-size:12px;text-shadow:0 1px #fff;margin:8px 16px}
+@media(max-width:740px){.battle-ability{font-size:9px;line-height:1.1}.battle-hp{row-gap:3px}.hidden-mark{margin-right:2px}}

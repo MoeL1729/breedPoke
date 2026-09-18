@@ -1,3 +1,5 @@
+import {HIDDEN_CHANCE,DROP_CHANCE,options,abilityOf,abilitySlug,assignAbility,abilityItemTarget,weather,changeStage,statusImmune,inflict,transform,enter,leave,statFactor,accuracyFactor,blockMove,damageFactor,sheerForce,afterHit,endAbilities,trapped} from './abilities.js?v=pokegotchi-250';
+export {HIDDEN_CHANCE,DROP_CHANCE,abilityOf,abilityItemTarget};
 // Pure game rules. Canonical data lives in data/pokedex.json; care rules are game-specific.
 export const clamp=(n,a,b)=>Math.min(b,Math.max(a,n));
 export function statsFor(db,id,level,ivs={}){
@@ -16,13 +18,15 @@ export function initialMoves(db,id,level){
 }
 export function encounterPool(db,level){return db.enemyIds.filter(id=>{const e=db.pokemon[id].encounter;return level>=e.minLevel&&level<=e.maxLevel;});}
 const FIXED_DAMAGE=new Set(['seismic-toss','night-shade','dragon-rage','sonic-boom','super-fang','endeavor','counter','mirror-coat','fissure','guillotine','horn-drill']);
-export function makePet(db,id,level=db.starterLevel??7,random=Math.random){return {...(id===265?{evolutionBranch:random()<.5?266:268}:{}),speciesId:id,level,exp:db.experience[db.pokemon[id].growthRateId][level],hp:statsFor(db,id,level).hp,hunger:75,friendship:db.pokemon[id].baseFriendship,moves:initialMoves(db,id,level),wins:0,originSpeciesId:id,shiny:false,heldItem:null};}
+export function makePet(db,id,level=db.starterLevel??7,random=Math.random){return {...(id===265?{evolutionBranch:random()<.5?266:268}:{}),abilitySlot:1,speciesId:id,level,exp:db.experience[db.pokemon[id].growthRateId][level],hp:statsFor(db,id,level).hp,hunger:75,friendship:db.pokemon[id].baseFriendship,moves:initialMoves(db,id,level),wins:0,originSpeciesId:id,shiny:false,heldItem:null};}
 export const SHINY_CHANCE=0.04;
 export const MAX_PARTY=3;
 export const TRAINER_CHANCE=.2;
 export const TRAINERS=[{"id":"lass-gen4","name":"짧은치마 소녀","sprite":"assets/trainers/lass-gen4.png"},{"id":"falkner","name":"체육관 관장 비상","sprite":"assets/trainers/falkner.png"},{"id":"bugsy","name":"체육관 관장 호일","sprite":"assets/trainers/bugsy.png"},{"id":"whitney","name":"체육관 관장 꼭두","sprite":"assets/trainers/whitney.png"},{"id":"morty","name":"체육관 관장 유빈","sprite":"assets/trainers/morty.png"},{"id":"chuck","name":"체육관 관장 사도","sprite":"assets/trainers/chuck.png"},{"id":"jasmine","name":"체육관 관장 규리","sprite":"assets/trainers/jasmine.png"},{"id":"pryce","name":"체육관 관장 류옹","sprite":"assets/trainers/pryce.png"},{"id":"clair","name":"체육관 관장 이향","sprite":"assets/trainers/clair.png"},{"id":"brock","name":"체육관 관장 웅","sprite":"assets/trainers/brock.png"},{"id":"misty","name":"체육관 관장 이슬","sprite":"assets/trainers/misty.png"},{"id":"ltsurge","name":"체육관 관장 마티스","sprite":"assets/trainers/ltsurge.png"},{"id":"erika","name":"체육관 관장 민화","sprite":"assets/trainers/erika.png"},{"id":"janine","name":"체육관 관장 도희","sprite":"assets/trainers/janine.png"},{"id":"sabrina","name":"체육관 관장 초련","sprite":"assets/trainers/sabrina.png"},{"id":"blaine","name":"체육관 관장 강연","sprite":"assets/trainers/blaine.png"},{"id":"blue","name":"체육관 관장 그린","sprite":"assets/trainers/blue.png"}];
 export const battleExperience=level=>Math.floor((40+3*level*level)*.8);
 export const ITEMS={
+ 'ability-capsule':{name:'특성캡슐',kind:'ability',price:1200,description:'일반 특성 2종을 서로 전환. 숨겨진 특성에는 사용 불가. 쉼터에서 사용.'},
+ 'ability-patch':{name:'특성패치',kind:'ability',price:3000,description:'일반 특성 ↔ 숨겨진 특성 전환 (9세대 도구 규칙). 숨겨진 특성이 있는 종에만 사용.'},
  'poke-ball':{name:'몬스터볼',kind:'ball',price:40,bonus:1,description:'야생 포켓몬을 포획해요.'},
  'great-ball':{name:'수퍼볼',kind:'ball',price:80,bonus:1.5,description:'몬스터볼보다 높은 포획 보정.'},
  'ultra-ball':{name:'하이퍼볼',kind:'ball',price:120,bonus:2,description:'더 높은 포획 보정.'},
@@ -112,6 +116,7 @@ export function validateState(db,input){
   const sp=db.pokemon[p?.speciesId],origin=db.pokemon[p?.originSpeciesId];
   if(!sp||!origin||!origin.family.includes(p.speciesId)||typeof p.shiny!=='boolean'||(p.heldItem!==null&&ITEMS[p.heldItem]?.kind!=='held')||!Number.isInteger(p.level)||p.level<1||p.level>100||!Array.isArray(p.moves)||p.moves.length<1||p.moves.length>4||new Set(p.moves).size!==p.moves.length||p.moves.some(m=>!db.moves[m]))fail();
   if(![p.hp,p.hunger,p.friendship,p.exp,p.wins].every(Number.isFinite)||p.hp<0||p.hp>statsFor(db,p.speciesId,p.level,p.ivs).hp||p.hunger<0||p.hunger>100||p.friendship<0||p.friendship>255||p.exp<0||p.wins<0)fail();
+  if(p.abilitySlot!==undefined&&![1,2,3].includes(p.abilitySlot))fail();
   if(p.originSpeciesId===265&&![266,268].includes(p.evolutionBranch))fail();
   if(p.ivs&&Object.entries(p.ivs).some(([k,v])=>!['attack','defense'].includes(k)||!Number.isInteger(v)||v<0||v>31))fail();
  }
@@ -123,11 +128,20 @@ export function validateState(db,input){
  return s;
 }
 export class Game{
-  constructor(db,state){this.db=db;this.s=state?migrateState(db,state):freshState(db);this.s.battleCount??=0;this.s.lastBattleTrainer??=false;}
+  constructor(db,state){this.db=db;this.s=state?migrateState(db,state):freshState(db);this.s.battleCount??=0;this.s.lastBattleTrainer??=false;
+    for(const p of Object.values(this.s.pets))if(p.abilitySlot===undefined)assignAbility(db,p);
+    const b=this.s.battle;if(b){
+      for(const p of b.enemyTeam??[])if(p.abilitySlot===undefined)assignAbility(db,p);
+      if(b.originalEnemy?.abilitySlot===undefined&&b.originalEnemy){if(b.enemyTeam?.[b.enemyIndex??0])b.originalEnemy.abilitySlot=b.enemyTeam[b.enemyIndex??0].abilitySlot;else assignAbility(db,b.originalEnemy);}
+      b.player.abilitySlot??=this.pet.abilitySlot;b.enemy.abilitySlot??=b.originalEnemy?.abilitySlot;
+      if(b.enemy.abilitySlot===undefined)assignAbility(db,b.enemy);
+      for(const [id,f] of Object.entries(b.bench??{}))f.abilitySlot??=this.s.pets[id]?.abilitySlot;
+    }
+  }
   get pet(){return this.s.pets[this.s.active];} get species(){return this.db.pokemon[this.pet.speciesId];}
   log(text){this.s.journal.unshift({day:this.s.day,text});this.s.journal=this.s.journal.slice(0,30);}
   ready(){return this.s.hatched&&!this.s.battle&&!this.s.pending.length&&!this.s.progressing;}
-  hatch(random=Math.random,shinyRandom=Math.random){if(this.s.hatched)return false;const value=random();if(!Number.isFinite(value)||value<0||value>=1)throw Error('잘못된 난수입니다.');const table=this.db.hatchTable,total=table.reduce((n,x)=>n+x.weight,0);let ticket=value*total;const id=table.find(x=>{ticket-=x.weight;return ticket<0;}).id;this.s.active=id;this.s.pets={[id]:makePet(this.db,id)};if(id===236){const iv=()=>{const r=random();if(!Number.isFinite(r)||r<0||r>=1)throw Error('잘못된 난수입니다.');return Math.floor(r*32);};this.s.pets[id].ivs={attack:iv(),defense:iv()};}this.pet.shiny=shinyRandom()<SHINY_CHANCE;this.s.hatched=true;this.log(`${this.species.name}가 알에서 태어났어요! 이제 둘만의 모험을 시작해요.`);return id;}
+  hatch(random=Math.random,shinyRandom=Math.random,abilityRandom=Math.random){if(this.s.hatched)return false;const value=random();if(!Number.isFinite(value)||value<0||value>=1)throw Error('잘못된 난수입니다.');const table=this.db.hatchTable,total=table.reduce((n,x)=>n+x.weight,0);let ticket=value*total;const id=table.find(x=>{ticket-=x.weight;return ticket<0;}).id;this.s.active=id;this.s.pets={[id]:makePet(this.db,id)};if(id===236){const iv=()=>{const r=random();if(!Number.isFinite(r)||r<0||r>=1)throw Error('잘못된 난수입니다.');return Math.floor(r*32);};this.s.pets[id].ivs={attack:iv(),defense:iv()};}assignAbility(this.db,this.pet,abilityRandom);this.pet.shiny=shinyRandom()<SHINY_CHANCE;this.s.hatched=true;this.log(`${this.species.name}가 알에서 태어났어요! 이제 둘만의 모험을 시작해요.`);return id;}
   release(){
  if(!this.ready())throw Error('전투와 성장을 마친 뒤 놓아줄 수 있어요.');
  const p=this.pet;if(p.heldItem&&(this.s.inventory[p.heldItem]??0)>=999)throw Error('돌려받을 도구의 가방 공간이 부족해요.');if(p.heldItem)this.s.inventory[p.heldItem]=(this.s.inventory[p.heldItem]??0)+1;
@@ -193,44 +207,49 @@ export class Game{
  stone(to=null){if(!this.ready())throw Error('진행 중인 일을 먼저 마쳐주세요.');const e=this.species.evolutions.find(e=>e.trigger==='use-item'&&(to===null||e.to===to));if(!e)throw Error('진화의돌을 사용할 수 없습니다.');this.consumeEvolution(e);this.evolveTo(e.to);}
  trade(to){if(!this.ready())throw Error('진행 중인 일을 먼저 마쳐주세요.');const e=this.species.evolutions.find(e=>e.trigger==='trade'&&e.to===to);if(!e)throw Error('교환 진화 대상이 아닙니다.');this.consumeEvolution(e);this.evolveTo(e.to);this.log('NPC에게 맡겼다가 진화한 같은 친구를 돌려받았어요.');}
   recall(moveId,slot){if(!this.ready())throw Error('진행 중인 일을 먼저 마쳐주세요.');const p=this.pet;if(!this.species.learnset.some(m=>m.moveId===moveId&&m.level<=p.level)||p.moves.includes(moveId))throw Error('떠올릴 수 없는 기술입니다.');if(p.moves.length<4)p.moves.push(moveId);else{if(!Number.isInteger(slot)||slot<0||slot>3)throw Error('교체할 기술을 선택하세요.');p.moves[slot]=moveId;}this.log(`${this.species.name}, ${this.db.moves[moveId].name}을 떠올렸어요.`);}
-  startBattle(random=Math.random,shinyRandom=Math.random,trainerRandom=Math.random,appearanceRandom=Math.random){
+  startBattle(random=Math.random,shinyRandom=Math.random,trainerRandom=Math.random,appearanceRandom=Math.random,abilityRandom=Math.random){
  const error=this.can('battle');if(error)throw Error(error);
  const trainer=this.s.battleCount>=10&&!this.s.lastBattleTrainer&&this.pet.level>1&&trainerRandom()<TRAINER_CHANCE;
  const team=[];for(let n=0;n<(trainer?3:1);n++){
   const level=clamp(this.pet.level-(trainer?1:0)-Math.floor(random()*3),1,100);
   const candidates=encounterPool(this.db,level),id=candidates[Math.floor(random()*candidates.length)];
-  const enemy=makePet(this.db,id,level);enemy.shiny=shinyRandom()<SHINY_CHANCE;team.push(enemy);
+  const enemy=assignAbility(this.db,makePet(this.db,id,level),abilityRandom);enemy.shiny=shinyRandom()<SHINY_CHANCE;team.push(enemy);
  }
  this.s.fatigue+=35;this.pet.hunger=clamp(this.pet.hunger-18,0,100);
  this.s.battleCount++;this.s.lastBattleTrainer=trainer;
  const appearance=trainer?TRAINERS[Math.floor(appearanceRandom()*TRAINERS.length)]:null;
  const enemy=team[0];this.s.battle={trainerId:appearance?.id??null,introSeen:false,kind:trainer?'trainer':'wild',trainerName:appearance?.name??null,enemyIndex:0,enemyTeam:team,earnedXP:0,player:this.fighter(this.pet),enemy:this.fighter(enemy),originalEnemy:structuredClone(enemy),activeId:this.s.active,turn:1};
+ const intro=[];enter(this,this.s.battle.player,this.s.battle.enemy,intro);enter(this,this.s.battle.enemy,this.s.battle.player,intro);this.s.battle.player.enteredTurn=0;this.s.battle.enemy.enteredTurn=0;this.s.battle.abilityLogs=intro;
  this.log(trainer?`${appearance.name}가 포켓몬 3마리로 승부를 걸었어요!`:`야생 ${this.db.pokemon[enemy.speciesId].name}와 만났어요.`);return this.s.battle;
  }
-  fighter(p){return {speciesId:p.speciesId,shiny:p.shiny??false,heldItem:p.heldItem??null,level:p.level,ivs:{...(p.ivs??{})},hp:p.hp,maxHp:statsFor(this.db,p.speciesId,p.level,p.ivs).hp,moves:p.moves.map(id=>({id,pp:this.db.moves[id].pp})),stages:{attack:0,defense:0,'special-attack':0,'special-defense':0,speed:0,accuracy:0,evasion:0},status:null,statusTurns:0,confused:0,seeded:false,guard:false,charge:null,lastDamage:0,lastClass:null,recharge:false};}
+  fighter(p){return {abilitySlot:p.abilitySlot,originalHeldItem:p.heldItem??null,speciesId:p.speciesId,shiny:p.shiny??false,heldItem:p.heldItem??null,level:p.level,ivs:{...(p.ivs??{})},hp:p.hp,maxHp:statsFor(this.db,p.speciesId,p.level,p.ivs).hp,moves:p.moves.map(id=>({id,pp:this.db.moves[id].pp})),stages:{attack:0,defense:0,'special-attack':0,'special-defense':0,speed:0,accuracy:0,evasion:0},status:null,statusTurns:0,confused:0,seeded:false,guard:false,charge:null,lastDamage:0,lastClass:null,recharge:false};}
   canStruggle(f){return !this.usable(f).length||!f.moves.some(x=>this.db.moves[x.id].damageClass!=='status');}
-  usable(f){return f.moves.filter(m=>m.pp>0);}
-  effectiveStat(f,key){let n=(f.copiedStats??statsFor(this.db,f.speciesId,f.level,f.ivs))[key],stage=f.stages[key]||0;n*=stage>=0?(2+stage)/2:2/(2-stage);if(key==='speed'&&f.status==='paralysis')n*=.25;if(key==='attack'&&f.status==='burn')n*=.5;return n;}
+  usable(f){return f.moves.filter(m=>m.pp>0&&m.id!==f.disabledMove);}
+  baseStats(f){return statsFor(this.db,f.speciesId,f.level,f.ivs);}
+  itemName(id){return ITEMS[id]?.name??id;}
+  hasAbility(f,...slugs){return slugs.includes(abilitySlug(this.db,f));}
+  effectiveStat(f,key,ignoreStage=false){let n=(f.copiedStats??statsFor(this.db,f.speciesId,f.level,f.ivs))[key],stage=ignoreStage?0:f.stages[key]||0;n*=stage>=0?(2+stage)/2:2/(2-stage);if(key==='speed'&&f.status==='paralysis'&&!this.hasAbility(f,'quick-feet'))n*=.5;if(key==='attack'&&f.status==='burn'&&!this.hasAbility(f,'guts'))n*=.5;return n*statFactor(this,f,key);}
   fighterTypes(f){return f.typeIds??this.db.pokemon[f.speciesId].typeIds;}
-  effectiveness(move,defender){if(move.slug==='struggle')return 1;return this.fighterTypes(defender).reduce((n,t)=>n*(this.db.typeChart[move.typeId]?.[t]??1),1);}
+  effectiveness(move,defender,attacker=null){if(move.slug==='struggle')return 1;return this.fighterTypes(defender).reduce((n,t)=>n*(attacker&&this.hasAbility(attacker,'scrappy')&&t===8&&[1,2].includes(move.typeId)?1:(this.db.typeChart[move.typeId]?.[t]??1)),1);}
   moveMatchup(move,attacker,defender){
     if(move.damageClass==='status')return '변화 기술 · 직접 피해 없음';
-    const effect=this.effectiveness(move,defender);
+    const effect=this.effectiveness(move,defender,attacker);
     if(effect===0)return '효과 없음 · 0배';
     if(FIXED_DAMAGE.has(move.slug))return '고정·조건부 피해 · 상성 배율 제외';
     const stab=move.slug!=='struggle'&&this.fighterTypes(attacker).includes(move.typeId);
-    return `상성 ${effect}배${stab?' · 같은 타입 ×1.5':''}`;
+    return `상성 ${effect}배${stab?' · 같은 타입 ×'+(this.hasAbility(attacker,'adaptability')?2:1.5):''} · 특성에 따라 변동`;
   }
   syncPlayer(){const b=this.s.battle;if(b){this.pet.hp=b.player.hp;this.pet.heldItem=b.player.heldItem??null;}}
  enemyMove(random){const e=this.s.battle.enemy,slots=this.usable(e),damaging=slots.filter(m=>this.db.moves[m.id].damageClass!=='status');if(e.charge)return e.charge;if(!slots.length)return -1;if(damaging.length&&random()<.7)return damaging[Math.floor(random()*damaging.length)].id;return slots[Math.floor(random()*slots.length)].id;}
  heldRecovery(f,logs){
  if(f.hp<=0)return;
- const item=ITEMS[f.heldItem];if(item?.cure&&((item.cure==='all'&&(f.status||f.confused>0))||f.status===item.cure)){cureWith(item,f);f.heldItem=null;logs.push(`${item.name}로 상태를 치료했어요.`);return;}
- if(f.heldItem==='sitrus-berry'&&f.hp<=f.maxHp/2){f.hp=Math.min(f.maxHp,f.hp+Math.max(1,Math.floor(f.maxHp/4)));f.heldItem=null;logs.push('자뭉열매로 HP를 회복했어요.');}
- if(f.heldItem==='oran-berry'&&f.hp<=f.maxHp/2){f.hp=Math.min(f.maxHp,f.hp+10);f.heldItem=null;logs.push('오랭열매를 먹고 HP 10을 회복했어요.');}
+ const other=this.s.battle?.player===f?this.s.battle.enemy:this.s.battle?.player;if(other&&this.hasAbility(other,'unnerve')&&f.heldItem?.endsWith('-berry'))return;
+ const item=ITEMS[f.heldItem];if(item?.cure&&((item.cure==='all'&&(f.status||f.confused>0))||f.status===item.cure)){cureWith(item,f);f.lastConsumedItem=f.heldItem;f.lastBerry=f.heldItem;f.heldItem=null;if(this.hasAbility(f,'unburden'))f.unburden=true;logs.push(`${item.name}로 상태를 치료했어요.`);return;}
+ if(f.heldItem==='sitrus-berry'&&f.hp<=f.maxHp/2){f.hp=Math.min(f.maxHp,f.hp+Math.max(1,Math.floor(f.maxHp/4)));f.lastConsumedItem=f.heldItem;f.lastBerry=f.heldItem;f.heldItem=null;if(this.hasAbility(f,'unburden'))f.unburden=true;logs.push('자뭉열매로 HP를 회복했어요.');}
+ if(f.heldItem==='oran-berry'&&f.hp<=f.maxHp/2){f.hp=Math.min(f.maxHp,f.hp+10);f.lastConsumedItem=f.heldItem;f.lastBerry=f.heldItem;f.heldItem=null;if(this.hasAbility(f,'unburden'))f.unburden=true;logs.push('오랭열매를 먹고 HP 10을 회복했어요.');}
  }
  attack(a,d,id,who,logs,events,random){
- if(a.hp<=0||d.hp<=0)return;const before=d.hp;delete a.lastHit;this.execute(a,d,id,logs,random);
+ if(a.hp<=0||d.hp<=0)return;const before=d.hp;this.s.battle.acted??=[];this.s.battle.acted.push(a);delete a.lastHit;this.execute(a,d,id,logs,random);
  const hit=a.lastHit;events.push({who,damage:Math.max(0,before-d.hp),effect:hit?.effect??1,immune:hit?.immune??false});
  this.heldRecovery(a,logs);this.heldRecovery(d,logs);
  }
@@ -238,12 +257,12 @@ export class Game{
  const b=this.s.battle;if(!b)throw Error('전투 중이 아닙니다.');const p=b.player,e=b.enemy;
  if(moveId!==-1&&!this.usable(p).some(m=>m.id===moveId))throw Error('이 기술은 사용할 수 없습니다.');if(moveId===-1&&!this.canStruggle(p))throw Error('사용 가능한 기술이 남아 있어요.');
  const em=this.enemyMove(random),pm=p.charge??moveId,priority=id=>id===-1?0:this.db.moves[id].priority;
- const logs=[],events=[];p.guard=false;e.guard=false;
+ const logs=[],events=[];b.acted=[];p.flinch=false;e.flinch=false;p.guard=false;e.guard=false;
  const quickP=p.heldItem==='quick-claw'&&random()<.2,quickE=e.heldItem==='quick-claw'&&random()<.2;
  if(quickP)logs.push('선제공격손톱 발동!');if(quickE)logs.push('상대의 선제공격손톱 발동!');
  let order=priority(pm)!==priority(em)?priority(pm)>priority(em):quickP!==quickE?quickP:this.effectiveStat(p,'speed')===this.effectiveStat(e,'speed')?random()<.5:this.effectiveStat(p,'speed')>this.effectiveStat(e,'speed');
  if(order){this.attack(p,e,pm,'player',logs,events,random);this.attack(e,p,em,'enemy',logs,events,random);}else{this.attack(e,p,em,'enemy',logs,events,random);this.attack(p,e,pm,'player',logs,events,random);}
- return this.endTurn(logs,events);
+ return this.endTurn(logs,events,random);
  }
  battleItem(id,random=Math.random){
  const b=this.s.battle,item=ITEMS[id];if(!b||!item||!['ball','medicine'].includes(item.kind)||!(this.s.inventory[id]>0))throw Error('사용할 도구가 없습니다.');
@@ -262,59 +281,79 @@ export class Game{
    return {logs,events,result:'caught',caughtId:key};
   }logs.push('아쉽게도 볼에서 빠져나왔어요!');
  }
- b.player.guard=false;b.enemy.guard=false;this.attack(b.enemy,b.player,this.enemyMove(random),'enemy',logs,events,random);return this.endTurn(logs,events);
+ b.acted=[];b.player.flinch=false;b.enemy.flinch=false;b.player.guard=false;b.enemy.guard=false;this.attack(b.enemy,b.player,this.enemyMove(random),'enemy',logs,events,random);return this.endTurn(logs,events,random);
  }
  battleSwitch(id,random=Math.random){
  const b=this.s.battle;if(!b||id===this.s.active||!this.s.pets[id]||this.s.pets[id].hp<=0)throw Error('교대할 수 없는 친구예요.');
- this.syncPlayer();
+ if(trapped(this,b.player,b.enemy))throw Error('상대 특성 때문에 교대할 수 없어요.');leave(this,b.player);this.syncPlayer();
  if(b.player.transformed){b.player.moves=b.player.originalMoves??this.pet.moves.map(id=>({id,pp:this.db.moves[id].pp}));for(const key of ['transformed','transformedSpeciesId','transformedShiny','typeIds','copiedStats','originalMoves'])delete b.player[key];}
  b.bench??={};b.bench[this.s.active]=b.player;
  this.s.active=Number(id);b.activeId=this.s.active;b.player=b.bench[id]??this.fighter(this.pet);delete b.bench[id];
  b.player.stages={attack:0,defense:0,'special-attack':0,'special-defense':0,speed:0,accuracy:0,evasion:0};b.player.confused=0;b.player.seeded=false;b.player.charge=null;b.player.guard=false;b.enemy.guard=false;
- const logs=[`${this.species.name}, 부탁해!`],events=[];this.attack(b.enemy,b.player,this.enemyMove(random),'enemy',logs,events,random);return this.endTurn(logs,events);
+ const logs=[`${this.species.name}, 부탁해!`],events=[];b.acted=[];b.player.flinch=false;b.enemy.flinch=false;enter(this,b.player,b.enemy,logs);this.attack(b.enemy,b.player,this.enemyMove(random),'enemy',logs,events,random);return this.endTurn(logs,events,random);
  }
- endTurn(logs,events){
+ endTurn(logs,events,random=Math.random,dropRandom=Math.random){
  const b=this.s.battle,p=b.player,e=b.enemy;
- for(const [a,d] of [[p,e],[e,p]]){if(a.hp<=0)continue;if(a.status==='poison'||a.status==='burn'){const n=Math.max(1,Math.floor(a.maxHp/8));a.hp=Math.max(0,a.hp-n);logs.push(`${this.db.pokemon[a.speciesId].name}: ${a.status==='poison'?'독':'화상'}으로 ${n} 피해!`);}if(a.seeded&&a.hp>0&&d.hp>0){const n=Math.min(a.hp,Math.max(1,Math.floor(a.maxHp/8)));a.hp-=n;d.hp=Math.min(d.maxHp,d.hp+n);logs.push('씨뿌리기가 체력을 흡수했어요.');}if(a.hp>0&&a.hp<a.maxHp&&a.heldItem==='leftovers'){a.hp=Math.min(a.maxHp,a.hp+Math.max(1,Math.floor(a.maxHp/16)));logs.push('먹다남은음식으로 HP를 회복했어요.');}this.heldRecovery(a,logs);}
- this.syncPlayer();b.turn++;
+ for(const [a,d] of [[p,e],[e,p]]){if(a.hp<=0)continue;if((a.status==='poison'||a.status==='burn')&&!this.hasAbility(a,'magic-guard')){const n=Math.max(1,Math.floor(a.maxHp/(a.status==='burn'?16:8)));a.hp=Math.max(0,a.hp-n);logs.push(`${this.db.pokemon[a.speciesId].name}: ${a.status==='poison'?'독':'화상'}으로 ${n} 피해!`);}if(a.seeded&&a.hp>0&&d.hp>0&&!this.hasAbility(a,'magic-guard')){const n=Math.min(a.hp,Math.max(1,Math.floor(a.maxHp/8)));a.hp-=n;d.hp=this.hasAbility(a,'liquid-ooze')?Math.max(0,d.hp-n):Math.min(d.maxHp,d.hp+n);logs.push('씨뿌리기가 체력을 흡수했어요.');}if(a.hp>0&&a.hp<a.maxHp&&a.heldItem==='leftovers'){a.hp=Math.min(a.maxHp,a.hp+Math.max(1,Math.floor(a.maxHp/16)));logs.push('먹다남은음식으로 HP를 회복했어요.');}endAbilities(this,a,d,logs,random);this.heldRecovery(a,logs);}
+ if(b.weatherTurns>0&&--b.weatherTurns===0){b.weather=null;logs.push('날씨가 원래대로 돌아왔어요.');}
+ delete b.acted;this.syncPlayer();b.turn++;
  if(p.hp>0&&e.hp<=0&&b.kind==='trainer'&&b.enemyIndex<2&&b.turn<=180){
   b.earnedXP+=battleExperience(e.level);b.enemyIndex++;
-  const next=b.enemyTeam[b.enemyIndex];b.enemy=this.fighter(next);b.originalEnemy=structuredClone(next);
+  const next=b.enemyTeam[b.enemyIndex];b.enemy=this.fighter(next);b.originalEnemy=structuredClone(next);enter(this,b.enemy,b.player,logs);b.enemy.enteredTurn=b.turn-1;
   logs.push(`상대 포켓몬을 쓰러뜨렸어요! ${b.trainerName}의 ${next.shiny?'★ 이로치 ':''}${this.db.pokemon[next.speciesId].name} 등장! (${b.enemyIndex+1}/3)`);
   return {logs,events,result:null};
  }
  let result=null;if(p.hp<=0)result='lose';else if(e.hp<=0)result='win';else if(b.turn>(b.kind==='trainer'?180:60))result='draw';
- if(result){this.s.battle=null;if(result==='win'){this.pet.wins++;const reward=b.kind==='trainer'?240:80;this.s.coins+=reward;const xp=(b.earnedXP??0)+battleExperience(e.level);this.log(`전투 승리! 경험치 +${xp}, 모험 포인트 +${reward} P`);this.awardXP(xp);logs.push(`승리! 경험치 ${xp}와 ${reward} P를 받았어요.`);}else if(result==='lose'){this.pet.friendship=clamp(this.pet.friendship-3,0,255);this.log('전투에서 졌어요. 다른 친구와 다시 도전하거나 회복하세요.');logs.push('전투 중인 친구가 기절해 쉼터로 돌아왔어요.');}else{this.log('긴 전투를 무승부로 마쳤어요.');logs.push(`${b.kind==='trainer'?180:60}턴이 지나 무승부로 마쳤어요.`);}}
+ if(result){this.s.battle=null;if(result==='win'){this.pet.wins++;const reward=b.kind==='trainer'?240:80;this.s.coins+=reward;const xp=(b.earnedXP??0)+battleExperience(e.level);this.log(`전투 승리! 경험치 +${xp}, 모험 포인트 +${reward} P`);this.awardXP(xp);logs.push(`승리! 경험치 ${xp}와 ${reward} P를 받았어요.`);this.rollDrop(logs,dropRandom);}else if(result==='lose'){this.pet.friendship=clamp(this.pet.friendship-3,0,255);this.log('전투에서 졌어요. 다른 친구와 다시 도전하거나 회복하세요.');logs.push('전투 중인 친구가 기절해 쉼터로 돌아왔어요.');}else{this.log('긴 전투를 무승부로 마쳤어요.');logs.push(`${b.kind==='trainer'?180:60}턴이 지나 무승부로 마쳤어요.`);}}
  return {logs,events,result};
  }
- flee(){if(!this.s.battle)return;this.syncPlayer();this.s.battle=null;this.log('전투에서 돌아왔어요. 소모한 피로도는 유지돼요.');}
-  execute(a,d,id,logs,random){
+ rollDrop(logs,random=Math.random){
+  if(random()>=DROP_CHANCE)return null;
+  const catalog=shopCatalog(this.db),pool=Object.keys(catalog).filter(id=>(this.s.inventory[id]??0)<999);
+  if(!pool.length){logs.push('가방이 가득 차 드롭 도구를 담지 못했어요.');return null;}
+  const id=pool[Math.floor(random()*pool.length)];this.s.inventory[id]=(this.s.inventory[id]??0)+1;
+  const text=`도구 발견! ${catalog[id].name} 1개를 얻었어요.`;this.log(text);logs.push(text);return id;
+ }
+ changeAbility(id){
+  if(!this.ready())throw Error('전투와 성장을 마친 뒤 특성을 바꿀 수 있어요.');
+  const target=abilityItemTarget(this.db,this.pet,id);
+  if(!target||!(this.s.inventory[id]>0))throw Error('이 포켓몬에게 사용할 수 없는 특성 도구입니다.');
+  this.s.inventory[id]--;this.pet.abilitySlot=target.slot;this.log(`${this.species.name}의 특성이 ${this.db.abilities[target.id].name}(으)로 바뀌었어요.`);return target;
+ }
+ flee(){if(!this.s.battle)return;if(trapped(this,this.s.battle.player,this.s.battle.enemy))throw Error('상대 특성 때문에 도망칠 수 없어요.');this.syncPlayer();this.s.battle=null;this.log('전투에서 돌아왔어요. 소모한 피로도는 유지돼요.');}
+  execute(a,d,id,logs,random,reflected=false){
     const name=this.db.pokemon[a.speciesId].name;
+    if(!reflected){
+    if(a.flinch){a.flinch=false;if(this.hasAbility(a,'steadfast'))changeStage(this,a,'speed',1,a,logs);logs.push(`${name}는 풀죽어 움직이지 못했어요.`);return;}
+    if(this.hasAbility(a,'truant')){a.loaf=!a.loaf;if(!a.loaf){logs.push(`${name}는 게으름을 피웠어요.`);return;}}
+    if(a.infatuated&&random()<.5){logs.push('헤롱헤롱해 움직이지 못했어요.');return;}
+
     if(a.recharge){a.recharge=false;logs.push(`${name}는 반동으로 쉬고 있어요.`);return;}
     if(a.status==='sleep'){if(--a.statusTurns>0){logs.push(`${name}는 잠들어 있어요.`);return;}a.status=null;logs.push(`${name}가 깨어났어요.`);}
     if(a.status==='freeze'){if(random()<.2){a.status=null;logs.push(`${name}의 얼음이 녹았어요.`);}else{logs.push(`${name}는 얼어 있어요.`);return;}}
     if(a.status==='paralysis'&&random()<.25){logs.push(`${name}는 몸이 저려 움직이지 못했어요.`);return;}
     if(a.confused>0){a.confused--;if(random()<.33){const n=Math.max(1,Math.floor(a.maxHp/8));a.hp=Math.max(0,a.hp-n);logs.push(`${name}는 혼란으로 자신을 공격했어요.`);return;}}
+    }
     let m=id===-1?{id:-1,name:'발버둥',slug:'struggle',power:50,accuracy:null,pp:1,typeId:1,damageClass:'physical',meta:{},statChanges:[]}:this.db.moves[id];
-    if(!a.charge){const slot=a.moves.find(x=>x.id===id);if(slot){if(slot.pp<=0){logs.push('PP가 부족해요.');return;}slot.pp--;}}
+    if(!a.charge&&!reflected){const slot=a.moves.find(x=>x.id===id);if(slot){if(slot.pp<=0){logs.push('PP가 부족해요.');return;}slot.pp=Math.max(0,slot.pp-(this.hasAbility(d,'pressure')&&m.target!=='user'?2:1));}}
     logs.push(`${name}의 ${m.name}!`);
     const slug=m.slug;
-    if(['solar-beam','skull-bash','razor-wind','dig','fly','bounce'].includes(slug)&&!a.charge){a.charge=id;if(slug==='skull-bash')a.stages.defense=clamp(a.stages.defense+1,-6,6);logs.push('힘을 모으고 있어요. 다음 턴에 공격해요.');return;}a.charge=null;
+    if(['solar-beam','skull-bash','razor-wind','dig','fly','bounce'].includes(slug)&&!a.charge&&!(slug==='solar-beam'&&weather(this)==='sun')){a.charge=id;if(slug==='skull-bash')a.stages.defense=clamp(a.stages.defense+1,-6,6);logs.push('힘을 모으고 있어요. 다음 턴에 공격해요.');return;}a.charge=null;
     if(d.guard&&m.target!=='user'){logs.push('상대가 공격을 막았어요.');return;}
-    const accStage=clamp(a.stages.accuracy-d.stages.evasion,-6,6),accMult=accStage>=0?(3+accStage)/3:3/(3-accStage);
-    if(m.accuracy!==null&&random()*100>=m.accuracy*accMult){logs.push('하지만 빗나갔어요!');return;}
-    const effect=this.effectiveness(m,d),self=m.target==='user';
+    const accStage=clamp(a.stages.accuracy-(this.hasAbility(a,'keen-eye')?Math.min(0,d.stages.evasion):d.stages.evasion),-6,6),accMult=accStage>=0?(3+accStage)/3:3/(3-accStage);
+    if(m.accuracy!==null&&!this.hasAbility(a,'no-guard')&&!this.hasAbility(d,'no-guard')&&random()*100>=(m.damageClass==='status'&&!this.hasAbility(a,'mold-breaker')&&this.hasAbility(d,'wonder-skin')?Math.min(50,m.accuracy):m.accuracy)*accMult*accuracyFactor(this,a,d,m)){logs.push('하지만 빗나갔어요!');return;}
+    const effect=this.effectiveness(m,d,a),self=m.target==='user';
     if(!self&&effect===0&&m.damageClass!=='status'){a.lastHit={effect:0,immune:true};logs.push('상대에게 효과가 없어요.');return;}
+    if(!self&&m.flags?.includes('reflectable')&&this.hasAbility(d,'magic-bounce')&&!this.hasAbility(a,'mold-breaker')&&!a.reflecting){d.reflecting=true;try{this.execute(d,a,id,logs,random,true);}finally{delete d.reflecting;}return;}
+    if(blockMove(this,a,d,m,logs))return;
     const meta=m.meta||{};
-    if(slug==='transform'){
-      if(a.transformed||d.transformed){logs.push('변신에 실패했어요.');return;}
-      a.originalMoves=structuredClone(a.moves);a.transformedShiny=d.transformed?d.transformedShiny:d.shiny;a.transformed=true;a.transformedSpeciesId=d.speciesId;a.typeIds=[...this.fighterTypes(d)];
-      a.copiedStats={...statsFor(this.db,d.speciesId,d.level,d.ivs)};
-      a.stages={...d.stages};a.moves=d.moves.map(x=>({id:x.id,pp:5}));
-      logs.push('상대의 타입·능력치·기술을 복사했어요. HP와 레벨은 유지돼요.');return;
-    }
+    const weatherMoves={'sunny-day':'sun','rain-dance':'rain','sandstorm':'sand','hail':'hail'};
+    if(weatherMoves[slug]){this.s.battle.weather=weatherMoves[slug];this.s.battle.weatherTurns=5;logs.push('날씨가 바뀌었어요.');return;}
+
+    if(slug==='transform'){if(!transform(this,a,d,logs))logs.push('변신에 실패했어요.');return;}
     if(slug==='splash'){logs.push('하지만 아무 일도 일어나지 않았어요.');return;}
     if(['protect','detect','endure'].includes(slug)){a.guard=true;logs.push('공격에 대비했어요.');return;}
+    if(slug==='rest'&&statusImmune(this,a,'sleep',a)){logs.push('특성 때문에 잠들 수 없어요.');return;}
     if(slug==='rest'){a.hp=a.maxHp;a.status='sleep';a.statusTurns=3;logs.push('HP를 전부 회복하고 잠들었어요.');return;}
     if(slug==='leech-seed'){if(this.fighterTypes(d).includes(12)){logs.push('풀타입에게는 씨뿌리기가 통하지 않아요.');return;}d.seeded=true;logs.push('상대에게 씨앗을 심었어요.');return;}
     if(slug==='belly-drum'){if(a.hp>a.maxHp/2){a.hp-=Math.floor(a.maxHp/2);a.stages.attack=6;logs.push('HP를 줄이고 공격을 최대한 높였어요.');}else logs.push('HP가 부족해요.');return;}
@@ -325,35 +364,53 @@ export class Game{
       if(slug==='frustration')power=Math.max(1,Math.floor((255-this.pet.friendship)/2.5));
       if(slug==='flail')power=Math.min(200,Math.floor(20*a.maxHp/Math.max(1,a.hp)));
       if(slug==='magnitude')power=[10,30,50,70,90,110,150][Math.floor(random()*7)];
+      if(['low-kick','grass-knot'].includes(slug)){let weight=this.db.pokemon[d.transformedSpeciesId??d.speciesId].weightKg;if(this.hasAbility(d,'heavy-metal'))weight*=2;if(this.hasAbility(d,'light-metal'))weight/=2;power=weight<10?20:weight<25?40:weight<50?60:weight<100?80:weight<200?100:120;}
       if(slug==='gyro-ball')power=Math.min(150,Math.floor(25*this.effectiveStat(d,'speed')/Math.max(1,this.effectiveStat(a,'speed')))+1);
       const held=ITEMS[a.heldItem];if(slug!=='struggle'&&!FIXED_DAMAGE.has(slug)){if(held?.boostType===m.typeId)power*=1.2;if(a.heldItem==='muscle-band'&&m.damageClass==='physical'||a.heldItem==='wise-glasses'&&m.damageClass==='special')power*=1.1;}
-      const atk=this.effectiveStat(a,m.damageClass==='physical'?'attack':'special-attack'),def=this.effectiveStat(d,m.damageClass==='physical'?'defense':'special-defense');
-      const stab=slug!=='struggle'&&this.fighterTypes(a).includes(m.typeId)?1.5:1;
+      const atk=this.effectiveStat(a,m.damageClass==='physical'?'attack':'special-attack',this.hasAbility(d,'unaware')&&!this.hasAbility(a,'mold-breaker')),def=this.effectiveStat(d,m.damageClass==='physical'?'defense':'special-defense',this.hasAbility(a,'unaware'));
+
+      const stab=slug!=='struggle'&&this.fighterTypes(a).includes(m.typeId)?(this.hasAbility(a,'adaptability')?2:1.5):1;
       let damage=Math.max(1,Math.floor(((2*a.level/5+2)*power*atk/Math.max(1,def)/50+2)*stab*effect*(.85+random()*.15)));
+      if(!FIXED_DAMAGE.has(slug)&&slug!=='struggle'){
+        damage=Math.max(1,Math.floor(damage*damageFactor(this,a,d,m,power,effect)));
+        const critical=!(this.hasAbility(d,'battle-armor','shell-armor')&&!this.hasAbility(a,'mold-breaker'))&&random()<(meta.critRate>0?1/8:1/24);
+        if(critical){damage=Math.floor(damage*(this.hasAbility(a,'sniper')?2.25:1.5));logs.push('급소에 맞았어요!');if(this.hasAbility(d,'anger-point'))d.stages.attack=6;}
+      }
       if(!FIXED_DAMAGE.has(slug)&&slug!=='struggle'){if(a.heldItem==='life-orb')damage=Math.floor(damage*1.3);if(a.heldItem==='expert-belt'&&effect>1)damage=Math.floor(damage*1.2);}
       if(['seismic-toss','night-shade'].includes(slug))damage=a.level;
       if(slug==='dragon-rage')damage=40;if(slug==='sonic-boom')damage=20;if(slug==='super-fang')damage=Math.max(1,Math.floor(d.hp/2));
       if(slug==='endeavor')damage=Math.max(0,d.hp-a.hp);
       if(['fissure','guillotine','horn-drill'].includes(slug)){if(a.level<d.level||random()>.3){logs.push('일격필살에 실패했어요.');return;}damage=d.hp;}
       if(['counter','mirror-coat'].includes(slug)){damage=a.lastClass===(slug==='counter'?'physical':'special')?a.lastDamage*2:0;}
-      if(meta.minHits){const hits=meta.minHits+Math.floor(random()*(meta.maxHits-meta.minHits+1));damage*=hits;logs.push(`${hits}번 연속 공격!`);}
-      a.lastHit={effect:FIXED_DAMAGE.has(slug)?1:effect};damage=Math.min(d.hp,damage);d.hp-=damage;d.lastDamage=damage;d.lastClass=m.damageClass;
+      const hits=meta.minHits?(this.hasAbility(a,'skill-link')?meta.maxHits:meta.minHits+Math.floor(random()*(meta.maxHits-meta.minHits+1))):1;
+      if(hits>1)logs.push(`${hits}번 연속 공격!`);
+      let totalDamage=0;
+      for(let hit=0;hit<hits&&d.hp>0;hit++){
+        let hitDamage=damage;
+        if(!this.hasAbility(a,'mold-breaker')&&this.hasAbility(d,'sturdy')){
+          if(['fissure','guillotine','horn-drill'].includes(slug)){hitDamage=0;logs.push('옹골참이 일격필살을 막았어요.');}
+          else if(d.hp===d.maxHp&&hitDamage>=d.hp){hitDamage=d.hp-1;logs.push('옹골참으로 버텼어요!');}
+        }
+        hitDamage=Math.min(d.hp,hitDamage);d.hp-=hitDamage;totalDamage+=hitDamage;
+      }
+      damage=totalDamage;a.lastHit={effect:FIXED_DAMAGE.has(slug)?1:effect};d.lastDamage=damage;d.lastClass=m.damageClass;
+      afterHit(this,a,d,m,damage,logs,random);
       logs.push(`${damage} 피해! ${FIXED_DAMAGE.has(slug)?'고정·조건부 피해':`상성 ${effect}배${stab>1?' · 같은 타입 1.5배':''}`}${!FIXED_DAMAGE.has(slug)&&effect>1?' 효과가 굉장했어요.':!FIXED_DAMAGE.has(slug)&&effect<1?' 효과가 별로예요.':''}`);
-      if(meta.drain>0)a.hp=Math.min(a.maxHp,a.hp+Math.floor(damage*meta.drain/100));
-      if(meta.drain<0)a.hp=Math.max(0,a.hp-Math.max(1,Math.floor(damage*-meta.drain/100)));
+      if(meta.drain>0)a.hp=this.hasAbility(d,'liquid-ooze')&&!this.hasAbility(a,'magic-guard')?Math.max(0,a.hp-Math.floor(damage*meta.drain/100)):Math.min(a.maxHp,a.hp+Math.floor(damage*meta.drain/100));
+      if(meta.drain<0&&!this.hasAbility(a,'rock-head','magic-guard'))a.hp=Math.max(0,a.hp-Math.max(1,Math.floor(damage*-meta.drain/100)));
       if(a.hp>0&&damage>0&&a.heldItem==='shell-bell'){a.hp=Math.min(a.maxHp,a.hp+Math.max(1,Math.floor(damage/8)));logs.push('조개껍질방울로 HP를 회복했어요.');}
-      if(a.hp>0&&damage>0&&slug!=='struggle'&&a.heldItem==='life-orb'){a.hp=Math.max(0,a.hp-Math.max(1,Math.floor(a.maxHp/10)));logs.push('생명의구슬로 HP를 소모했어요.');}
+      if(a.hp>0&&damage>0&&slug!=='struggle'&&a.heldItem==='life-orb'&&!this.hasAbility(a,'magic-guard')&&!sheerForce(this,a,m)){a.hp=Math.max(0,a.hp-Math.max(1,Math.floor(a.maxHp/10)));logs.push('생명의구슬로 HP를 소모했어요.');}
       if(slug==='struggle')a.hp=Math.max(0,a.hp-Math.max(1,Math.floor(a.maxHp/4)));
       if(['hyper-beam','giga-impact','blast-burn','hydro-cannon','frenzy-plant'].includes(slug))a.recharge=true;
       did=true;
     }
     if(meta.healing>0){const amount=Math.ceil(a.maxHp*meta.healing/100);a.hp=Math.min(a.maxHp,a.hp+amount);logs.push('HP를 회복했어요.');did=true;}
-    for(const change of m.statChanges||[]){if(m.damageClass!=='status'&&random()*100>=(meta.statChance||0))continue;const target=self?a:d;if(!self&&(d.heldItem==='clear-amulet'&&change.change<0||d.heldItem==='covert-cloak'&&m.damageClass!=='status')){logs.push(`${ITEMS[d.heldItem].name}이 능력치 변화를 막았어요.`);did=true;continue;}target.stages[change.stat]=clamp((target.stages[change.stat]||0)+change.change,-6,6);logs.push(`${self?'자신':'상대'}의 ${change.label} ${change.change>0?'상승':'하락'}!`);did=true;}
+    for(const change of m.statChanges||[]){if(m.damageClass!=='status'&&(sheerForce(this,a,m)||!self&&!this.hasAbility(a,'mold-breaker')&&this.hasAbility(d,'shield-dust')||random()*100>=(meta.statChance||0)*(this.hasAbility(a,'serene-grace')?2:1)))continue;const target=self?a:d;if(!self&&(d.heldItem==='clear-amulet'&&change.change<0||d.heldItem==='covert-cloak'&&m.damageClass!=='status')){logs.push(`${ITEMS[d.heldItem].name}이 능력치 변화를 막았어요.`);did=true;continue;}changeStage(this,target,change.stat,change.change,a,logs);logs.push(`${self?'자신':'상대'}의 ${change.label} ${change.change>0?'상승':'하락'}!`);did=true;}
     const ailments={1:'paralysis',2:'sleep',3:'freeze',4:'burn',5:'poison',6:'confusion'};
-    if(!(d.heldItem==='covert-cloak'&&m.damageClass!=='status')&&ailments[meta.ailment]&&(m.damageClass==='status'||random()*100<(meta.ailmentChance||0))&&d.hp>0){
+    if(!(m.damageClass!=='status'&&(d.heldItem==='covert-cloak'||sheerForce(this,a,m)||!this.hasAbility(a,'mold-breaker')&&this.hasAbility(d,'shield-dust')))&&ailments[meta.ailment]&&(m.damageClass==='status'||random()*100<(meta.ailmentChance||0)*(this.hasAbility(a,'serene-grace')?2:1))&&d.hp>0){
       const status=ailments[meta.ailment],types=this.fighterTypes(d);
-      const immune=(status==='burn'&&types.includes(10))||(status==='freeze'&&types.includes(15))||(status==='poison'&&(types.includes(4)||types.includes(9)))||(slug==='thunder-wave'&&types.includes(5));
-      if(immune)logs.push('상태이상에 걸리지 않았어요.');else if(status==='confusion'){d.confused=3;logs.push('상대가 혼란에 빠졌어요.');}else if(!d.status){d.status=status;d.statusTurns=status==='sleep'?2+Math.floor(random()*2):0;logs.push('상대에게 상태이상이 생겼어요.');}did=true;
+      const immune=statusImmune(this,d,status,a)||(slug==='thunder-wave'&&types.includes(5));
+      if(immune)logs.push('상태이상에 걸리지 않았어요.');else inflict(this,d,status,a,logs,status==='sleep'?2+Math.floor(random()*2):0);did=true;
     }
     // Unmodeled field/utility effects are openly simplified; learn levels and four slots stay canonical.
     if(!did){if(['sweet-scent','sand-attack','smokescreen','flash'].includes(slug))d.stages.accuracy=clamp(d.stages.accuracy-1,-6,6);else a.stages['special-defense']=clamp(a.stages['special-defense']+1,-6,6);logs.push('간소화 효과: 전투를 준비했어요. (특수방어 +1 또는 명중률 조정)');}
