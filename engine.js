@@ -19,6 +19,7 @@ const FIXED_DAMAGE=new Set(['seismic-toss','night-shade','dragon-rage','sonic-bo
 export function makePet(db,id,level=db.starterLevel??7,random=Math.random){return {...(id===265?{evolutionBranch:random()<.5?266:268}:{}),speciesId:id,level,exp:db.experience[db.pokemon[id].growthRateId][level],hp:statsFor(db,id,level).hp,hunger:75,friendship:db.pokemon[id].baseFriendship,moves:initialMoves(db,id,level),wins:0,originSpeciesId:id,shiny:false,heldItem:null};}
 export const SHINY_CHANCE=0.04;
 export const MAX_PARTY=3;
+export const TRAINER_CHANCE=.2;
 export const battleExperience=level=>Math.floor((40+3*level*level)*.8);
 export const ITEMS={
  'poke-ball':{name:'몬스터볼',kind:'ball',price:40,bonus:1,description:'야생 포켓몬을 포획해요.'},
@@ -86,7 +87,7 @@ export function captureChance(db,f,ball='poke-ball',boost=true){
  return Math.min(1,original*(boost?1.1:1));
 }
 const startingBag=()=>({'poke-ball':5,potion:3});
-export function freshState(db){return {schemaVersion:3,hatched:false,active:null,day:1,fatigue:0,coins:100,pets:{},inventory:startingBag(),journal:[{day:1,text:'작은 알 하나가 도착했어요. 몬스터볼 5개와 상처약 3개도 함께 왔어요.'}],battle:null,pending:[],progressing:false};}
+export function freshState(db){return {schemaVersion:3,battleCount:0,lastBattleTrainer:false,hatched:false,active:null,day:1,fatigue:0,coins:100,pets:{},inventory:startingBag(),journal:[{day:1,text:'작은 알 하나가 도착했어요. 몬스터볼 5개와 상처약 3개도 함께 왔어요.'}],battle:null,pending:[],progressing:false};}
 export function migrateState(db,state){
  if(state?.schemaVersion===3)return state;
  if(!state||![1,2].includes(state.schemaVersion))throw Error('지원하지 않는 저장 버전입니다.');
@@ -101,6 +102,8 @@ export function validateState(db,input){
  const s=input?.schemaVersion===3?input:migrateState(db,input);
  const fail=()=>{throw Error('저장 데이터 형식이 올바르지 않습니다.');};
  if(!s||typeof s.hatched!=='boolean'||!s.pets||Array.isArray(s.pets)||!Number.isInteger(s.day)||s.day<1||!Number.isFinite(s.fatigue)||s.fatigue<0||s.fatigue>100||!Number.isSafeInteger(s.coins)||s.coins<0)fail();
+ if(s.battleCount!==undefined&&(!Number.isSafeInteger(s.battleCount)||s.battleCount<0))fail();
+ if(s.lastBattleTrainer!==undefined&&typeof s.lastBattleTrainer!=='boolean')fail();
  const entries=Object.entries(s.pets);
  if(entries.length>MAX_PARTY||s.hatched!==!!entries.length||(s.hatched?(!Number.isSafeInteger(s.active)||!s.pets[s.active]):s.active!==null))fail();
  for(const [id,p] of entries){
@@ -119,7 +122,7 @@ export function validateState(db,input){
  return s;
 }
 export class Game{
-  constructor(db,state){this.db=db;this.s=state?migrateState(db,state):freshState(db);}
+  constructor(db,state){this.db=db;this.s=state?migrateState(db,state):freshState(db);this.s.battleCount??=0;this.s.lastBattleTrainer??=false;}
   get pet(){return this.s.pets[this.s.active];} get species(){return this.db.pokemon[this.pet.speciesId];}
   log(text){this.s.journal.unshift({day:this.s.day,text});this.s.journal=this.s.journal.slice(0,30);}
   ready(){return this.s.hatched&&!this.s.battle&&!this.s.pending.length&&!this.s.progressing;}
@@ -189,7 +192,19 @@ export class Game{
  stone(to=null){if(!this.ready())throw Error('진행 중인 일을 먼저 마쳐주세요.');const e=this.species.evolutions.find(e=>e.trigger==='use-item'&&(to===null||e.to===to));if(!e)throw Error('진화의돌을 사용할 수 없습니다.');this.consumeEvolution(e);this.evolveTo(e.to);}
  trade(to){if(!this.ready())throw Error('진행 중인 일을 먼저 마쳐주세요.');const e=this.species.evolutions.find(e=>e.trigger==='trade'&&e.to===to);if(!e)throw Error('교환 진화 대상이 아닙니다.');this.consumeEvolution(e);this.evolveTo(e.to);this.log('NPC에게 맡겼다가 진화한 같은 친구를 돌려받았어요.');}
   recall(moveId,slot){if(!this.ready())throw Error('진행 중인 일을 먼저 마쳐주세요.');const p=this.pet;if(!this.species.learnset.some(m=>m.moveId===moveId&&m.level<=p.level)||p.moves.includes(moveId))throw Error('떠올릴 수 없는 기술입니다.');if(p.moves.length<4)p.moves.push(moveId);else{if(!Number.isInteger(slot)||slot<0||slot>3)throw Error('교체할 기술을 선택하세요.');p.moves[slot]=moveId;}this.log(`${this.species.name}, ${this.db.moves[moveId].name}을 떠올렸어요.`);}
-  startBattle(random=Math.random,shinyRandom=Math.random){const error=this.can('battle');if(error)throw Error(error);this.s.fatigue+=35;this.pet.hunger=clamp(this.pet.hunger-18,0,100);const level=clamp(this.pet.level-Math.floor(random()*3),1,100);const candidates=encounterPool(this.db,level);const id=candidates[Math.floor(random()*candidates.length)];const enemy=makePet(this.db,id,level);enemy.shiny=shinyRandom()<SHINY_CHANCE;this.s.battle={player:this.fighter(this.pet),enemy:this.fighter(enemy),originalEnemy:structuredClone(enemy),activeId:this.s.active,turn:1};this.log(`야생 ${this.db.pokemon[id].name}와 만났어요.`);return this.s.battle;}
+  startBattle(random=Math.random,shinyRandom=Math.random,trainerRandom=Math.random){
+ const error=this.can('battle');if(error)throw Error(error);
+ const trainer=this.s.battleCount>=10&&!this.s.lastBattleTrainer&&this.pet.level>1&&trainerRandom()<TRAINER_CHANCE;
+ const team=[];for(let n=0;n<(trainer?3:1);n++){
+  const level=clamp(this.pet.level-(trainer?1:0)-Math.floor(random()*3),1,100);
+  const candidates=encounterPool(this.db,level),id=candidates[Math.floor(random()*candidates.length)];
+  const enemy=makePet(this.db,id,level);enemy.shiny=shinyRandom()<SHINY_CHANCE;team.push(enemy);
+ }
+ this.s.fatigue+=35;this.pet.hunger=clamp(this.pet.hunger-18,0,100);
+ this.s.battleCount++;this.s.lastBattleTrainer=trainer;
+ const enemy=team[0];this.s.battle={kind:trainer?'trainer':'wild',trainerName:trainer?'숲길 트레이너':null,enemyIndex:0,enemyTeam:team,earnedXP:0,player:this.fighter(this.pet),enemy:this.fighter(enemy),originalEnemy:structuredClone(enemy),activeId:this.s.active,turn:1};
+ this.log(trainer?'숲길 트레이너가 포켓몬 3마리로 승부를 걸었어요!':`야생 ${this.db.pokemon[enemy.speciesId].name}와 만났어요.`);return this.s.battle;
+ }
   fighter(p){return {speciesId:p.speciesId,shiny:p.shiny??false,heldItem:p.heldItem??null,level:p.level,ivs:{...(p.ivs??{})},hp:p.hp,maxHp:statsFor(this.db,p.speciesId,p.level,p.ivs).hp,moves:p.moves.map(id=>({id,pp:this.db.moves[id].pp})),stages:{attack:0,defense:0,'special-attack':0,'special-defense':0,speed:0,accuracy:0,evasion:0},status:null,statusTurns:0,confused:0,seeded:false,guard:false,charge:null,lastDamage:0,lastClass:null,recharge:false};}
   canStruggle(f){return !this.usable(f).length||!f.moves.some(x=>this.db.moves[x.id].damageClass!=='status');}
   usable(f){return f.moves.filter(m=>m.pp>0);}
@@ -235,6 +250,7 @@ export class Game{
   if(!medicineUsable(item,b.player))throw Error('지금은 회복이 필요하지 않아요.');
   this.s.inventory[id]--;const before=b.player.hp;b.player.hp=Math.min(b.player.maxHp,b.player.hp+(item.heal??0));cureWith(item,b.player);logs.push(`${item.name}: HP ${b.player.hp-before} 회복${item.cure?' · 상태 치료':''}!`);
  }else{
+  if(b.kind==='trainer')throw Error('트레이너의 포켓몬은 포획할 수 없어요.');
   if(Object.keys(this.s.pets).length>=MAX_PARTY)throw Error('3마리가 함께하고 있어요. 쉼터에서 자리를 비워주세요.');
   if(b.enemy.hp<=0)throw Error('기절한 상대는 포획할 수 없어요.');
   const chance=captureChance(this.db,b.enemy,id);this.s.inventory[id]--;logs.push(`${item.name}을 던졌어요!`);
@@ -259,8 +275,14 @@ export class Game{
  const b=this.s.battle,p=b.player,e=b.enemy;
  for(const [a,d] of [[p,e],[e,p]]){if(a.hp<=0)continue;if(a.status==='poison'||a.status==='burn'){const n=Math.max(1,Math.floor(a.maxHp/8));a.hp=Math.max(0,a.hp-n);logs.push(`${this.db.pokemon[a.speciesId].name}: ${a.status==='poison'?'독':'화상'}으로 ${n} 피해!`);}if(a.seeded&&a.hp>0&&d.hp>0){const n=Math.min(a.hp,Math.max(1,Math.floor(a.maxHp/8)));a.hp-=n;d.hp=Math.min(d.maxHp,d.hp+n);logs.push('씨뿌리기가 체력을 흡수했어요.');}if(a.hp>0&&a.hp<a.maxHp&&a.heldItem==='leftovers'){a.hp=Math.min(a.maxHp,a.hp+Math.max(1,Math.floor(a.maxHp/16)));logs.push('먹다남은음식으로 HP를 회복했어요.');}this.heldRecovery(a,logs);}
  this.syncPlayer();b.turn++;
- let result=null;if(p.hp<=0)result='lose';else if(e.hp<=0)result='win';else if(b.turn>60)result='draw';
- if(result){this.s.battle=null;if(result==='win'){this.pet.wins++;this.s.coins+=80;const xp=battleExperience(e.level);this.log(`전투 승리! 경험치 +${xp}, 모험 포인트 +80 P`);this.awardXP(xp);logs.push(`승리! 경험치 ${xp}와 80 P를 받았어요.`);}else if(result==='lose'){this.pet.friendship=clamp(this.pet.friendship-3,0,255);this.log('전투에서 졌어요. 다른 친구와 다시 도전하거나 회복하세요.');logs.push('전투 중인 친구가 기절해 쉼터로 돌아왔어요.');}else{this.log('긴 전투를 무승부로 마쳤어요.');logs.push('60턴이 지나 무승부로 마쳤어요.');}}
+ if(p.hp>0&&e.hp<=0&&b.kind==='trainer'&&b.enemyIndex<2&&b.turn<=180){
+  b.earnedXP+=battleExperience(e.level);b.enemyIndex++;
+  const next=b.enemyTeam[b.enemyIndex];b.enemy=this.fighter(next);b.originalEnemy=structuredClone(next);
+  logs.push(`상대 포켓몬을 쓰러뜨렸어요! ${b.trainerName}의 ${next.shiny?'★ 이로치 ':''}${this.db.pokemon[next.speciesId].name} 등장! (${b.enemyIndex+1}/3)`);
+  return {logs,events,result:null};
+ }
+ let result=null;if(p.hp<=0)result='lose';else if(e.hp<=0)result='win';else if(b.turn>(b.kind==='trainer'?180:60))result='draw';
+ if(result){this.s.battle=null;if(result==='win'){this.pet.wins++;const reward=b.kind==='trainer'?240:80;this.s.coins+=reward;const xp=(b.earnedXP??0)+battleExperience(e.level);this.log(`전투 승리! 경험치 +${xp}, 모험 포인트 +${reward} P`);this.awardXP(xp);logs.push(`승리! 경험치 ${xp}와 ${reward} P를 받았어요.`);}else if(result==='lose'){this.pet.friendship=clamp(this.pet.friendship-3,0,255);this.log('전투에서 졌어요. 다른 친구와 다시 도전하거나 회복하세요.');logs.push('전투 중인 친구가 기절해 쉼터로 돌아왔어요.');}else{this.log('긴 전투를 무승부로 마쳤어요.');logs.push(`${b.kind==='trainer'?180:60}턴이 지나 무승부로 마쳤어요.`);}}
  return {logs,events,result};
  }
  flee(){if(!this.s.battle)return;this.syncPlayer();this.s.battle=null;this.log('전투에서 돌아왔어요. 소모한 피로도는 유지돼요.');}
