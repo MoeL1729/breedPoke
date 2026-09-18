@@ -20,6 +20,7 @@ export function makePet(db,id,level=db.starterLevel??7,random=Math.random){retur
 export const SHINY_CHANCE=0.04;
 export const MAX_PARTY=3;
 export const TRAINER_CHANCE=.2;
+export const TRAINERS=[{"id":"lass-gen4","name":"짧은치마 소녀","sprite":"assets/trainers/lass-gen4.png"},{"id":"falkner","name":"체육관 관장 비상","sprite":"assets/trainers/falkner.png"},{"id":"bugsy","name":"체육관 관장 호일","sprite":"assets/trainers/bugsy.png"},{"id":"whitney","name":"체육관 관장 꼭두","sprite":"assets/trainers/whitney.png"},{"id":"morty","name":"체육관 관장 유빈","sprite":"assets/trainers/morty.png"},{"id":"chuck","name":"체육관 관장 사도","sprite":"assets/trainers/chuck.png"},{"id":"jasmine","name":"체육관 관장 규리","sprite":"assets/trainers/jasmine.png"},{"id":"pryce","name":"체육관 관장 류옹","sprite":"assets/trainers/pryce.png"},{"id":"clair","name":"체육관 관장 이향","sprite":"assets/trainers/clair.png"},{"id":"brock","name":"체육관 관장 웅","sprite":"assets/trainers/brock.png"},{"id":"misty","name":"체육관 관장 이슬","sprite":"assets/trainers/misty.png"},{"id":"ltsurge","name":"체육관 관장 마티스","sprite":"assets/trainers/ltsurge.png"},{"id":"erika","name":"체육관 관장 민화","sprite":"assets/trainers/erika.png"},{"id":"janine","name":"체육관 관장 도희","sprite":"assets/trainers/janine.png"},{"id":"sabrina","name":"체육관 관장 초련","sprite":"assets/trainers/sabrina.png"},{"id":"blaine","name":"체육관 관장 강연","sprite":"assets/trainers/blaine.png"},{"id":"blue","name":"체육관 관장 그린","sprite":"assets/trainers/blue.png"}];
 export const battleExperience=level=>Math.floor((40+3*level*level)*.8);
 export const ITEMS={
  'poke-ball':{name:'몬스터볼',kind:'ball',price:40,bonus:1,description:'야생 포켓몬을 포획해요.'},
@@ -192,7 +193,7 @@ export class Game{
  stone(to=null){if(!this.ready())throw Error('진행 중인 일을 먼저 마쳐주세요.');const e=this.species.evolutions.find(e=>e.trigger==='use-item'&&(to===null||e.to===to));if(!e)throw Error('진화의돌을 사용할 수 없습니다.');this.consumeEvolution(e);this.evolveTo(e.to);}
  trade(to){if(!this.ready())throw Error('진행 중인 일을 먼저 마쳐주세요.');const e=this.species.evolutions.find(e=>e.trigger==='trade'&&e.to===to);if(!e)throw Error('교환 진화 대상이 아닙니다.');this.consumeEvolution(e);this.evolveTo(e.to);this.log('NPC에게 맡겼다가 진화한 같은 친구를 돌려받았어요.');}
   recall(moveId,slot){if(!this.ready())throw Error('진행 중인 일을 먼저 마쳐주세요.');const p=this.pet;if(!this.species.learnset.some(m=>m.moveId===moveId&&m.level<=p.level)||p.moves.includes(moveId))throw Error('떠올릴 수 없는 기술입니다.');if(p.moves.length<4)p.moves.push(moveId);else{if(!Number.isInteger(slot)||slot<0||slot>3)throw Error('교체할 기술을 선택하세요.');p.moves[slot]=moveId;}this.log(`${this.species.name}, ${this.db.moves[moveId].name}을 떠올렸어요.`);}
-  startBattle(random=Math.random,shinyRandom=Math.random,trainerRandom=Math.random){
+  startBattle(random=Math.random,shinyRandom=Math.random,trainerRandom=Math.random,appearanceRandom=Math.random){
  const error=this.can('battle');if(error)throw Error(error);
  const trainer=this.s.battleCount>=10&&!this.s.lastBattleTrainer&&this.pet.level>1&&trainerRandom()<TRAINER_CHANCE;
  const team=[];for(let n=0;n<(trainer?3:1);n++){
@@ -202,8 +203,9 @@ export class Game{
  }
  this.s.fatigue+=35;this.pet.hunger=clamp(this.pet.hunger-18,0,100);
  this.s.battleCount++;this.s.lastBattleTrainer=trainer;
- const enemy=team[0];this.s.battle={kind:trainer?'trainer':'wild',trainerName:trainer?'숲길 트레이너':null,enemyIndex:0,enemyTeam:team,earnedXP:0,player:this.fighter(this.pet),enemy:this.fighter(enemy),originalEnemy:structuredClone(enemy),activeId:this.s.active,turn:1};
- this.log(trainer?'숲길 트레이너가 포켓몬 3마리로 승부를 걸었어요!':`야생 ${this.db.pokemon[enemy.speciesId].name}와 만났어요.`);return this.s.battle;
+ const appearance=trainer?TRAINERS[Math.floor(appearanceRandom()*TRAINERS.length)]:null;
+ const enemy=team[0];this.s.battle={trainerId:appearance?.id??null,introSeen:false,kind:trainer?'trainer':'wild',trainerName:appearance?.name??null,enemyIndex:0,enemyTeam:team,earnedXP:0,player:this.fighter(this.pet),enemy:this.fighter(enemy),originalEnemy:structuredClone(enemy),activeId:this.s.active,turn:1};
+ this.log(trainer?`${appearance.name}가 포켓몬 3마리로 승부를 걸었어요!`:`야생 ${this.db.pokemon[enemy.speciesId].name}와 만났어요.`);return this.s.battle;
  }
   fighter(p){return {speciesId:p.speciesId,shiny:p.shiny??false,heldItem:p.heldItem??null,level:p.level,ivs:{...(p.ivs??{})},hp:p.hp,maxHp:statsFor(this.db,p.speciesId,p.level,p.ivs).hp,moves:p.moves.map(id=>({id,pp:this.db.moves[id].pp})),stages:{attack:0,defense:0,'special-attack':0,'special-defense':0,speed:0,accuracy:0,evasion:0},status:null,statusTurns:0,confused:0,seeded:false,guard:false,charge:null,lastDamage:0,lastClass:null,recharge:false};}
   canStruggle(f){return !this.usable(f).length||!f.moves.some(x=>this.db.moves[x.id].damageClass!=='status');}

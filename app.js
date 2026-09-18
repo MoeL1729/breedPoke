@@ -1,4 +1,4 @@
-import { Game, freshState, migrateState, validateState, statsFor, clamp, ITEMS, shopCatalog, captureChance, SHINY_CHANCE, medicineUsable } from './engine.js?v=pokegotchi-231';
+import { Game, freshState, migrateState, validateState, statsFor, clamp, ITEMS, shopCatalog, captureChance, SHINY_CHANCE, medicineUsable, TRAINERS } from './engine.js?v=pokegotchi-240';
 const $=id=>document.getElementById(id);
 const esc=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const wait=ms=>new Promise(resolve=>setTimeout(resolve,ms));
@@ -101,7 +101,27 @@ async function care(action){if(busy)return;try{const error=game.can(action);if(e
   if(action==='feed'){$('pet').classList.add('eating');$('action-fx').textContent='♥';speak('냠냠! 정말 맛있어.');say('포만감 +35 · HP 30% 회복 · 친밀도 +12. 기분 좋은 식사예요.');await wait(1300);$('pet').classList.remove('eating');}
   else{$('scene').classList.add('resting');$('pet').classList.add('sleeping');$('action-fx').textContent='z Z';speak('쿨쿨… 내일도 함께 놀자.');say('친구가 잠들었어요. 하루의 피로를 푹 쉬며 회복해요.');await wait(1600);$('scene').classList.remove('resting');$('pet').classList.remove('sleeping');speak('잘 잤다! 새로운 하루야.');say(`DAY ${game.s.day}. 피로도 0, 친구의 HP가 회복됐어요. 오늘은 뭘 할까요?`);}
   $('action-fx').textContent='';busy=false;render();}catch(e){busy=false;say(e.message);render();}}
-function startBattle(){if(busy)return;try{game.startBattle();save();render();say(game.s.battle.kind==='trainer'?'숲길 트레이너가 승부를 걸었어요! 상대 3마리를 모두 쓰러뜨리세요.':`야생 ${game.s.battle.enemy.shiny?'★ 이로치 ':''}${db.pokemon[game.s.battle.enemy.speciesId].name}가 나타났어요! 사용할 기술을 선택하세요.`);}catch(e){say(e.message);}}
+async function playTrainerIntro(b){
+ if(b.kind!=='trainer'||b.introSeen)return;
+ b.introSeen=true;save();busy=true;render();
+ const layer=$('trainer-intro'),scene=$('scene'),img=$('intro-trainer-image'),skip=$('skip-trainer-intro');
+ const trainer=TRAINERS.find(t=>t.id===b.trainerId);
+ $('intro-trainer-name').textContent=b.trainerName??'숲길 트레이너';
+ img.onerror=()=>{img.onerror=null;img.src='assets/trainers/forest-trainer.svg';};
+ img.src=trainer?.sprite??'assets/trainers/forest-trainer.svg';img.alt=b.trainerName??'숲길 트레이너';
+ layer.hidden=false;scene.classList.add('trainer-introducing');
+ const reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+ skip.focus({preventScroll:true});
+ try{await new Promise(resolve=>{const timer=setTimeout(resolve,reduced?900:2600);skip.onclick=()=>{clearTimeout(timer);resolve();};});}
+ finally{skip.onclick=null;layer.hidden=true;scene.classList.remove('trainer-introducing');busy=false;render();$('battle-moves').querySelector('button:not(:disabled)')?.focus({preventScroll:true});}
+}
+async function startBattle(){
+ if(busy)return;
+ try{game.startBattle();save();render();const b=game.s.battle;
+  if(b.kind==='trainer'){say(`${b.trainerName}가 승부를 걸었어요!`);await playTrainerIntro(b);say(`${b.trainerName}의 ${db.pokemon[b.enemy.speciesId].name} 등장! 상대 3마리를 모두 쓰러뜨리세요.`);}
+  else say(`야생 ${b.enemy.shiny?'★ 이로치 ':''}${db.pokemon[b.enemy.speciesId].name}가 나타났어요! 사용할 기술을 선택하세요.`);
+ }catch(e){busy=false;render();say(e.message);}
+}
 function sayBattle(logs){$('message').innerHTML=logs.map(l=>`<span class="battle-line ${l.includes('효과가 굉장')?'damage-super':l.includes('효과가 별로')?'damage-resist':l.includes('효과가 없')?'damage-immune':''}">${esc(l)}</span>`).join(' ');}
 async function turn(command){
  if(busy||!game.s.battle)return;busy=true;closeModal();render();
@@ -186,7 +206,7 @@ function confirmNewEgg(){
  modal(`<h2 class="modal-title">${esc(game.species.name)}를 놓아줄까요?</h2><p class="modal-copy">선택한 친구의 육성 기록은 삭제됩니다. 다른 친구·가방·포인트·날짜는 유지하고 지닌 도구는 돌려받아요.${Object.keys(game.s.pets).length===1?' 마지막 친구를 놓아주면 새 알을 받습니다.':''}</p><div class="modal-actions"><button id="backup-before-reset" class="secondary">현재 저장 백업</button><button id="confirm-new-egg" class="primary">이 친구 놓아주기</button><button id="cancel-new-egg" class="secondary">취소</button></div>`,'GOODBYE');
  $('backup-before-reset').onclick=exportSave;$('cancel-new-egg').onclick=closeModal;$('confirm-new-egg').onclick=()=>{try{game.release();save();closeModal();render();}catch(e){say(e.message);}};
 }
-async function init(){try{const response=await fetch('data/pokedex.json?v=pokegotchi-231');if(!response.ok)throw Error('도감 데이터를 불러오지 못했어요.');db=await response.json();let state=null;try{const raw=localStorage.getItem(KEY);if(raw){state=JSON.parse(raw);if(state.schemaVersion!==3){try{localStorage.setItem(KEY+'-legacy-backup',raw);}catch{}state=migrateState(db,state);}validateState(db,{...state,battle:null,pending:[],progressing:false});if(state.pending.some(e=>!['move','evolution'].includes(e.kind)||(e.kind==='move'&&!db.moves[e.moveId])||(e.kind==='evolution'&&!db.pokemon[e.to])))throw Error('성장 정보 오류');if(state.battle){for(const f of [state.battle.player,state.battle.enemy]){if(!db.pokemon[f.speciesId]||!Array.isArray(f.moves)||!f.moves.every(m=>db.moves[m.id]&&Number.isFinite(m.pp))||!Number.isFinite(f.hp)||!f.stages)throw Error('전투 정보 오류');}}}}catch(error){throw Error('기존 저장은 그대로 보관했어요. '+error.message);}
+async function init(){try{const response=await fetch('data/pokedex.json?v=pokegotchi-240');if(!response.ok)throw Error('도감 데이터를 불러오지 못했어요.');db=await response.json();let state=null;try{const raw=localStorage.getItem(KEY);if(raw){state=JSON.parse(raw);if(state.schemaVersion!==3){try{localStorage.setItem(KEY+'-legacy-backup',raw);}catch{}state=migrateState(db,state);}validateState(db,{...state,battle:null,pending:[],progressing:false});if(state.pending.some(e=>!['move','evolution'].includes(e.kind)||(e.kind==='move'&&!db.moves[e.moveId])||(e.kind==='evolution'&&!db.pokemon[e.to])))throw Error('성장 정보 오류');if(state.battle){for(const f of [state.battle.player,state.battle.enemy]){if(!db.pokemon[f.speciesId]||!Array.isArray(f.moves)||!f.moves.every(m=>db.moves[m.id]&&Number.isFinite(m.pp))||!Number.isFinite(f.hp)||!f.stages)throw Error('전투 정보 오류');}}}}catch(error){throw Error('기존 저장은 그대로 보관했어요. '+error.message);}
     game=new Game(db,state??freshState(db));$('open-shop').onclick=()=>showShop();$('open-bag').onclick=()=>showBag();$('battle-bag').onclick=()=>showBag();$('battle-catch').onclick=()=>showBag(true);$('battle').onclick=startBattle;$('feed').onclick=()=>care('feed');$('sleep').onclick=()=>care('sleep');$('flee').onclick=()=>{if(busy)return;game.flee();save();render();say('쉼터로 돌아왔어요. 피로도는 그대로 유지돼요.');};$('help').onclick=showHelp;$('sources').onclick=showSources;$('dex-button').onclick=()=>showDex();$('learnset').onclick=()=>showLearnset();$('export-save').onclick=exportSave;
     render();if(!game.s.hatched){$('hatch-egg').onclick=hatchEgg;save();return;}save();if(game.s.battle)say('진행 중이던 전투를 이어서 시작해요. 기술을 선택하세요.');else say(saveWarning||`${game.species.name}가 주인님을 기다리고 있어요. 오늘은 함께 무엇을 할까요?`);if(game.s.pending.length||game.s.progressing)pump();
   }catch(e){say(e.message+' 새로고침해서 다시 시도해 주세요.');$('actions').innerHTML='<p class="error-view">게임 데이터를 불러오지 못했습니다. <button onclick="location.reload()">다시 시도</button></p>';}}

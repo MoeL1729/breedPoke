@@ -1,0 +1,91 @@
+{
+  "trainers": [
+    {
+      "id": "lass-gen4",
+      "name": "짧은치마 소녀",
+      "sprite": "assets/trainers/lass-gen4.png"
+    },
+    {
+      "id": "falkner",
+      "name": "체육관 관장 비상",
+      "sprite": "assets/trainers/falkner.png"
+    },
+    {
+      "id": "bugsy",
+      "name": "체육관 관장 호일",
+      "sprite": "assets/trainers/bugsy.png"
+    },
+    {
+      "id": "whitney",
+      "name": "체육관 관장 꼭두",
+      "sprite": "assets/trainers/whitney.png"
+    },
+    {
+      "id": "morty",
+      "name": "체육관 관장 유빈",
+      "sprite": "assets/trainers/morty.png"
+    },
+    {
+      "id": "chuck",
+      "name": "체육관 관장 사도",
+      "sprite": "assets/trainers/chuck.png"
+    },
+    {
+      "id": "jasmine",
+      "name": "체육관 관장 규리",
+      "sprite": "assets/trainers/jasmine.png"
+    },
+    {
+      "id": "pryce",
+      "name": "체육관 관장 류옹",
+      "sprite": "assets/trainers/pryce.png"
+    },
+    {
+      "id": "clair",
+      "name": "체육관 관장 이향",
+      "sprite": "assets/trainers/clair.png"
+    },
+    {
+      "id": "brock",
+      "name": "체육관 관장 웅",
+      "sprite": "assets/trainers/brock.png"
+    },
+    {
+      "id": "misty",
+      "name": "체육관 관장 이슬",
+      "sprite": "assets/trainers/misty.png"
+    },
+    {
+      "id": "ltsurge",
+      "name": "체육관 관장 마티스",
+      "sprite": "assets/trainers/ltsurge.png"
+    },
+    {
+      "id": "erika",
+      "name": "체육관 관장 민화",
+      "sprite": "assets/trainers/erika.png"
+    },
+    {
+      "id": "janine",
+      "name": "체육관 관장 도희",
+      "sprite": "assets/trainers/janine.png"
+    },
+    {
+      "id": "sabrina",
+      "name": "체육관 관장 초련",
+      "sprite": "assets/trainers/sabrina.png"
+    },
+    {
+      "id": "blaine",
+      "name": "체육관 관장 강연",
+      "sprite": "assets/trainers/blaine.png"
+    },
+    {
+      "id": "blue",
+      "name": "체육관 관장 그린",
+      "sprite": "assets/trainers/blue.png"
+    }
+  ],
+  "source": "https://play.pokemonshowdown.com/sprites/trainers/",
+  "notes": "Unmodified PNGs from the Showdown trainer archive. Names/images are encounter presentation; parties remain randomized, not canonical gym teams. Pokemon artwork belongs to respective rights holders."
+}

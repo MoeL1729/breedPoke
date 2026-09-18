@@ -1,6 +1,6 @@
 {
   "name": "pokegotchi",
-  "version": "2.3.1",
+  "version": "2.4.0",
   "private": true,
   "type": "module",
   "description": "Version-pinned HGSS pixel Pokemon raising game",
