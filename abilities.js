@@ -118,7 +118,7 @@ export function damageFactor(g,a,d,m,power,effect){
  if(w==='rain')n*=m.typeId===11?1.5:m.typeId===10?.5:1;
  return n;
 }
-export function sheerForce(g,a,m){return has(g,a,'sheer-force')&&m.damageClass!=='status'&&(m.meta?.ailmentChance>0||m.meta?.statChance>0||m.meta?.flinchChance>0);}
+export function sheerForce(g,a,m){return m.slug!=='overheat'&&has(g,a,'sheer-force')&&m.damageClass!=='status'&&(m.meta?.ailmentChance>0||m.meta?.statChance>0||m.meta?.flinchChance>0);}
 export function afterHit(g,a,d,m,damage,logs,random){
  if(damage<=0)return;
  const contact=m.flags?.includes('contact');

@@ -1,4 +1,4 @@
-import {HIDDEN_CHANCE,DROP_CHANCE,options,abilityOf,abilitySlug,assignAbility,abilityItemTarget,weather,changeStage,statusImmune,inflict,transform,enter,leave,statFactor,accuracyFactor,blockMove,damageFactor,sheerForce,afterHit,endAbilities,trapped} from './abilities.js?v=pokegotchi-250';
+import {HIDDEN_CHANCE,DROP_CHANCE,options,abilityOf,abilitySlug,assignAbility,abilityItemTarget,weather,changeStage,statusImmune,inflict,transform,enter,leave,statFactor,accuracyFactor,blockMove,damageFactor,sheerForce,afterHit,endAbilities,trapped} from './abilities.js?v=pokegotchi-260';
 export {HIDDEN_CHANCE,DROP_CHANCE,abilityOf,abilityItemTarget};
 // Pure game rules. Canonical data lives in data/pokedex.json; care rules are game-specific.
 export const clamp=(n,a,b)=>Math.min(b,Math.max(a,n));
@@ -23,8 +23,9 @@ export const SHINY_CHANCE=0.04;
 export const MAX_PARTY=3;
 export const TRAINER_CHANCE=.2;
 export const TRAINERS=[{"id":"lass-gen4","name":"짧은치마 소녀","sprite":"assets/trainers/lass-gen4.png"},{"id":"falkner","name":"체육관 관장 비상","sprite":"assets/trainers/falkner.png"},{"id":"bugsy","name":"체육관 관장 호일","sprite":"assets/trainers/bugsy.png"},{"id":"whitney","name":"체육관 관장 꼭두","sprite":"assets/trainers/whitney.png"},{"id":"morty","name":"체육관 관장 유빈","sprite":"assets/trainers/morty.png"},{"id":"chuck","name":"체육관 관장 사도","sprite":"assets/trainers/chuck.png"},{"id":"jasmine","name":"체육관 관장 규리","sprite":"assets/trainers/jasmine.png"},{"id":"pryce","name":"체육관 관장 류옹","sprite":"assets/trainers/pryce.png"},{"id":"clair","name":"체육관 관장 이향","sprite":"assets/trainers/clair.png"},{"id":"brock","name":"체육관 관장 웅","sprite":"assets/trainers/brock.png"},{"id":"misty","name":"체육관 관장 이슬","sprite":"assets/trainers/misty.png"},{"id":"ltsurge","name":"체육관 관장 마티스","sprite":"assets/trainers/ltsurge.png"},{"id":"erika","name":"체육관 관장 민화","sprite":"assets/trainers/erika.png"},{"id":"janine","name":"체육관 관장 도희","sprite":"assets/trainers/janine.png"},{"id":"sabrina","name":"체육관 관장 초련","sprite":"assets/trainers/sabrina.png"},{"id":"blaine","name":"체육관 관장 강연","sprite":"assets/trainers/blaine.png"},{"id":"blue","name":"체육관 관장 그린","sprite":"assets/trainers/blue.png"}];
-export const battleExperience=level=>Math.floor((40+3*level*level)*.8);
+export const battleExperience=level=>Math.floor(Math.floor((40+3*level*level)*.8)*.6);
 export const ITEMS={
+ 'shiny-stone':{name:'별빛물약',kind:'shiny',price:20000,drop:false,description:'선택한 친구를 영구적으로 이로치로 바꿉니다. 1회 소모 · 이미 이로치면 사용 불가 · 게임 전용 아이템.'},
  'ability-capsule':{name:'특성캡슐',kind:'ability',price:1200,description:'일반 특성 2종을 서로 전환. 숨겨진 특성에는 사용 불가. 쉼터에서 사용.'},
  'ability-patch':{name:'특성패치',kind:'ability',price:3000,description:'일반 특성 ↔ 숨겨진 특성 전환 (9세대 도구 규칙). 숨겨진 특성이 있는 종에만 사용.'},
  'poke-ball':{name:'몬스터볼',kind:'ball',price:40,bonus:1,description:'야생 포켓몬을 포획해요.'},
@@ -76,7 +77,7 @@ export const ITEMS={
 export function medicineUsable(item,f){return !!(item?.kind==='medicine'&&f.hp>0&&((item.heal&&f.hp<f.maxHp)||(item.cure==='all'&&(f.status||f.confused>0))||(item.cure&&item.cure!=='all'&&f.status===item.cure)));}
 function cureWith(item,f){if(item.cure==='all'){f.status=null;f.statusTurns=0;f.confused=0;}else if(item.cure&&f.status===item.cure){f.status=null;f.statusTurns=0;}}
 export function shopCatalog(db){
- const items={...ITEMS};for(const sp of Object.values(db.pokemon))for(const e of sp.evolutions){
+ const items={...ITEMS};for(const [id,t] of Object.entries(db.tms??{})){if(t.enabled)items[id]={name:`TM${String(t.number).padStart(2,'0')} ${db.moves[t.moveId].name}`,kind:'tm',price:t.price,moveId:t.moveId,description:'습득 가능한 포켓몬에게 사용 · 성공 시 1개 소모 · 기술 4칸 유지'};}for(const sp of Object.values(db.pokemon))for(const e of sp.evolutions){
   const id=e.itemId??e.heldItemId;if(id)items['evo-'+id]={name:e.itemName??e.heldItemName,kind:'evolution',price:300,description:'해당 진화 조건에서 사용하는 도구.'};
  }return items;
 }
@@ -183,6 +184,7 @@ export class Game{
   buy(id,quantity=1){
  if(!this.ready())throw Error('전투와 성장을 마친 뒤 상점을 이용하세요.');
  const item=shopCatalog(this.db)[id];if(!item||!Number.isSafeInteger(quantity)||quantity<1||quantity>99)throw Error('구매 수량을 확인하세요.');
+ if(item.kind==='tm'&&this.tmReason(id))throw Error(this.tmReason(id));
  if((this.s.inventory[id]??0)+quantity>999)throw Error('도구는 999개까지 보관할 수 있어요.');
  if(this.s.coins<item.price*quantity)throw Error('모험 포인트가 부족해요.');
  this.s.coins-=item.price*quantity;this.s.inventory[id]=(this.s.inventory[id]??0)+quantity;this.log(`${item.name} ${quantity}개 구매!`);
@@ -222,7 +224,7 @@ export class Game{
  const intro=[];enter(this,this.s.battle.player,this.s.battle.enemy,intro);enter(this,this.s.battle.enemy,this.s.battle.player,intro);this.s.battle.player.enteredTurn=0;this.s.battle.enemy.enteredTurn=0;this.s.battle.abilityLogs=intro;
  this.log(trainer?`${appearance.name}가 포켓몬 3마리로 승부를 걸었어요!`:`야생 ${this.db.pokemon[enemy.speciesId].name}와 만났어요.`);return this.s.battle;
  }
-  fighter(p){return {abilitySlot:p.abilitySlot,originalHeldItem:p.heldItem??null,speciesId:p.speciesId,shiny:p.shiny??false,heldItem:p.heldItem??null,level:p.level,ivs:{...(p.ivs??{})},hp:p.hp,maxHp:statsFor(this.db,p.speciesId,p.level,p.ivs).hp,moves:p.moves.map(id=>({id,pp:this.db.moves[id].pp})),stages:{attack:0,defense:0,'special-attack':0,'special-defense':0,speed:0,accuracy:0,evasion:0},status:null,statusTurns:0,confused:0,seeded:false,guard:false,charge:null,lastDamage:0,lastClass:null,recharge:false};}
+  fighter(p){return {abilitySlot:p.abilitySlot,originalHeldItem:p.heldItem??null,speciesId:p.speciesId,shiny:p.shiny??false,heldItem:p.heldItem??null,friendship:p.friendship??70,level:p.level,ivs:{...(p.ivs??{})},hp:p.hp,maxHp:statsFor(this.db,p.speciesId,p.level,p.ivs).hp,moves:p.moves.map(id=>({id,pp:this.db.moves[id].pp})),stages:{attack:0,defense:0,'special-attack':0,'special-defense':0,speed:0,accuracy:0,evasion:0},status:null,statusTurns:0,confused:0,seeded:false,guard:false,charge:null,lastDamage:0,lastClass:null,recharge:false};}
   canStruggle(f){return !this.usable(f).length||!f.moves.some(x=>this.db.moves[x.id].damageClass!=='status');}
   usable(f){return f.moves.filter(m=>m.pp>0&&m.id!==f.disabledMove);}
   baseStats(f){return statsFor(this.db,f.speciesId,f.level,f.ivs);}
@@ -309,10 +311,31 @@ export class Game{
  }
  rollDrop(logs,random=Math.random){
   if(random()>=DROP_CHANCE)return null;
-  const catalog=shopCatalog(this.db),pool=Object.keys(catalog).filter(id=>(this.s.inventory[id]??0)<999);
+  const catalog=shopCatalog(this.db),pool=Object.keys(catalog).filter(id=>catalog[id].drop!==false&&(this.s.inventory[id]??0)<999);
   if(!pool.length){logs.push('가방이 가득 차 드롭 도구를 담지 못했어요.');return null;}
   const id=pool[Math.floor(random()*pool.length)];this.s.inventory[id]=(this.s.inventory[id]??0)+1;
   const text=`도구 발견! ${catalog[id].name} 1개를 얻었어요.`;this.log(text);logs.push(text);return id;
+ }
+ tmReason(id){
+  const t=this.db.tms?.[id];if(!t?.enabled)return '현재 지원하지 않는 기술머신이에요.';
+  if(!this.pet||!this.species.tmMoves?.includes(t.moveId))return '이 포켓몬은 배울 수 없어요.';
+  if(this.pet.moves.includes(t.moveId))return '이미 알고 있는 기술이에요.';
+  return null;
+ }
+ teachTM(id,slot=null){
+  if(!this.ready())throw Error('전투와 성장을 마친 뒤 기술머신을 사용하세요.');
+  const error=this.tmReason(id);if(error)throw Error(error);
+  if(!(this.s.inventory[id]>0))throw Error('이 기술머신을 가지고 있지 않아요.');
+  const p=this.pet,moveId=this.db.tms[id].moveId;
+  if(p.moves.length>=4&&(!Number.isInteger(slot)||slot<0||slot>=p.moves.length))throw Error('잊을 기술을 선택하세요.');
+  if(p.moves.length<4)p.moves.push(moveId);else p.moves[slot]=moveId;
+  this.s.inventory[id]--;this.log(`${this.species.name}, 기술머신으로 ${this.db.moves[moveId].name} 습득!`);
+ }
+ makeShiny(){
+  if(!this.ready())throw Error('전투와 성장을 마친 뒤 사용하세요.');
+  if(this.pet.shiny)throw Error('이미 이로치인 친구예요.');
+  if(!(this.s.inventory['shiny-stone']>0))throw Error('별빛물약이 없어요.');
+  this.s.inventory['shiny-stone']--;this.pet.shiny=true;this.log(`★ ${this.species.name}가 이로치로 바뀌었어요!`);
  }
  changeAbility(id){
   if(!this.ready())throw Error('전투와 성장을 마친 뒤 특성을 바꿀 수 있어요.');
@@ -360,8 +383,9 @@ export class Game{
     let did=false;
     if(m.damageClass!=='status'){
       let power=m.power??60;
-      if(slug==='return')power=Math.max(1,Math.floor(this.pet.friendship/2.5));
-      if(slug==='frustration')power=Math.max(1,Math.floor((255-this.pet.friendship)/2.5));
+      if(slug==='return')power=Math.max(1,Math.floor((a.friendship??70)/2.5));
+      if(slug==='frustration')power=Math.max(1,Math.floor((255-(a.friendship??70))/2.5));
+      if(slug==='facade'&&['poison','burn','paralysis'].includes(a.status))power*=2;
       if(slug==='flail')power=Math.min(200,Math.floor(20*a.maxHp/Math.max(1,a.hp)));
       if(slug==='magnitude')power=[10,30,50,70,90,110,150][Math.floor(random()*7)];
       if(['low-kick','grass-knot'].includes(slug)){let weight=this.db.pokemon[d.transformedSpeciesId??d.speciesId].weightKg;if(this.hasAbility(d,'heavy-metal'))weight*=2;if(this.hasAbility(d,'light-metal'))weight/=2;power=weight<10?20:weight<25?40:weight<50?60:weight<100?80:weight<200?100:120;}
@@ -405,7 +429,7 @@ export class Game{
       did=true;
     }
     if(meta.healing>0){const amount=Math.ceil(a.maxHp*meta.healing/100);a.hp=Math.min(a.maxHp,a.hp+amount);logs.push('HP를 회복했어요.');did=true;}
-    for(const change of m.statChanges||[]){if(m.damageClass!=='status'&&(sheerForce(this,a,m)||!self&&!this.hasAbility(a,'mold-breaker')&&this.hasAbility(d,'shield-dust')||random()*100>=(meta.statChance||0)*(this.hasAbility(a,'serene-grace')?2:1)))continue;const target=self?a:d;if(!self&&(d.heldItem==='clear-amulet'&&change.change<0||d.heldItem==='covert-cloak'&&m.damageClass!=='status')){logs.push(`${ITEMS[d.heldItem].name}이 능력치 변화를 막았어요.`);did=true;continue;}changeStage(this,target,change.stat,change.change,a,logs);logs.push(`${self?'자신':'상대'}의 ${change.label} ${change.change>0?'상승':'하락'}!`);did=true;}
+    for(const change of m.statChanges||[]){const affectsSelf=self||(m.damageClass!=='status'&&(change.change>0||slug==='overheat'));if(m.damageClass!=='status'&&(sheerForce(this,a,m)||!affectsSelf&&!this.hasAbility(a,'mold-breaker')&&this.hasAbility(d,'shield-dust')||random()*100>=(meta.statChance||0)*(this.hasAbility(a,'serene-grace')?2:1)))continue;const target=affectsSelf?a:d;if(!affectsSelf&&(d.heldItem==='clear-amulet'&&change.change<0||d.heldItem==='covert-cloak'&&m.damageClass!=='status')){logs.push(`${ITEMS[d.heldItem].name}이 능력치 변화를 막았어요.`);did=true;continue;}changeStage(this,target,change.stat,change.change,a,logs);logs.push(`${affectsSelf?'자신':'상대'}의 ${change.label} ${change.change>0?'상승':'하락'}!`);did=true;}
     const ailments={1:'paralysis',2:'sleep',3:'freeze',4:'burn',5:'poison',6:'confusion'};
     if(!(m.damageClass!=='status'&&(d.heldItem==='covert-cloak'||sheerForce(this,a,m)||!this.hasAbility(a,'mold-breaker')&&this.hasAbility(d,'shield-dust')))&&ailments[meta.ailment]&&(m.damageClass==='status'||random()*100<(meta.ailmentChance||0)*(this.hasAbility(a,'serene-grace')?2:1))&&d.hp>0){
       const status=ailments[meta.ailment],types=this.fighterTypes(d);
