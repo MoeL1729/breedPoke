@@ -1,4 +1,4 @@
-import {HIDDEN_CHANCE,DROP_CHANCE,options,abilityOf,abilitySlug,assignAbility,abilityItemTarget,weather,changeStage,statusImmune,inflict,transform,enter,leave,statFactor,accuracyFactor,blockMove,damageFactor,sheerForce,afterHit,endAbilities,trapped} from './abilities.js?v=pokegotchi-270';
+import {HIDDEN_CHANCE,DROP_CHANCE,options,abilityOf,abilitySlug,assignAbility,abilityItemTarget,weather,changeStage,statusImmune,inflict,transform,enter,leave,statFactor,accuracyFactor,blockMove,damageFactor,sheerForce,afterHit,endAbilities,trapped} from './abilities.js?v=pokegotchi-271';
 export {HIDDEN_CHANCE,DROP_CHANCE,abilityOf,abilityItemTarget};
 // Pure game rules. Canonical data lives in data/pokedex.json; care rules are game-specific.
 export const clamp=(n,a,b)=>Math.min(b,Math.max(a,n));
@@ -130,6 +130,7 @@ export function validateState(db,input){
 }
 export class Game{
   constructor(db,state){this.db=db;this.s=state?migrateState(db,state):freshState(db);this.s.battleCount??=0;this.s.lastBattleTrainer??=false;
+    if(!this.s.hatched&&Object.keys(this.s.pets).length===0)this.s.day=1;
     for(const p of Object.values(this.s.pets))if(p.abilitySlot===undefined)assignAbility(db,p);
     const b=this.s.battle;if(b){
       for(const p of b.enemyTeam??[])if(p.abilitySlot===undefined)assignAbility(db,p);
@@ -147,7 +148,7 @@ export class Game{
  if(!this.ready())throw Error('전투와 성장을 마친 뒤 놓아줄 수 있어요.');
  const p=this.pet;if(p.heldItem&&(this.s.inventory[p.heldItem]??0)>=999)throw Error('돌려받을 도구의 가방 공간이 부족해요.');if(p.heldItem)this.s.inventory[p.heldItem]=(this.s.inventory[p.heldItem]??0)+1;
  this.log(`${this.species.name}를 놓아주었어요.`);delete this.s.pets[this.s.active];
- const ids=Object.keys(this.s.pets);this.s.active=ids.length?Number(ids[0]):null;this.s.hatched=!!ids.length;return this.s;
+ const ids=Object.keys(this.s.pets);this.s.active=ids.length?Number(ids[0]):null;this.s.hatched=!!ids.length;if(!ids.length)this.s.day=1;return this.s;
  }
   setEvolutionContext(timeOfDay,locationId){
     if(!this.ready())throw Error('진행 중인 일을 먼저 마쳐주세요.');
