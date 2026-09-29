@@ -120,3 +120,16 @@ main{max-width:1380px;padding:24px 26px 0;background:#dce5ed;border:3px solid #1
 .tm-rules{margin-top:16px;padding:10px;border:1px solid #9badae;border-radius:6px;background:#f1f3e9}.tm-rules summary{cursor:pointer;font-size:12px;font-weight:700}.tm-rules .modal-copy{margin-bottom:0}.shop-item .tm-effect{padding:8px;background:#eaf0e3;border-radius:4px;color:#2e4a43;font-size:12px;line-height:1.7}.shop-item .blocked-reason{font-size:12px;color:#824735;background:#fff0df;padding:8px;border-radius:4px}.replace-hint{display:block;margin-top:9px;border-top:1px solid currentColor;padding-top:8px;font-size:12px;font-weight:700}.new-move-label{font-size:12px;font-weight:700}.modal-top{position:sticky;top:0;z-index:20;background:#fcfafe;padding:6px 0}.modal-top button{width:44px;height:44px}.shop-item button+button{margin-top:8px}.shop-item button[data-tm-learn]{background:#d1e7b9}.tm-effect{font-size:13px;line-height:1.7}
 
 @media(max-width:740px){.navigation-hint{padding:9px 12px}}
+
+/* Battlefield details stay outside the sprite area and expand in normal flow. */
+.field-panel{padding:14px;margin-bottom:16px;border:2px solid #697c84;border-radius:10px;background:#f7f6e8;min-width:0}
+.field-panel>strong{display:block;color:#273d50}.field-panel>small{display:block;margin:5px 0 12px;color:#506270;line-height:1.5}
+.field-chips{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:8px;min-width:0}
+.field-condition{min-width:0}.field-condition button{width:100%;min-height:44px;padding:9px 10px;text-align:left;white-space:normal;overflow-wrap:anywhere;border:1px solid #768c70;border-radius:6px;background:#e5eedc;color:#263d2b;font:inherit;font-size:13px;line-height:1.5}
+.field-condition button>span{color:#537444;font-size:18px}.field-condition button:focus-visible{outline:3px solid #9c7438;outline-offset:2px}
+.field-tooltip{display:none;position:static;margin:5px 0 0;padding:10px;border:1px solid #9daab0;border-radius:6px;background:#fffdf2;color:#263b4a;font-size:13px;line-height:1.65;overflow-wrap:anywhere}
+.field-condition button[aria-expanded="true"]+.field-tooltip{display:block}
+@media(hover:hover){.field-condition:hover .field-tooltip{display:block}}
+.field-empty{font-size:13px;color:#65766b}.egg-progress{font-size:26px;color:#50743d;font-weight:700}
+.shop-item details{font-size:12px;overflow-wrap:anywhere}.shop-item details summary{min-height:32px;cursor:pointer}
+@media(max-width:600px){.field-panel{padding:10px}.field-chips{grid-template-columns:1fr}.field-condition button{font-size:12px}}

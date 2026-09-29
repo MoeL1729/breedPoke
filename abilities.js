@@ -27,13 +27,14 @@ const chip=(g,f,n)=>{if(!has(g,f,'magic-guard'))f.hp=Math.max(0,f.hp-Math.max(1,
 const announce=(g,f,logs,text)=>logs.push(`${g.db.pokemon[f.speciesId].name} · ${abilityOf(g.db,f)?.name??'특성'}: ${text}`);
 export function weather(g){const b=g.s.battle;if(!b)return null;return [b.player,b.enemy].some(f=>f.hp>0&&has(g,f,'cloud-nine'))?null:b.weather;}
 export function changeStage(g,f,key,delta,source,logs){
- const hostile=source!==f;
+ const hostile=source!==f;if(hostile&&delta<0&&g.fieldSide?.(f).mist&&!active(g,source,f,'infiltrator')){logs.push('흰안개가 능력치 하락을 막았어요.');return false;}
  if(hostile&&delta<0&&(f.heldItem==='clear-amulet'||active(g,f,source,'clear-body')||key==='attack'&&active(g,f,source,'hyper-cutter')||key==='defense'&&active(g,f,source,'big-pecks')||key==='accuracy'&&active(g,f,source,'keen-eye'))){logs.push('특성·도구가 능력치 하락을 막았어요.');return false;}
  const old=f.stages[key]??0;f.stages[key]=clamp(old+delta);
  if(hostile&&f.stages[key]<old){if(has(g,f,'defiant'))f.stages.attack=clamp(f.stages.attack+2);if(has(g,f,'competitive'))f.stages['special-attack']=clamp(f.stages['special-attack']+2);}
  return f.stages[key]!==old;
 }
 export function statusImmune(g,f,status,source=f){
+ if(source!==f&&g.fieldSide?.(f).safeguard&&!has(g,source,'infiltrator'))return true;
  if(status==='confusion'&&active(g,f,source,'own-tempo'))return true;
  const w=weather(g);
  return active(g,f,source,'leaf-guard')&&w==='sun'||status==='paralysis'&&(g.fighterTypes(f).includes(13)||active(g,f,source,'limber'))||status==='sleep'&&active(g,f,source,'insomnia','vital-spirit')||status==='poison'&&(g.fighterTypes(f).some(t=>[4,9].includes(t))||active(g,f,source,'immunity'))||status==='burn'&&(g.fighterTypes(f).includes(10)||active(g,f,source,'water-veil'))||status==='freeze'&&(g.fighterTypes(f).includes(15)||w==='sun');
@@ -90,7 +91,7 @@ export function accuracyFactor(g,a,d,m){
 export function blockMove(g,a,d,m,logs){
  if(m.slug==='struggle'||m.target==='user')return false;
  const type=m.typeId;
- let blocked=type===5&&active(g,d,a,'levitate')||m.flags?.includes('sound')&&active(g,d,a,'soundproof')||m.flags?.includes('powder')&&(active(g,d,a,'overcoat')||g.fighterTypes(d).includes(12));
+ let blocked=type===5&&active(g,d,a,'levitate')&&!g.isGrounded?.(d)||m.flags?.includes('sound')&&active(g,d,a,'soundproof')||m.flags?.includes('powder')&&(active(g,d,a,'overcoat')||g.fighterTypes(d).includes(12));
  if(type===11&&active(g,d,a,'water-absorb','dry-skin')||type===13&&active(g,d,a,'volt-absorb')){heal(d,d.maxHp/4);blocked=true;}
  if(type===13&&active(g,d,a,'lightning-rod','motor-drive')){changeStage(g,d,has(g,d,'motor-drive')?'speed':'special-attack',1,d,logs);blocked=true;}
  if(type===10&&active(g,d,a,'flash-fire')){d.flashFire=true;blocked=true;}
@@ -151,8 +152,9 @@ export function endAbilities(g,f,other,logs,random){
  if(f.disabledTurns>0&&--f.disabledTurns===0)delete f.disabledMove;
 }
 export function trapped(g,f,other){
+ if(f.heldItem==='shed-shell')return false;
  if(has(g,f,'run-away')||g.fighterTypes(f).includes(8))return false;
- return has(g,other,'arena-trap')&&!g.fighterTypes(f).includes(3)&&!has(g,f,'levitate')||has(g,other,'magnet-pull')&&g.fighterTypes(f).includes(9);
+ return has(g,other,'arena-trap')&&(g.isGrounded?.(f)??(!g.fighterTypes(f).includes(3)&&!has(g,f,'levitate')))||has(g,other,'magnet-pull')&&g.fighterTypes(f).includes(9);
 }
 // No substitute mechanics or fake stat boost for abilities with no applicable rule.
 export const abilityNotes={
@@ -166,7 +168,7 @@ export const abilityNotes={
  telepathy:'싱글 전투에서는 동료 공격 회피 효과가 없습니다.',
  'heavy-metal':'몸무게를 2배로 계산해 안다리걸기·풀묶기 피해에 반영합니다.',
  'light-metal':'몸무게를 절반으로 계산해 안다리걸기·풀묶기 피해에 반영합니다.',
- infiltrator:'대타출동·벽 시스템이 없어 추가 효과가 없습니다.',
+ infiltrator:'리플렉터·빛의장막·신비의부적·흰안개를 무시합니다.',
  'sticky-hold':'나쁜손버릇에 의한 도구 도난을 방지합니다.',
  pickup:'전투에서 상대가 소비한 열매를 줍습니다. 승리 보상 드롭 1%와 별개입니다.',
  'skill-link':'연속 공격 횟수를 최대로 고정합니다. 각 타격의 피해·옹골참을 계산합니다.',

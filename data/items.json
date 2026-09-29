@@ -1,6 +1,6 @@
 {
-  "version": "2.1.0",
-  "basis": "HGSS items; Clear Amulet and Covert Cloak from Generation IX. Game prices and simplified engine interactions.",
+  "version": "2.9.0",
+  "basis": "HGSS field items with selected Gen8/9 items; game prices. Canonical live catalog: engine.js + field.js.",
   "sources": [
     "https://bulbapedia.bulbagarden.net/wiki/Type-enhancing_item",
     "https://bulbapedia.bulbagarden.net/wiki/Muscle_Band",
@@ -16,9 +16,91 @@
     "https://bulbapedia.bulbagarden.net/wiki/Hyper_Potion",
     "https://bulbapedia.bulbagarden.net/wiki/Max_Potion",
     "https://bulbapedia.bulbagarden.net/wiki/Full_Restore",
-    "https://bulbapedia.bulbagarden.net/wiki/Full_Heal"
+    "https://bulbapedia.bulbagarden.net/wiki/Full_Heal",
+    "https://bulbapedia.bulbagarden.net/wiki/Big_Root",
+    "https://bulbapedia.bulbagarden.net/wiki/Light_Clay",
+    "https://bulbapedia.bulbagarden.net/wiki/Heavy-Duty_Boots"
   ],
   "items": {
+    "light-clay": {
+      "name": "빛의점토",
+      "kind": "held",
+      "price": 1000,
+      "description": "리플렉터·빛의장막을 5턴에서 8턴으로 연장."
+    },
+    "iron-ball": {
+      "name": "검은철구",
+      "kind": "held",
+      "price": 650,
+      "description": "스피드 절반. 비행·부유도 땅에 닿아 설치 기술과 땅 공격에 영향받음."
+    },
+    "shed-shell": {
+      "name": "아름다운허물",
+      "kind": "held",
+      "price": 900,
+      "description": "조이기·교체 방해 특성에도 자발적으로 교체 가능."
+    },
+    "big-root": {
+      "name": "큰뿌리",
+      "kind": "held",
+      "price": 1000,
+      "description": "흡수 기술·씨뿌리기·뿌리박기·아쿠아링의 회복량 30% 증가. 해감액 피해도 증가."
+    },
+    "grip-claw": {
+      "name": "끈기갈고리손톱",
+      "kind": "held",
+      "price": 850,
+      "description": "조이기·회오리불꽃 등 구속이 5턴 지속 (4세대)."
+    },
+    "heavy-duty-boots": {
+      "name": "통굽부츠",
+      "kind": "held",
+      "price": 1800,
+      "description": "등장 시 압정뿌리기·독압정·스텔스록 무시 (8세대 도구를 추가 적용)."
+    },
+    "heat-rock": {
+      "name": "뜨거운바위",
+      "kind": "held",
+      "price": 800,
+      "description": "대응하는 날씨 기술의 지속 시간을 5턴에서 8턴으로 연장."
+    },
+    "damp-rock": {
+      "name": "축축한바위",
+      "kind": "held",
+      "price": 800,
+      "description": "대응하는 날씨 기술의 지속 시간을 5턴에서 8턴으로 연장."
+    },
+    "smooth-rock": {
+      "name": "보송보송바위",
+      "kind": "held",
+      "price": 800,
+      "description": "대응하는 날씨 기술의 지속 시간을 5턴에서 8턴으로 연장."
+    },
+    "icy-rock": {
+      "name": "차가운바위",
+      "kind": "held",
+      "price": 800,
+      "description": "대응하는 날씨 기술의 지속 시간을 5턴에서 8턴으로 연장."
+    },
+    "shiny-stone": {
+      "name": "별빛물약",
+      "kind": "shiny",
+      "price": 20000,
+      "drop": false,
+      "description": "선택한 친구를 영구적으로 이로치로 바꿉니다. 1회 소모 · 이미 이로치면 사용 불가 · 게임 전용 아이템."
+    },
+    "ability-capsule": {
+      "name": "특성캡슐",
+      "kind": "ability",
+      "price": 1200,
+      "description": "일반 특성 2종을 서로 전환. 숨겨진 특성에는 사용 불가. 쉼터에서 사용."
+    },
+    "ability-patch": {
+      "name": "특성패치",
+      "kind": "ability",
+      "price": 3000,
+      "description": "일반 특성 ↔ 숨겨진 특성 전환 (9세대 도구 규칙). 숨겨진 특성이 있는 종에만 사용."
+    },
     "poke-ball": {
       "name": "몬스터볼",
       "kind": "ball",
@@ -322,48 +404,6 @@
       "kind": "trade",
       "price": 150,
       "description": "교환 진화 시 1장 소모. 필요한 진화 도구도 준비하세요."
-    },
-    "evo-83": {
-      "name": "천둥의돌",
-      "kind": "evolution",
-      "price": 300,
-      "description": "해당 진화 조건에서 사용하는 도구."
-    },
-    "evo-81": {
-      "name": "달의돌",
-      "kind": "evolution",
-      "price": 300,
-      "description": "해당 진화 조건에서 사용하는 도구."
-    },
-    "evo-82": {
-      "name": "불꽃의돌",
-      "kind": "evolution",
-      "price": 300,
-      "description": "해당 진화 조건에서 사용하는 도구."
-    },
-    "evo-85": {
-      "name": "리프의돌",
-      "kind": "evolution",
-      "price": 300,
-      "description": "해당 진화 조건에서 사용하는 도구."
-    },
-    "evo-84": {
-      "name": "물의돌",
-      "kind": "evolution",
-      "price": 300,
-      "description": "해당 진화 조건에서 사용하는 도구."
-    },
-    "evo-299": {
-      "name": "에레키부스터",
-      "kind": "evolution",
-      "price": 300,
-      "description": "해당 진화 조건에서 사용하는 도구."
-    },
-    "evo-300": {
-      "name": "마그마부스터",
-      "kind": "evolution",
-      "price": 300,
-      "description": "해당 진화 조건에서 사용하는 도구."
     }
   }
 }
