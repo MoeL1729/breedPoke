@@ -20,15 +20,6 @@
 - 알기술 상점은 역사적 기록을 합친 게임 전용 유료 학습 시스템. 원작의 교배나 세대 간 전송 제약 전체를 모사하지 않으며, 미구현 기술은 판매하지 않음.
 - 검증: `npm test` 130개 통과. 실제 브라우저의 화면/터치 동작은 이번 작업에서 확인하지 못함.
 
-### GitHub Pages 반영
-
-기존 2.8.2에서 **index.html, style.css, app.js, engine.js, abilities.js, 새 파일 field.js, data/pokedex.json, data/items.json**을 같은 위치에 덮어쓰기 후 커밋합니다. Assets는 이번 패치에서 변경하지 않았습니다. 전체 ZIP을 압축 해제해 내용물을 올려도 됩니다. ZIP 파일 자체를 올리는 방식은 아닙니다. 저장 키를 유지하므로 같은 주소에서 기존 친구·포인트를 이어받습니다.
-
-### 데이터 재생성
-
-기존 빌드 스크립트 뒤에 `python scripts/build_field_egg.py`를 마지막으로 실행합니다. `.data-cache/tm`과 `.data-cache/abilities`의 PokeAPI CSV 스냅샷을 사용합니다(배포 ZIP에는 캐시 제외). 런타임에는 API 호출 없이 포함된 JSON을 사용합니다.
-
-출처: [PokeAPI CSV](https://github.com/PokeAPI/pokeapi/tree/master/data/v2/csv), [4세대 Spikes](https://bulbapedia.bulbagarden.net/wiki/Spikes_(move)), [Leech Seed](https://bulbapedia.bulbagarden.net/wiki/Leech_Seed_(move)), [Egg Move](https://bulbapedia.bulbagarden.net/wiki/Egg_Move).
 
 ## 이전 버전의 변경 기록
 
