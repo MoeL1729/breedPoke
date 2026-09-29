@@ -7,9 +7,9 @@ function rollFor(id){const table=db.hatchTable;let prior=0;for(const row of tabl
 function started(id=25,level=10){const g=new Game(db);g.hatch(()=>rollFor(id===25?172:id));if(id===25){g.s.pets[25]=g.pet;delete g.s.pets[g.s.active];g.s.active=25;}g.s.pets[id]={...makePet(db,id,level),ivs:g.pet.ivs};return g;}
 function settle(g,accept=true){let count=0;while(g.s.pending.length||g.s.progressing){assert.ok(++count<500);const e=g.s.pending[0]??g.progress();if(!e)break;if(e.kind==='move')g.chooseMove(0);else g.chooseEvolution(accept);}return g;}
 test('snapshot uses HGSS learnsets and historically accurate examples',()=>{
- assert.equal(db.meta.versionGroupId,10);assert.equal(Object.keys(db.pokemon).length,205);assert.equal(Object.keys(db.moves).length,387);
+ assert.equal(db.meta.versionGroupId,10);assert.equal(Object.keys(db.pokemon).length,205);assert.equal(Object.keys(db.moves).length,397);
  assert.equal(db.moves[33].power,35);assert.equal(db.moves[33].accuracy,95);assert.equal(db.moves[85].power,95);assert.equal(db.moves[204].typeId,1);
- assert.equal(db.pokemon[25].stats.defense,30);assert.equal(db.pokemon[26].stats.speed,100);assert.equal(db.pokemon[51].stats.attack,80);
+ assert.equal(db.pokemon[25].stats.defense,40);assert.equal(db.pokemon[26].stats.speed,110);assert.equal(db.pokemon[51].stats.attack,100);
  assert.deepEqual(db.pokemon[173].typeIds,[1]);assert.equal(db.pokemon[4].evolutions[0].minLevel,16);assert.equal(db.pokemon[5].evolutions[0].minLevel,36);
  assert.equal(db.pokemon[238].evolutions[0].minLevel,30);assert.equal(db.pokemon[174].evolutions[0].minFriendship,220);
  assert.equal(db.pokemon[25].learnset.find(x=>x.moveId===98).level,13);
@@ -142,8 +142,8 @@ test('rare partner evolves at 30 and 55 with four moves and survives backup rest
 
 test('release of last partner keeps bag and currency and returns an egg',()=>{
  const g=started(133);g.s.coins=900;g.s.day=17;g.s.fatigue=80;g.pet.friendship=220;g.setEvolutionContext('night',8);
- g.release();assert.equal(g.s.hatched,false);assert.equal(g.s.active,null);assert.deepEqual(g.s.pets,{});assert.equal(g.s.coins,900);assert.equal(g.s.day,17);assert.equal(g.s.fatigue,80);assert.deepEqual(g.s.evolutionContext,{timeOfDay:'night',locationId:8});assert.equal(validateState(db,g.s),g.s);
- const restored=new Game(db,JSON.parse(JSON.stringify(g.s)));assert.equal(restored.hatch(()=>rollFor(133)),133);assert.equal(restored.hatch(()=>0),false);
+ g.release();assert.equal(g.s.hatched,false);assert.equal(g.s.active,null);assert.deepEqual(g.s.pets,{});assert.equal(g.s.coins,900);assert.equal(g.s.day,1);assert.equal(g.s.fatigue,80);assert.deepEqual(g.s.evolutionContext,{timeOfDay:'night',locationId:8});assert.equal(validateState(db,g.s),g.s);
+ const legacyEgg=JSON.parse(JSON.stringify(g.s));legacyEgg.day=99;const restored=new Game(db,legacyEgg);assert.equal(restored.s.day,1);assert.equal(restored.hatch(()=>rollFor(133)),133);assert.equal(restored.s.day,1);assert.equal(restored.hatch(()=>0),false);
  const busy=started();busy.startBattle(()=>.5);assert.throws(()=>busy.release());busy.flee();busy.s.pending=[{kind:'move',moveId:85}];assert.throws(()=>busy.release());
 });
 test('Elekid and Magby evolve at 30, then consume required item in NPC trade',()=>{
