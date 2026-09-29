@@ -116,5 +116,7 @@ main{max-width:1380px;padding:24px 26px 0;background:#dce5ed;border:3px solid #1
 @media(max-width:740px){header{height:auto}}
 
 /* 2.8.1 review: less repetition, visible action reasons, move comparisons. */
-.navigation-hint{margin:0 auto;padding:9px 24px;max-width:1530px;color:#3f5667;font-size:12px;background:#f6f0de;line-height:1.5}
+.navigation-hint{margin:0 auto;padding:9px 26px;width:100%;max-width:1380px;border-inline:3px solid #111d32;color:#3f5667;font-size:12px;background:#f6f0de;line-height:1.5;overflow-wrap:anywhere}
 .tm-rules{margin-top:16px;padding:10px;border:1px solid #9badae;border-radius:6px;background:#f1f3e9}.tm-rules summary{cursor:pointer;font-size:12px;font-weight:700}.tm-rules .modal-copy{margin-bottom:0}.shop-item .tm-effect{padding:8px;background:#eaf0e3;border-radius:4px;color:#2e4a43;font-size:12px;line-height:1.7}.shop-item .blocked-reason{font-size:12px;color:#824735;background:#fff0df;padding:8px;border-radius:4px}.replace-hint{display:block;margin-top:9px;border-top:1px solid currentColor;padding-top:8px;font-size:12px;font-weight:700}.new-move-label{font-size:12px;font-weight:700}.modal-top{position:sticky;top:0;z-index:20;background:#fcfafe;padding:6px 0}.modal-top button{width:44px;height:44px}.shop-item button+button{margin-top:8px}.shop-item button[data-tm-learn]{background:#d1e7b9}.tm-effect{font-size:13px;line-height:1.7}
+
+@media(max-width:740px){.navigation-hint{padding:9px 12px}}
