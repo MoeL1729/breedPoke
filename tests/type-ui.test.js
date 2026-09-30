@@ -17,9 +17,9 @@ test('egg screen odds follow the same weights as the actual hatch table',()=>{
  const html=fs.readFileSync(new URL('../index.html',import.meta.url),'utf8');assert.ok(html.includes('id="hatch-odds"'));assert.ok(!html.includes('메타몽 5%'));assert.ok(code.includes("$('hatch-odds').textContent=hatchOddsText(db)"));
 });
 test('trainer portrait banner shows only for trainers and counts remaining opponents',()=>{
- const nodes={};const ctx=vm.createContext({$:id=>nodes[id]??=( {hidden:false,textContent:'',innerHTML:'',setAttribute(k,v){this[k]=v;}} )});
+ const nodes={};const ctx=vm.createContext({$:id=>nodes[id]??=( {hidden:false,classList:{toggle(){}},textContent:'',innerHTML:'',setAttribute(k,v){this[k]=v;}} )});
  vm.runInContext(code.slice(code.indexOf('function renderTrainerBanner('),code.indexOf('function renderBattle(')),ctx);
- for(let i=0;i<3;i++){ctx.b={kind:'trainer',trainerName:'숲길 트레이너',enemyIndex:i};vm.runInContext('renderTrainerBanner(b)',ctx);assert.equal(nodes['trainer-banner'].hidden,false);assert.ok(nodes['trainer-team'].innerHTML.includes(`${3-i}마리 남음`));assert.equal((nodes['trainer-team'].innerHTML.match(/defeated/g)||[]).length,i);}
+ for(let i=0;i<3;i++){ctx.b={kind:'trainer',trainerName:'숲길 트레이너',enemyTeam:[{},{},{}],enemyIndex:i};vm.runInContext('renderTrainerBanner(b)',ctx);assert.equal(nodes['trainer-banner'].hidden,false);assert.ok(nodes['trainer-team'].innerHTML.includes(`${3-i}마리 남음`));assert.equal((nodes['trainer-team'].innerHTML.match(/defeated/g)||[]).length,i);}
  for(const b of [null,{kind:'wild'}]){ctx.b=b;vm.runInContext('renderTrainerBanner(b)',ctx);assert.equal(nodes['trainer-banner'].hidden,true);}
  assert.ok(fs.existsSync(new URL('../assets/trainers/forest-trainer.svg',import.meta.url)));
 });

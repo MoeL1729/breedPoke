@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import vm from 'node:vm';
-import {Game,TRAINERS,makePet} from '../engine.js';
+import {Game,TRAINERS,LEGEND_TRAINERS,makePet} from '../engine.js';
 const db=JSON.parse(fs.readFileSync(new URL('../data/pokedex.json',import.meta.url)));
 const code=fs.readFileSync(new URL('../app.js',import.meta.url),'utf8');
 test('all 17 trainer appearances have local PNG files and persist in battle saves',()=>{
@@ -17,8 +17,8 @@ test('all 17 trainer appearances have local PNG files and persist in battle save
 });
 for(const mode of ['timeout','skip','reduced'])test(`trainer intro ${mode}: locks, exits, restores focus, never replays`,async()=>{
  const nodes={};let timer,delay,saves=0,focused=null,cleared=false;
- const $=id=>nodes[id]??=( {hidden:true,classList:{add(){},remove(){}},focus(){focused=id;},querySelector(){return {focus(){focused='move';}}} });
- const context=vm.createContext({$,TRAINERS,busy:false,save(){saves++;},render(){},window:{matchMedia(){return {matches:mode==='reduced'};}},setTimeout(fn,ms){timer=fn;delay=ms;return 1;},clearTimeout(){cleared=true;}});
+ const $=id=>nodes[id]??=( {hidden:true,classList:{add(){},remove(){},toggle(){}},focus(){focused=id;},querySelector(){return {focus(){focused='move';}}} });
+ const context=vm.createContext({$,TRAINERS,LEGEND_TRAINERS,busy:false,save(){saves++;},render(){},window:{matchMedia(){return {matches:mode==='reduced'};}},setTimeout(fn,ms){timer=fn;delay=ms;return 1;},clearTimeout(){cleared=true;}});
  vm.runInContext(code.slice(code.indexOf('async function playTrainerIntro('),code.indexOf('async function startBattle(')),context);
  const b={kind:'trainer',trainerId:TRAINERS[0].id,trainerName:TRAINERS[0].name,introSeen:false};
  const pending=context.playTrainerIntro(b);

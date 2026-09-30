@@ -133,3 +133,11 @@ main{max-width:1380px;padding:24px 26px 0;background:#dce5ed;border:3px solid #1
 .field-empty{font-size:13px;color:#65766b}.egg-progress{font-size:26px;color:#50743d;font-weight:700}
 .shop-item details{font-size:12px;overflow-wrap:anywhere}.shop-item details summary{min-height:32px;cursor:pointer}
 @media(max-width:600px){.field-panel{padding:10px}.field-chips{grid-template-columns:1fr}.field-condition button{font-size:12px}}
+
+/* Legend encounters and one-purchase shop cycle. */
+.legend-progress{font-size:12px;line-height:1.5;color:#725019;max-width:220px;overflow-wrap:anywhere}
+.legend-banner{background:#3e284f;border-bottom:3px solid #d4ae58;color:#fff2c7}
+.legend-banner .trainer-ball.current{box-shadow:0 0 0 3px #efcd64}
+.legend-intro .intro-stripe{background:#352445}.legend-intro .intro-copy small{color:#ffe68e}
+.trainer-team{flex-wrap:wrap;gap:6px}.intro-copy strong{overflow-wrap:anywhere}
+@media(max-width:600px){.legend-progress{max-width:100%;width:100%;text-align:center}.intro-copy strong{font-size:clamp(17px,4vw,24px)}}

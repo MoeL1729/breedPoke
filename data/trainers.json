@@ -87,5 +87,162 @@
     }
   ],
   "source": "https://play.pokemonshowdown.com/sprites/trainers/",
-  "notes": "Unmodified PNGs from the Showdown trainer archive. Names/images are encounter presentation; parties remain randomized, not canonical gym teams. Pokemon artwork belongs to respective rights holders."
+  "notes": "Unmodified PNGs from the Showdown trainer archive. Names/images are encounter presentation; parties remain randomized, not canonical gym teams. Pokemon artwork belongs to respective rights holders. Legends use unmodified canonical FRLG/RSE/HGSS/DP sprites from smogon/sprites. Teams are game-specific randomized teams, not canonical Elite Four parties. Im Hangyu uses an original SVG silhouette.",
+  "legendTrainers": [
+    {
+      "id": "lorelei-gen3",
+      "name": "사천왕 칸나",
+      "region": "관동",
+      "sprite": "assets/trainers/lorelei-gen3.png",
+      "source": "https://github.com/smogon/sprites/blob/master/src/_uncategorized/canonical/trainers/gen3/firered-leafgreen/Lorelei.png",
+      "downloadSource": "https://raw.githubusercontent.com/smogon/sprites/master/src/_uncategorized/canonical/trainers/gen3/firered-leafgreen/Lorelei.png",
+      "spriteGame": "gen3-firered-leafgreen"
+    },
+    {
+      "id": "bruno",
+      "name": "사천왕 시바",
+      "region": "관동·성도",
+      "sprite": "assets/trainers/bruno.png",
+      "source": "https://github.com/smogon/sprites/blob/master/src/_uncategorized/canonical/trainers/gen4/heartgold-soulsilver/Bruno.png",
+      "downloadSource": "https://raw.githubusercontent.com/smogon/sprites/master/src/_uncategorized/canonical/trainers/gen4/heartgold-soulsilver/Bruno.png",
+      "spriteGame": "gen4-heartgold-soulsilver"
+    },
+    {
+      "id": "agatha-gen3",
+      "name": "사천왕 국화",
+      "region": "관동",
+      "sprite": "assets/trainers/agatha-gen3.png",
+      "source": "https://github.com/smogon/sprites/blob/master/src/_uncategorized/canonical/trainers/gen3/firered-leafgreen/Agatha.png",
+      "downloadSource": "https://raw.githubusercontent.com/smogon/sprites/master/src/_uncategorized/canonical/trainers/gen3/firered-leafgreen/Agatha.png",
+      "spriteGame": "gen3-firered-leafgreen"
+    },
+    {
+      "id": "lance-gen3",
+      "name": "사천왕 목호",
+      "region": "관동",
+      "sprite": "assets/trainers/lance-gen3.png",
+      "source": "https://github.com/smogon/sprites/blob/master/src/_uncategorized/canonical/trainers/gen3/firered-leafgreen/Lance.png",
+      "downloadSource": "https://raw.githubusercontent.com/smogon/sprites/master/src/_uncategorized/canonical/trainers/gen3/firered-leafgreen/Lance.png",
+      "spriteGame": "gen3-firered-leafgreen"
+    },
+    {
+      "id": "will",
+      "name": "사천왕 일목",
+      "region": "성도",
+      "sprite": "assets/trainers/will.png",
+      "source": "https://github.com/smogon/sprites/blob/master/src/_uncategorized/canonical/trainers/gen4/heartgold-soulsilver/Will.png",
+      "downloadSource": "https://raw.githubusercontent.com/smogon/sprites/master/src/_uncategorized/canonical/trainers/gen4/heartgold-soulsilver/Will.png",
+      "spriteGame": "gen4-heartgold-soulsilver"
+    },
+    {
+      "id": "koga",
+      "name": "사천왕 독수",
+      "region": "성도",
+      "sprite": "assets/trainers/koga.png",
+      "source": "https://github.com/smogon/sprites/blob/master/src/_uncategorized/canonical/trainers/gen4/heartgold-soulsilver/Koga.png",
+      "downloadSource": "https://raw.githubusercontent.com/smogon/sprites/master/src/_uncategorized/canonical/trainers/gen4/heartgold-soulsilver/Koga.png",
+      "spriteGame": "gen4-heartgold-soulsilver"
+    },
+    {
+      "id": "karen",
+      "name": "사천왕 카렌",
+      "region": "성도",
+      "sprite": "assets/trainers/karen.png",
+      "source": "https://github.com/smogon/sprites/blob/master/src/_uncategorized/canonical/trainers/gen4/heartgold-soulsilver/Karen.png",
+      "downloadSource": "https://raw.githubusercontent.com/smogon/sprites/master/src/_uncategorized/canonical/trainers/gen4/heartgold-soulsilver/Karen.png",
+      "spriteGame": "gen4-heartgold-soulsilver"
+    },
+    {
+      "id": "sidney-gen3",
+      "name": "사천왕 혁진",
+      "region": "호연",
+      "sprite": "assets/trainers/sidney-gen3.png",
+      "source": "https://github.com/smogon/sprites/blob/master/src/_uncategorized/canonical/trainers/gen3/ruby-sapphire/Sidney.png",
+      "downloadSource": "https://raw.githubusercontent.com/smogon/sprites/master/src/_uncategorized/canonical/trainers/gen3/ruby-sapphire/Sidney.png",
+      "spriteGame": "gen3-ruby-sapphire"
+    },
+    {
+      "id": "phoebe-gen3",
+      "name": "사천왕 회연",
+      "region": "호연",
+      "sprite": "assets/trainers/phoebe-gen3.png",
+      "source": "https://github.com/smogon/sprites/blob/master/src/_uncategorized/canonical/trainers/gen3/ruby-sapphire/Phoebe.png",
+      "downloadSource": "https://raw.githubusercontent.com/smogon/sprites/master/src/_uncategorized/canonical/trainers/gen3/ruby-sapphire/Phoebe.png",
+      "spriteGame": "gen3-ruby-sapphire"
+    },
+    {
+      "id": "glacia-gen3",
+      "name": "사천왕 미혜",
+      "region": "호연",
+      "sprite": "assets/trainers/glacia-gen3.png",
+      "source": "https://github.com/smogon/sprites/blob/master/src/_uncategorized/canonical/trainers/gen3/ruby-sapphire/Glacia.png",
+      "downloadSource": "https://raw.githubusercontent.com/smogon/sprites/master/src/_uncategorized/canonical/trainers/gen3/ruby-sapphire/Glacia.png",
+      "spriteGame": "gen3-ruby-sapphire"
+    },
+    {
+      "id": "drake-gen3",
+      "name": "사천왕 권수",
+      "region": "호연",
+      "sprite": "assets/trainers/drake-gen3.png",
+      "source": "https://github.com/smogon/sprites/blob/master/src/_uncategorized/canonical/trainers/gen3/ruby-sapphire/Drake.png",
+      "downloadSource": "https://raw.githubusercontent.com/smogon/sprites/master/src/_uncategorized/canonical/trainers/gen3/ruby-sapphire/Drake.png",
+      "spriteGame": "gen3-ruby-sapphire"
+    },
+    {
+      "id": "aaron",
+      "name": "사천왕 충호",
+      "region": "신오",
+      "sprite": "assets/trainers/aaron.png",
+      "source": "https://github.com/smogon/sprites/blob/master/src/_uncategorized/canonical/trainers/gen4/diamond-pearl/Aaron.png",
+      "downloadSource": "https://raw.githubusercontent.com/smogon/sprites/master/src/_uncategorized/canonical/trainers/gen4/diamond-pearl/Aaron.png",
+      "spriteGame": "gen4-diamond-pearl"
+    },
+    {
+      "id": "bertha",
+      "name": "사천왕 들국화",
+      "region": "신오",
+      "sprite": "assets/trainers/bertha.png",
+      "source": "https://github.com/smogon/sprites/blob/master/src/_uncategorized/canonical/trainers/gen4/diamond-pearl/Bertha.png",
+      "downloadSource": "https://raw.githubusercontent.com/smogon/sprites/master/src/_uncategorized/canonical/trainers/gen4/diamond-pearl/Bertha.png",
+      "spriteGame": "gen4-diamond-pearl"
+    },
+    {
+      "id": "flint",
+      "name": "사천왕 대엽",
+      "region": "신오",
+      "sprite": "assets/trainers/flint.png",
+      "source": "https://github.com/smogon/sprites/blob/master/src/_uncategorized/canonical/trainers/gen4/diamond-pearl/Flint.png",
+      "downloadSource": "https://raw.githubusercontent.com/smogon/sprites/master/src/_uncategorized/canonical/trainers/gen4/diamond-pearl/Flint.png",
+      "spriteGame": "gen4-diamond-pearl"
+    },
+    {
+      "id": "lucian",
+      "name": "사천왕 오엽",
+      "region": "신오",
+      "sprite": "assets/trainers/lucian.png",
+      "source": "https://github.com/smogon/sprites/blob/master/src/_uncategorized/canonical/trainers/gen4/diamond-pearl/Lucian.png",
+      "downloadSource": "https://raw.githubusercontent.com/smogon/sprites/master/src/_uncategorized/canonical/trainers/gen4/diamond-pearl/Lucian.png",
+      "spriteGame": "gen4-diamond-pearl"
+    },
+    {
+      "id": "im-hangyu",
+      "name": "으어으어 임한규",
+      "region": "스페셜",
+      "sprite": "assets/trainers/im-hangyu.svg",
+      "special": true
+    }
+  ],
+  "legendRules": {
+    "trigger": "5th trainer encounter while special shop is closed",
+    "retry": "same legend on next trainer after loss or fleeing",
+    "teamSize": 4,
+    "specialTeam": {
+      "name": "으어으어 임한규",
+      "speciesId": 88,
+      "size": 6
+    },
+    "level": "highest owned level +2..4, capped at100",
+    "shop": "one successful move purchase, then reset cycle; no ticket stacking",
+    "appearanceChance": "uniform among 16 legends"
+  }
 }
