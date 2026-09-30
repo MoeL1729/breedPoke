@@ -43,9 +43,6 @@ ZIP 압축을 풀어 내용물을 기존 GitHub 저장소에 덮어쓰세요. **
 - 알기술 상점은 역사적 기록을 합친 게임 전용 유료 학습 시스템. 원작의 교배나 세대 간 전송 제약 전체를 모사하지 않으며, 미구현 기술은 판매하지 않음.
 - 검증: `npm test` 130개 통과. 실제 브라우저의 화면/터치 동작은 이번 작업에서 확인하지 못함.
 
-### GitHub Pages 반영
-
-기존 2.8.2에서 **index.html, style.css, app.js, engine.js, abilities.js, 새 파일 field.js, data/pokedex.json, data/items.json**을 같은 위치에 덮어쓰기 후 커밋합니다. Assets는 이번 패치에서 변경하지 않았습니다. 전체 ZIP을 압축 해제해 내용물을 올려도 됩니다. ZIP 파일 자체를 올리는 방식은 아닙니다. 저장 키를 유지하므로 같은 주소에서 기존 친구·포인트를 이어받습니다.
 
 ### 데이터 재생성
 
@@ -72,16 +69,6 @@ ZIP 압축을 풀어 내용물을 기존 GitHub 저장소에 덮어쓰세요. **
 
 2.2.1에서 업데이트할 때는 **index.html, app.js, engine.js**를 교체하면 됩니다. 이번 패치는 assets 변경이 없습니다.
 
-## GitHub Pages 업데이트
-
-1. 게임에서 저장 백업을 내려받습니다. 기존 사이트 데이터는 삭제하지 마세요.
-2. 배포 ZIP을 압축 해제합니다. **ZIP 자체가 아니라 그 안의 파일·폴더**를 기존 저장소의 같은 위치에 덮어씁니다.
-3. `index.html`, `app.js`, `engine.js`, `style.css`, `data/`, **`assets/` 전체**를 포함해 커밋합니다. 이번 버전에는 `assets/shiny/` 이미지 320장이 새로 필요합니다.
-4. 기존 Pages 배포가 끝나면 같은 주소에서 새로고침합니다. 예전 화면이 보이면 강력 새로고침을 사용합니다.
-
-처음 설정한다면 Settings → Pages에서 배포 브랜치와 `index.html`이 있는 루트 경로를 선택합니다. 이미 Pages가 동작하면 설정 변경은 필요 없습니다. 이 ZIP을 받는 것만으로 원격 저장소가 변경되지는 않습니다.
-
-로컬 실행: 이 폴더에서 `python3 -m http.server 8000` 후 `http://localhost:8000`을 엽니다. HTML 파일을 직접 더블클릭하면 JSON 로딩이 제한될 수 있습니다. 실행 중 게임 데이터 API 호출은 없으며, 글꼴은 네트워크 실패 시 시스템 글꼴로 대체됩니다.
 
 ## 2.2 밸런스·3세대 스타터 추가
 
@@ -216,13 +203,6 @@ ZIP 압축을 풀어 내용물을 기존 GitHub 저장소에 덮어쓰세요. **
 
 현재 게임에는 성별·헤롱헤롱·더블배틀·벽·대타출동 시스템이 없습니다. 투쟁심·헤롱헤롱바디·힐러·프렌드가드·텔레파시·틈새포착 등 관련 특성의 해당 효과는 적용되지 않으며 게임 상세 화면에 이를 안내합니다. 발광의 필드 효과도 없습니다. 급소의 세부 랭크 무시, 다단 공격의 개별 부가 효과·타격별 재계산 등 복잡한 원작 처리 전체를 재현한 대전 시뮬레이터는 아닙니다. 부가효과 확률·다단 공격 분포 등 기존 간소화 규칙이 남아 있습니다.
 
-### GitHub Pages 업데이트
-
-압축을 풀고 기존 저장소 루트에 다음 파일을 덮어쓰거나 추가하세요:
-`index.html`, `app.js`, `engine.js`, **`abilities.js`(신규)**, `style.css`, **`data/pokedex.json`**.
-기존 2.4.0 사용자라면 이번 업데이트는 이미지 변경이 없으므로 assets를 다시 올리지 않아도 됩니다. 그보다 이전 버전이라면 전체 파일을 업로드하세요. node_modules나 빌드 서버는 필요하지 않습니다. 이 패키지는 GitHub에 자동 커밋되지 않습니다.
-
-데이터 재생성: `python scripts/build_abilities.py`. 생성된 JSON은 게임에 포함되어 실행 중 외부 API를 호출하지 않습니다. 특성 데이터 캐시는 .data-cache/abilities에 저장됩니다.
 
 출처: [PokeAPI](https://pokeapi.co/docs/v2/#abilities), [특성 슬롯 변경 이력](https://github.com/PokeAPI/pokeapi/blob/master/data/v2/csv/pokemon_abilities_past.csv), [특성캡슐](https://bulbapedia.bulbagarden.net/wiki/Ability_Capsule), [특성패치](https://bulbapedia.bulbagarden.net/wiki/Ability_Patch), [Pokémon Showdown 7세대 규칙 참고](https://github.com/smogon/pokemon-showdown/blob/master/data/mods/gen7/abilities.ts).
 
