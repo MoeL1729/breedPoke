@@ -225,3 +225,8 @@ body.battle-mode .roster strong,body.battle-mode .roster small{text-align:left}
 .result-summary{background:#edf1e5;border-radius:8px;padding:1px 8px;margin:10px 0;}
 .battle-result>button{width:100%;min-height:44px;}
 @media(max-height:600px){.result-art{height:95px;}.result-art img{height:85px;width:85px;}.battle-result h2{font-size:28px;margin:2px;}.result-copy{margin:5px 0;}.result-summary{margin:5px 0;}}
+
+/* 2.10.4: hidden intro must not retain mobile animation layers. */
+#trainer-intro[hidden],.scene:not(.trainer-introducing)>#trainer-intro{display:none!important;visibility:hidden!important;pointer-events:none!important;}
+#trainer-intro[hidden] *{animation:none!important;filter:none!important;}
+#intro-trainer-image:not([src]){display:none!important;}
