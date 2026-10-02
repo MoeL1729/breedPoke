@@ -1,5 +1,5 @@
-import {FIELD_ITEMS,initField,side,grounded,clearVolatile,resetOnSwitch,entryHazards,fieldMove,afterFieldHit,tickField,fieldResidual} from './field.js?v=pokegotchi-2101';
-import {HIDDEN_CHANCE,DROP_CHANCE,options,abilityOf,abilitySlug,assignAbility,abilityItemTarget,weather,changeStage,statusImmune,inflict,transform,enter,leave,statFactor,accuracyFactor,blockMove,damageFactor,sheerForce,afterHit,endAbilities,trapped} from './abilities.js?v=pokegotchi-2101';
+import {FIELD_ITEMS,initField,side,grounded,clearVolatile,resetOnSwitch,entryHazards,fieldMove,afterFieldHit,tickField,fieldResidual} from './field.js?v=pokegotchi-2103';
+import {HIDDEN_CHANCE,DROP_CHANCE,options,abilityOf,abilitySlug,assignAbility,abilityItemTarget,weather,changeStage,statusImmune,inflict,transform,enter,leave,statFactor,accuracyFactor,blockMove,damageFactor,sheerForce,afterHit,endAbilities,trapped} from './abilities.js?v=pokegotchi-2103';
 export {HIDDEN_CHANCE,DROP_CHANCE,abilityOf,abilityItemTarget};
 // Pure game rules. Canonical data lives in data/pokedex.json; care rules are game-specific.
 export const clamp=(n,a,b)=>Math.min(b,Math.max(a,n));
@@ -275,6 +275,7 @@ export class Game{
  }
  act(moveId,random=Math.random){
  const b=this.s.battle;if(!b)throw Error('전투 중이 아닙니다.');const p=b.player,e=b.enemy;
+ if(p.hp<=0)throw Error('다음에 싸울 포켓몬을 선택하세요.');
  if(moveId!==-1&&!this.usable(p).some(m=>m.id===moveId))throw Error('이 기술은 사용할 수 없습니다.');if(moveId===-1&&!this.canStruggle(p))throw Error('사용 가능한 기술이 남아 있어요.');
  const em=this.enemyMove(random),pm=p.charge??moveId,priority=id=>id===-1?0:this.db.moves[id].priority;
  const logs=[],events=[];b.acted=[];p.flinch=false;e.flinch=false;p.guard=false;e.guard=false;
@@ -286,6 +287,7 @@ export class Game{
  }
  battleItem(id,random=Math.random){
  const b=this.s.battle,item=ITEMS[id];if(!b||!item||!['ball','medicine'].includes(item.kind)||!(this.s.inventory[id]>0))throw Error('사용할 도구가 없습니다.');
+ if(b.player.hp<=0)throw Error('다음에 싸울 포켓몬을 선택하세요.');
  const logs=[],events=[];
  if(item.kind==='medicine'){
   if(!medicineUsable(item,b.player))throw Error('지금은 회복이 필요하지 않아요.');
@@ -305,27 +307,38 @@ export class Game{
  }
  battleSwitch(id,random=Math.random){
  const b=this.s.battle;if(!b||id===this.s.active||!this.s.pets[id]||this.s.pets[id].hp<=0)throw Error('교대할 수 없는 친구예요.');
- if(b.player.heldItem!=='shed-shell'&&(b.player.bound||b.player.ingrain||trapped(this,b.player,b.enemy)))throw Error('상대 특성 때문에 교대할 수 없어요.');leave(this,b.player);this.syncPlayer();resetOnSwitch(b.player);
+ const replacement=b.player.hp<=0;
+ if(!replacement&&b.player.heldItem!=='shed-shell'&&(b.player.bound||b.player.ingrain||trapped(this,b.player,b.enemy)))throw Error('상대 특성 때문에 교대할 수 없어요.');if(!replacement)leave(this,b.player);this.syncPlayer();resetOnSwitch(b.player);
  if(b.player.transformed){b.player.moves=b.player.originalMoves??this.pet.moves.map(id=>({id,pp:this.db.moves[id].pp}));for(const key of ['transformed','transformedSpeciesId','transformedShiny','typeIds','copiedStats','originalMoves'])delete b.player[key];}
  b.bench??={};b.bench[this.s.active]=b.player;
  this.s.active=Number(id);b.activeId=this.s.active;b.player=b.bench[id]??this.fighter(this.pet);delete b.bench[id];
  b.player.stages={attack:0,defense:0,'special-attack':0,'special-defense':0,speed:0,accuracy:0,evasion:0};b.player.confused=0;b.player.seeded=false;b.player.charge=null;b.player.guard=false;b.enemy.guard=false;
- b.enemy.bound=null;clearVolatile(b.player);const logs=[`${this.species.name}, 부탁해!`],events=[];b.acted=[];b.player.flinch=false;b.enemy.flinch=false;entryHazards(this,b.player,logs);if(b.player.hp>0)enter(this,b.player,b.enemy,logs);this.attack(b.enemy,b.player,this.enemyMove(random),'enemy',logs,events,random);return this.endTurn(logs,events,random);
+ b.enemy.bound=null;clearVolatile(b.player);const logs=[`${this.species.name}, 부탁해!`],events=[];b.acted=[];b.player.flinch=false;b.enemy.flinch=false;entryHazards(this,b.player,logs);if(b.player.hp>0)enter(this,b.player,b.enemy,logs);this.syncPlayer();
+ if(replacement||b.player.hp<=0)return this.resolveBattle(logs,events);
+ this.attack(b.enemy,b.player,this.enemyMove(random),'enemy',logs,events,random);return this.endTurn(logs,events,random);
  }
  endTurn(logs,events,random=Math.random,dropRandom=Math.random){
  const b=this.s.battle,p=b.player,e=b.enemy;
  for(const [a,d] of [[p,e],[e,p]]){if(a.hp<=0)continue;if((a.status==='poison'||a.status==='burn')&&!this.hasAbility(a,'magic-guard')&&!(a.status==='poison'&&this.hasAbility(a,'poison-heal'))){const n=Math.max(1,Math.floor(a.maxHp*(a.status==='poison'&&a.toxic?Math.min(15,a.toxicCounter=(a.toxicCounter??0)+1)/16:1/(a.status==='burn'?16:8))));a.hp=Math.max(0,a.hp-n);logs.push(`${this.db.pokemon[a.speciesId].name}: ${a.status==='poison'?'독':'화상'}으로 ${n} 피해!`);}if(a.seeded&&a.hp>0&&d.hp>0&&!this.hasAbility(a,'magic-guard')){const n=Math.min(a.hp,Math.max(1,Math.floor(a.maxHp/8)));a.hp-=n;const heal=Math.floor(n*(d.heldItem==='big-root'?1.3:1));d.hp=this.hasAbility(a,'liquid-ooze')?(this.hasAbility(d,'magic-guard')?d.hp:Math.max(0,d.hp-heal)):Math.min(d.maxHp,d.hp+heal);logs.push('씨뿌리기가 체력을 흡수했어요.');}if(a.hp>0&&a.hp<a.maxHp&&a.heldItem==='leftovers'){a.hp=Math.min(a.maxHp,a.hp+Math.max(1,Math.floor(a.maxHp/16)));logs.push('먹다남은음식으로 HP를 회복했어요.');}if(a.hp>0&&a.status==='poison'&&this.hasAbility(a,'poison-heal'))a.hp=Math.min(a.maxHp,a.hp+Math.max(1,Math.floor(a.maxHp/8)));fieldResidual(this,a,d,logs);endAbilities(this,a,d,logs,random);this.heldRecovery(a,logs);}
  if(b.weatherTurns>0&&--b.weatherTurns===0){b.weather=null;logs.push('날씨가 원래대로 돌아왔어요.');}
  tickField(this,logs);delete b.acted;this.syncPlayer();b.turn++;
- while(p.hp>0&&b.enemy.hp<=0&&b.kind==='trainer'&&b.enemyIndex<b.enemyTeam.length-1&&b.turn<=this.battleTurnLimit(b)){
+ return this.resolveBattle(logs,events,dropRandom);
+ }
+ availableReplacements(){const b=this.s.battle;return Object.keys(this.s.pets).map(Number).filter(id=>id!==this.s.active&&(b?.bench?.[id]?.hp??this.s.pets[id].hp)>0);}
+ resolveBattle(logs=[],events=[],dropRandom=Math.random){
+ const b=this.s.battle,p=b.player;this.syncPlayer();
+ while((p.hp>0||this.availableReplacements().length)&&b.enemy.hp<=0&&b.kind==='trainer'&&b.enemyIndex<b.enemyTeam.length-1&&b.turn<=this.battleTurnLimit(b)){
   b.earnedXP+=battleExperience(b.enemy.level);b.enemyIndex++;p.bound=null;
   const next=b.enemyTeam[b.enemyIndex];b.enemy=b.enemyBench?.[b.enemyIndex]??this.fighter(next);b.originalEnemy=structuredClone(next);clearVolatile(b.enemy);
   logs.push(`${b.trainerName}의 ${this.db.pokemon[next.speciesId].name} 등장! (${b.enemyIndex+1}/${b.enemyTeam.length})`);
   entryHazards(this,b.enemy,logs);if(b.enemy.hp>0){enter(this,b.enemy,p,logs);b.enemy.enteredTurn=b.turn-1;}
  }
  const currentEnemy=b.enemy;
- let result=null;if(p.hp<=0)result='lose';else if(currentEnemy.hp<=0)result='win';else if(b.turn>this.battleTurnLimit(b))result='draw';
- if(result){this.s.battle=null;if(result==='win'){this.pet.wins++;if(b.kind==='trainer')this.s.trainerWins++;if(b.legend){this.s.legendWins++;this.s.specialShopOpen=true;this.s.trainerCycle=0;this.s.pendingLegendId=null;this.s.eggOffers={};logs.push('레전드전 승리! 특별상점이 열렸어요. 기술 1개를 구매할 수 있어요!');}const reward=b.legend?(b.specialLegend?900:600):b.kind==='trainer'?240:80;this.s.coins+=reward;const xp=(b.earnedXP??0)+battleExperience(currentEnemy.level);this.log(`전투 승리! 경험치 +${xp}, 모험 포인트 +${reward} P`);this.awardXP(xp);logs.push(`승리! 경험치 ${xp}와 ${reward} P를 받았어요.`);this.rollDrop(logs,dropRandom);}else if(result==='lose'){this.pet.friendship=clamp(this.pet.friendship-3,0,255);this.log('전투에서 졌어요. 다른 친구와 다시 도전하거나 회복하세요.');logs.push('전투 중인 친구가 기절해 쉼터로 돌아왔어요.');}else{this.log('긴 전투를 무승부로 마쳤어요.');logs.push(`${this.battleTurnLimit(b)}턴이 지나 무승부로 마쳤어요.`);}}
+ let result=null;const reserves=this.availableReplacements();
+ if(p.hp<=0&&!reserves.length)result='lose';else if(currentEnemy.hp<=0)result='win';else if(b.turn>this.battleTurnLimit(b))result='draw';
+ b.awaitingReplacement=!result&&p.hp<=0;
+ if(b.awaitingReplacement)logs.push('포켓몬이 쓰러졌어요. 다음에 싸울 친구를 선택하세요.');
+ if(result){this.s.battle=null;if(result==='win'){this.pet.wins++;if(b.kind==='trainer')this.s.trainerWins++;if(b.legend){this.s.legendWins++;this.s.specialShopOpen=true;this.s.trainerCycle=0;this.s.pendingLegendId=null;this.s.eggOffers={};logs.push('레전드전 승리! 특별상점이 열렸어요. 기술 1개를 구매할 수 있어요!');}const reward=b.legend?(b.specialLegend?900:600):b.kind==='trainer'?240:80;this.s.coins+=reward;const xp=(b.earnedXP??0)+battleExperience(currentEnemy.level);this.log(`전투 승리! 경험치 +${xp}, 모험 포인트 +${reward} P`);this.awardXP(xp);logs.push(`승리! 경험치 ${xp}와 ${reward} P를 받았어요.`);this.rollDrop(logs,dropRandom);}else if(result==='lose'){this.pet.friendship=clamp(this.pet.friendship-3,0,255);this.log('전투에서 졌어요. 다른 친구와 다시 도전하거나 회복하세요.');logs.push('모든 포켓몬이 쓰러져 쉼터로 돌아왔어요.');}else{this.log('긴 전투를 무승부로 마쳤어요.');logs.push(`${this.battleTurnLimit(b)}턴이 지나 무승부로 마쳤어요.`);}}
  return {logs,events,result};
  }
  rollDrop(logs,random=Math.random){
