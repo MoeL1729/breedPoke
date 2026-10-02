@@ -1,5 +1,5 @@
-import {FIELD_ITEMS,initField,side,grounded,clearVolatile,resetOnSwitch,entryHazards,fieldMove,afterFieldHit,tickField,fieldResidual} from './field.js?v=pokegotchi-2104';
-import {HIDDEN_CHANCE,DROP_CHANCE,options,abilityOf,abilitySlug,assignAbility,abilityItemTarget,weather,changeStage,statusImmune,inflict,transform,enter,leave,statFactor,accuracyFactor,blockMove,damageFactor,sheerForce,afterHit,endAbilities,trapped} from './abilities.js?v=pokegotchi-2104';
+import {FIELD_ITEMS,initField,side,grounded,clearVolatile,resetOnSwitch,entryHazards,fieldMove,afterFieldHit,tickField,fieldResidual} from './field.js?v=pokegotchi-2105';
+import {HIDDEN_CHANCE,DROP_CHANCE,options,abilityOf,abilitySlug,assignAbility,abilityItemTarget,weather,changeStage,statusImmune,inflict,transform,enter,leave,statFactor,accuracyFactor,blockMove,damageFactor,sheerForce,afterHit,endAbilities,trapped} from './abilities.js?v=pokegotchi-2105';
 export {HIDDEN_CHANCE,DROP_CHANCE,abilityOf,abilityItemTarget};
 // Pure game rules. Canonical data lives in data/pokedex.json; care rules are game-specific.
 export const clamp=(n,a,b)=>Math.min(b,Math.max(a,n));
@@ -141,6 +141,7 @@ export class Game{
   constructor(db,state){this.db=db;this.s=state?migrateState(db,state):freshState(db);this.s.trainerWins??=0;
     if(this.s.specialShopOpen===undefined){this.s.specialShopOpen=this.s.trainerWins>=5;this.s.trainerCycle=this.s.specialShopOpen?0:Math.min(4,this.s.trainerWins);}
     this.s.trainerCycle??=0;this.s.pendingLegendId??=null;this.s.legendWins??=0;this.s.eggOffers??={};this.s.battleCount??=0;this.s.lastBattleTrainer??=false;
+    if(!this.s.battle&&this.s.pendingLegendId&&this.s.lastBattleTrainer&&this.s.journal?.[0]?.text==='전투에서 졌어요. 다른 친구와 다시 도전하거나 회복하세요.'){this.s.trainerCycle=0;this.s.pendingLegendId=null;}
     if(!this.s.hatched&&Object.keys(this.s.pets).length===0)this.s.day=1;
     for(const p of Object.values(this.s.pets))if(p.abilitySlot===undefined)assignAbility(db,p);
     const b=this.s.battle;if(b){initField(this);
@@ -338,7 +339,7 @@ export class Game{
  if(p.hp<=0&&!reserves.length)result='lose';else if(currentEnemy.hp<=0)result='win';else if(b.turn>this.battleTurnLimit(b))result='draw';
  b.awaitingReplacement=!result&&p.hp<=0;
  if(b.awaitingReplacement)logs.push('포켓몬이 쓰러졌어요. 다음에 싸울 친구를 선택하세요.');
- if(result){this.s.battle=null;if(result==='win'){this.pet.wins++;if(b.kind==='trainer')this.s.trainerWins++;if(b.legend){this.s.legendWins++;this.s.specialShopOpen=true;this.s.trainerCycle=0;this.s.pendingLegendId=null;this.s.eggOffers={};logs.push('레전드전 승리! 특별상점이 열렸어요. 기술 1개를 구매할 수 있어요!');}const reward=b.legend?(b.specialLegend?900:600):b.kind==='trainer'?240:80;this.s.coins+=reward;const xp=(b.earnedXP??0)+battleExperience(currentEnemy.level);this.log(`전투 승리! 경험치 +${xp}, 모험 포인트 +${reward} P`);this.awardXP(xp);logs.push(`승리! 경험치 ${xp}와 ${reward} P를 받았어요.`);this.rollDrop(logs,dropRandom);}else if(result==='lose'){this.pet.friendship=clamp(this.pet.friendship-3,0,255);this.log('전투에서 졌어요. 다른 친구와 다시 도전하거나 회복하세요.');logs.push('모든 포켓몬이 쓰러져 쉼터로 돌아왔어요.');}else{this.log('긴 전투를 무승부로 마쳤어요.');logs.push(`${this.battleTurnLimit(b)}턴이 지나 무승부로 마쳤어요.`);}}
+ if(result){this.s.battle=null;if(result==='win'){this.pet.wins++;if(b.kind==='trainer')this.s.trainerWins++;if(b.legend){this.s.legendWins++;this.s.specialShopOpen=true;this.s.trainerCycle=0;this.s.pendingLegendId=null;this.s.eggOffers={};logs.push('레전드전 승리! 특별상점이 열렸어요. 기술 1개를 구매할 수 있어요!');}const reward=b.legend?(b.specialLegend?900:600):b.kind==='trainer'?240:80;this.s.coins+=reward;const xp=(b.earnedXP??0)+battleExperience(currentEnemy.level);this.log(`전투 승리! 경험치 +${xp}, 모험 포인트 +${reward} P`);this.awardXP(xp);logs.push(`승리! 경험치 ${xp}와 ${reward} P를 받았어요.`);this.rollDrop(logs,dropRandom);}else if(result==='lose'){if(b.legend){this.s.trainerCycle=0;this.s.pendingLegendId=null;logs.push('레전드 도전 카운트가 0으로 초기화됐어요. 다음 5번째 트레이너에게 다시 도전하세요.');}this.pet.friendship=clamp(this.pet.friendship-3,0,255);this.log('전투에서 졌어요. 다른 친구와 다시 도전하거나 회복하세요.');logs.push('모든 포켓몬이 쓰러져 쉼터로 돌아왔어요.');}else{this.log('긴 전투를 무승부로 마쳤어요.');logs.push(`${this.battleTurnLimit(b)}턴이 지나 무승부로 마쳤어요.`);}}
  return {logs,events,result};
  }
  rollDrop(logs,random=Math.random){
