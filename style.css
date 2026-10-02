@@ -230,3 +230,5 @@ body.battle-mode .roster strong,body.battle-mode .roster small{text-align:left}
 #trainer-intro[hidden],.scene:not(.trainer-introducing)>#trainer-intro{display:none!important;visibility:hidden!important;pointer-events:none!important;}
 #trainer-intro[hidden] *{animation:none!important;filter:none!important;}
 #intro-trainer-image:not([src]){display:none!important;}
+
+.box-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:10px 0;}.box-card{min-width:0;border:2px solid #94a7b0;border-radius:8px;padding:8px;background:#f4f6e8;display:flex;flex-direction:column;gap:5px;text-align:center;}.box-card img{width:64px;height:64px;object-fit:contain;align-self:center;}.box-card strong{overflow-wrap:anywhere;font-size:13px;}.box-card small{font-size:11px;overflow-wrap:anywhere;}.box-grid button{padding:8px 4px;min-height:44px;font-size:12px;}.box-card button{margin-top:auto;}@media(max-width:480px){.box-grid{grid-template-columns:repeat(2,minmax(0,1fr));}}

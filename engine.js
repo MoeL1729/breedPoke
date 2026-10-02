@@ -1,5 +1,5 @@
-import {FIELD_ITEMS,initField,side,grounded,clearVolatile,resetOnSwitch,entryHazards,fieldMove,afterFieldHit,tickField,fieldResidual} from './field.js?v=pokegotchi-2106';
-import {HIDDEN_CHANCE,DROP_CHANCE,options,abilityOf,abilitySlug,assignAbility,abilityItemTarget,weather,changeStage,statusImmune,inflict,transform,enter,leave,statFactor,accuracyFactor,blockMove,damageFactor,sheerForce,afterHit,endAbilities,trapped} from './abilities.js?v=pokegotchi-2106';
+import {FIELD_ITEMS,initField,side,grounded,clearVolatile,resetOnSwitch,entryHazards,fieldMove,afterFieldHit,tickField,fieldResidual} from './field.js?v=pokegotchi-2110';
+import {HIDDEN_CHANCE,DROP_CHANCE,options,abilityOf,abilitySlug,assignAbility,abilityItemTarget,weather,changeStage,statusImmune,inflict,transform,enter,leave,statFactor,accuracyFactor,blockMove,damageFactor,sheerForce,afterHit,endAbilities,trapped} from './abilities.js?v=pokegotchi-2110';
 export {HIDDEN_CHANCE,DROP_CHANCE,abilityOf,abilityItemTarget};
 // Pure game rules. Canonical data lives in data/pokedex.json; care rules are game-specific.
 export const clamp=(n,a,b)=>Math.min(b,Math.max(a,n));
@@ -22,6 +22,7 @@ const FIXED_DAMAGE=new Set(['seismic-toss','night-shade','dragon-rage','sonic-bo
 export function makePet(db,id,level=db.starterLevel??7,random=Math.random){return {...(id===265?{evolutionBranch:random()<.5?266:268}:{}),abilitySlot:1,speciesId:id,level,exp:db.experience[db.pokemon[id].growthRateId][level],hp:statsFor(db,id,level).hp,hunger:75,friendship:db.pokemon[id].baseFriendship,moves:initialMoves(db,id,level),wins:0,originSpeciesId:id,shiny:false,heldItem:null};}
 export const SHINY_CHANCE=0.04;
 export const MAX_PARTY=3;
+export const MAX_BOX=120;
 export const TRAINER_CHANCE=.2;
 export const TRAINERS=[{"id":"lass-gen4","name":"짧은치마 소녀","sprite":"assets/trainers/lass-gen4.png"},{"id":"falkner","name":"체육관 관장 비상","sprite":"assets/trainers/falkner.png"},{"id":"bugsy","name":"체육관 관장 호일","sprite":"assets/trainers/bugsy.png"},{"id":"whitney","name":"체육관 관장 꼭두","sprite":"assets/trainers/whitney.png"},{"id":"morty","name":"체육관 관장 유빈","sprite":"assets/trainers/morty.png"},{"id":"chuck","name":"체육관 관장 사도","sprite":"assets/trainers/chuck.png"},{"id":"jasmine","name":"체육관 관장 규리","sprite":"assets/trainers/jasmine.png"},{"id":"pryce","name":"체육관 관장 류옹","sprite":"assets/trainers/pryce.png"},{"id":"clair","name":"체육관 관장 이향","sprite":"assets/trainers/clair.png"},{"id":"brock","name":"체육관 관장 웅","sprite":"assets/trainers/brock.png"},{"id":"misty","name":"체육관 관장 이슬","sprite":"assets/trainers/misty.png"},{"id":"ltsurge","name":"체육관 관장 마티스","sprite":"assets/trainers/ltsurge.png"},{"id":"erika","name":"체육관 관장 민화","sprite":"assets/trainers/erika.png"},{"id":"janine","name":"체육관 관장 도희","sprite":"assets/trainers/janine.png"},{"id":"sabrina","name":"체육관 관장 초련","sprite":"assets/trainers/sabrina.png"},{"id":"blaine","name":"체육관 관장 강연","sprite":"assets/trainers/blaine.png"},{"id":"blue","name":"체육관 관장 그린","sprite":"assets/trainers/blue.png"}];
 export const LEGEND_TRAINERS=[{"id":"lorelei-gen3","name":"사천왕 칸나","region":"관동","sprite":"assets/trainers/lorelei-gen3.png"},{"id":"bruno","name":"사천왕 시바","region":"관동·성도","sprite":"assets/trainers/bruno.png"},{"id":"agatha-gen3","name":"사천왕 국화","region":"관동","sprite":"assets/trainers/agatha-gen3.png"},{"id":"lance-gen3","name":"사천왕 목호","region":"관동","sprite":"assets/trainers/lance-gen3.png"},{"id":"will","name":"사천왕 일목","region":"성도","sprite":"assets/trainers/will.png"},{"id":"koga","name":"사천왕 독수","region":"성도","sprite":"assets/trainers/koga.png"},{"id":"karen","name":"사천왕 카렌","region":"성도","sprite":"assets/trainers/karen.png"},{"id":"sidney-gen3","name":"사천왕 혁진","region":"호연","sprite":"assets/trainers/sidney-gen3.png"},{"id":"phoebe-gen3","name":"사천왕 회연","region":"호연","sprite":"assets/trainers/phoebe-gen3.png"},{"id":"glacia-gen3","name":"사천왕 미혜","region":"호연","sprite":"assets/trainers/glacia-gen3.png"},{"id":"drake-gen3","name":"사천왕 권수","region":"호연","sprite":"assets/trainers/drake-gen3.png"},{"id":"aaron","name":"사천왕 충호","region":"신오","sprite":"assets/trainers/aaron.png"},{"id":"bertha","name":"사천왕 들국화","region":"신오","sprite":"assets/trainers/bertha.png"},{"id":"flint","name":"사천왕 대엽","region":"신오","sprite":"assets/trainers/flint.png"},{"id":"lucian","name":"사천왕 오엽","region":"신오","sprite":"assets/trainers/lucian.png"},{"id":"im-hangyu","name":"으어으어 임한규","region":"스페셜","sprite":"assets/trainers/im-hangyu.svg","special":true}];
@@ -96,7 +97,7 @@ export function captureChance(db,f,ball='poke-ball',boost=true){
  return Math.min(1,original*(boost?1.1:1));
 }
 const startingBag=()=>({'poke-ball':5,potion:3});
-export function freshState(db){return {schemaVersion:3,trainerCycle:0,specialShopOpen:false,pendingLegendId:null,legendWins:0,trainerWins:0,eggOffers:{},battleCount:0,lastBattleTrainer:false,hatched:false,active:null,day:1,fatigue:0,coins:100,pets:{},inventory:startingBag(),journal:[{day:1,text:'작은 알 하나가 도착했어요. 몬스터볼 5개와 상처약 3개도 함께 왔어요.'}],battle:null,pending:[],progressing:false};}
+export function freshState(db){return {schemaVersion:3,trainerCycle:0,specialShopOpen:false,pendingLegendId:null,legendWins:0,trainerWins:0,eggOffers:{},battleCount:0,lastBattleTrainer:false,hatched:false,active:null,day:1,fatigue:0,coins:100,pets:{},box:{},inventory:startingBag(),journal:[{day:1,text:'작은 알 하나가 도착했어요. 몬스터볼 5개와 상처약 3개도 함께 왔어요.'}],battle:null,pending:[],progressing:false};}
 export function migrateState(db,state){
  if(state?.schemaVersion===3)return state;
  if(!state||![1,2].includes(state.schemaVersion))throw Error('지원하지 않는 저장 버전입니다.');
@@ -119,9 +120,12 @@ export function validateState(db,input){
  if(s.specialShopOpen!==undefined&&typeof s.specialShopOpen!=='boolean')fail();
  if(s.legendWins!==undefined&&(!Number.isSafeInteger(s.legendWins)||s.legendWins<0))fail();
  if(s.pendingLegendId!=null&&!LEGEND_TRAINERS.some(t=>t.id===s.pendingLegendId))fail();
+ const box=s.box??{};if(!box||typeof box!=='object'||Array.isArray(box)||Object.keys(box).length>MAX_BOX)fail();
+ if(Object.keys(box).some(id=>Object.hasOwn(s.pets,id)))fail();
  const entries=Object.entries(s.pets);
  if(entries.length>MAX_PARTY||s.hatched!==!!entries.length||(s.hatched?(!Number.isSafeInteger(s.active)||!s.pets[s.active]):s.active!==null))fail();
- for(const [id,p] of entries){
+ if(!entries.length&&Object.keys(box).length)fail();
+ for(const [id,p] of [...entries,...Object.entries(box)]){
   if(!/^\d+$/.test(id)||!Number.isSafeInteger(Number(id))||Number(id)<1)fail();
   const sp=db.pokemon[p?.speciesId],origin=db.pokemon[p?.originSpeciesId];
   if(!sp||!origin||!origin.family.includes(p.speciesId)||typeof p.shiny!=='boolean'||(p.heldItem!==null&&ITEMS[p.heldItem]?.kind!=='held')||!Number.isInteger(p.level)||p.level<1||p.level>100||!Array.isArray(p.moves)||p.moves.length<1||p.moves.length>4||new Set(p.moves).size!==p.moves.length||p.moves.some(m=>!db.moves[m]))fail();
@@ -138,12 +142,12 @@ export function validateState(db,input){
  return s;
 }
 export class Game{
-  constructor(db,state){this.db=db;this.s=state?migrateState(db,state):freshState(db);this.s.trainerWins??=0;
+  constructor(db,state){this.db=db;this.s=state?migrateState(db,state):freshState(db);this.s.trainerWins??=0;this.s.box??={};
     if(this.s.specialShopOpen===undefined){this.s.specialShopOpen=this.s.trainerWins>=5;this.s.trainerCycle=this.s.specialShopOpen?0:Math.min(4,this.s.trainerWins);}
     this.s.trainerCycle??=0;this.s.pendingLegendId??=null;this.s.legendWins??=0;this.s.eggOffers??={};this.s.battleCount??=0;this.s.lastBattleTrainer??=false;
     if(!this.s.battle&&this.s.pendingLegendId&&this.s.lastBattleTrainer&&this.s.journal?.[0]?.text==='전투에서 졌어요. 다른 친구와 다시 도전하거나 회복하세요.'){this.s.trainerCycle=0;this.s.pendingLegendId=null;}
     if(!this.s.hatched&&Object.keys(this.s.pets).length===0)this.s.day=1;
-    for(const p of Object.values(this.s.pets))if(p.abilitySlot===undefined)assignAbility(db,p);
+    for(const p of [...Object.values(this.s.pets),...Object.values(this.s.box)])if(p.abilitySlot===undefined)assignAbility(db,p);
     const b=this.s.battle;if(b){initField(this);
       for(const p of b.enemyTeam??[])if(p.abilitySlot===undefined)assignAbility(db,p);
       if(b.originalEnemy?.abilitySlot===undefined&&b.originalEnemy){if(b.enemyTeam?.[b.enemyIndex??0])b.originalEnemy.abilitySlot=b.enemyTeam[b.enemyIndex??0].abilitySlot;else assignAbility(db,b.originalEnemy);}
@@ -160,8 +164,28 @@ export class Game{
  if(!this.ready())throw Error('전투와 성장을 마친 뒤 놓아줄 수 있어요.');
  const p=this.pet;if(p.heldItem&&(this.s.inventory[p.heldItem]??0)>=999)throw Error('돌려받을 도구의 가방 공간이 부족해요.');if(p.heldItem)this.s.inventory[p.heldItem]=(this.s.inventory[p.heldItem]??0)+1;
  this.log(`${this.species.name}를 놓아주었어요.`);delete this.s.pets[this.s.active];
+ if(!Object.keys(this.s.pets).length&&Object.keys(this.s.box).length){const id=Object.keys(this.s.box)[0];this.s.pets[id]=this.s.box[id];delete this.s.box[id];this.log('박스의 친구가 새로운 동행이 되었어요.');}
  const ids=Object.keys(this.s.pets);this.s.active=ids.length?Number(ids[0]):null;this.s.hatched=!!ids.length;if(!ids.length)this.s.day=1;return this.s;
  }
+  captureSpace(){return Object.keys(this.s.pets).length<MAX_PARTY||Object.keys(this.s.box).length<MAX_BOX;}
+  deposit(id){
+   if(!this.ready())throw Error('전투와 성장을 마친 뒤 박스를 이용하세요.');
+   if(!Object.hasOwn(this.s.pets,id))throw Error('동행 중인 친구를 선택하세요.');
+   if(Object.keys(this.s.pets).length<=1)throw Error('최소 한 마리는 함께해야 해요. 박스 친구와 교환할 수 있어요.');
+   if(Object.keys(this.s.box).length>=MAX_BOX)throw Error('박스가 가득 찼어요.');
+   this.s.box[id]=this.s.pets[id];delete this.s.pets[id];
+   if(this.s.active===Number(id))this.s.active=Number(Object.keys(this.s.pets)[0]);
+   this.log(`${this.db.pokemon[this.s.box[id].speciesId].name}를 박스에 맡겼어요.`);
+  }
+  withdraw(id,replaceId=null){
+   if(!this.ready())throw Error('전투와 성장을 마친 뒤 박스를 이용하세요.');
+   if(!Object.hasOwn(this.s.box,id))throw Error('박스의 친구를 선택하세요.');
+   if(replaceId!==null&&!Object.hasOwn(this.s.pets,replaceId))throw Error('교환할 동행 친구를 선택하세요.');
+   if(replaceId===null&&Object.keys(this.s.pets).length>=MAX_PARTY)throw Error('동행은 최대 3마리예요. 교환할 친구를 선택하세요.');
+   const pet=this.s.box[id];delete this.s.box[id];
+   if(replaceId!==null){this.s.box[replaceId]=this.s.pets[replaceId];delete this.s.pets[replaceId];if(this.s.active===Number(replaceId))this.s.active=Number(id);}
+   this.s.pets[id]=pet;this.log(`${this.db.pokemon[pet.speciesId].name}를 박스에서 데려왔어요.`);
+  }
   setEvolutionContext(timeOfDay,locationId){
     if(!this.ready())throw Error('진행 중인 일을 먼저 마쳐주세요.');
     if(!['day','night'].includes(timeOfDay)||![null,8,10,48].includes(locationId))throw Error('진화 환경이 올바르지 않습니다.');
@@ -295,13 +319,13 @@ export class Game{
   this.s.inventory[id]--;const before=b.player.hp;b.player.hp=Math.min(b.player.maxHp,b.player.hp+(item.heal??0));cureWith(item,b.player);logs.push(`${item.name}: HP ${b.player.hp-before} 회복${item.cure?' · 상태 치료':''}!`);
  }else{
   if(b.kind==='trainer')throw Error('트레이너의 포켓몬은 포획할 수 없어요.');
-  if(Object.keys(this.s.pets).length>=MAX_PARTY)throw Error('3마리가 함께하고 있어요. 쉼터에서 자리를 비워주세요.');
+  if(!this.captureSpace())throw Error('동행과 박스가 모두 가득 찼어요.');
   if(b.enemy.hp<=0)throw Error('기절한 상대는 포획할 수 없어요.');
   const chance=captureChance(this.db,b.enemy,id);this.s.inventory[id]--;logs.push(`${item.name}을 던졌어요!`);
   if(random()<chance){
    const pet=structuredClone(b.originalEnemy??makePet(this.db,b.enemy.speciesId,b.enemy.level));pet.hp=b.enemy.hp;pet.shiny=b.enemy.shiny??false;pet.heldItem=null;
-   const key=Math.max(0,...Object.keys(this.s.pets).map(Number))+1;this.syncPlayer();this.s.pets[key]=pet;this.s.battle=null;this.log(`${pet.shiny?'★ 이로치 ':''}${this.db.pokemon[pet.speciesId].name} 포획 성공!`);logs.push(this.s.journal[0].text);
-   return {logs,events,result:'caught',caughtId:key};
+   const key=Math.max(0,...Object.keys(this.s.pets).map(Number),...Object.keys(this.s.box).map(Number))+1;const sentToBox=Object.keys(this.s.pets).length>=MAX_PARTY;this.syncPlayer();(sentToBox?this.s.box:this.s.pets)[key]=pet;this.s.battle=null;this.log(`${pet.shiny?'★ 이로치 ':''}${this.db.pokemon[pet.speciesId].name} 포획 성공!`);logs.push(this.s.journal[0].text);if(sentToBox){const message='동행이 3마리라 포획한 친구를 박스로 보냈어요.';this.log(message);logs.push(message);}
+   return {logs,events,result:'caught',caughtId:key,sentToBox};
   }logs.push('아쉽게도 볼에서 빠져나왔어요!');
  }
  b.acted=[];b.player.flinch=false;b.enemy.flinch=false;b.player.guard=false;b.enemy.guard=false;this.attack(b.enemy,b.player,this.enemyMove(random),'enemy',logs,events,random);return this.endTurn(logs,events,random);
