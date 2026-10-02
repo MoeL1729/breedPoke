@@ -236,3 +236,30 @@ body.battle-mode .roster strong,body.battle-mode .roster small{text-align:left}
 /* Collection and legendary expeditions share the existing responsive dialog. */
 .reward-choices,.expedition-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;}.reward-choices button{padding:18px 12px;min-height:120px;}.reward-choices strong,.reward-choices span{display:block;}.reward-choices span{font-size:12px;line-height:1.7;margin-top:10px;}.collection-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;margin:15px 0;}.collection-grid button{min-width:0;padding:6px 3px;}.collection-grid img{width:64px;height:64px;object-fit:contain;}.collection-grid small,.collection-grid strong,.collection-grid span{display:block;font-size:11px;}.uncollected img{filter:grayscale(1);opacity:.4;}.collected{background:#e0efd0;}.map-progress{padding:12px;background:#f3ebd5;border:2px solid #b3a16a;border-radius:8px;}.map-progress progress{width:100%;height:14px;}.map-progress p{font-size:12px;}.expedition-card{position:relative;min-width:0;padding:12px;text-align:center;border:2px solid #627d88;border-radius:10px;background:#dfece1;overflow:hidden;}.expedition-card img{display:block;width:96px;height:96px;object-fit:contain;margin:auto;}.expedition-card h3{font-size:16px;margin:5px;}.expedition-card p{font-size:12px;min-height:30px;}.expedition-card button{width:100%;min-height:44px;font-size:12px;}.expedition-symbol{position:absolute;top:6px;left:10px;font-size:25px;opacity:.6;}.tone-fire{background:#f6ddbf;}.tone-ice{background:#d6eff6;}.tone-electric{background:#f6edb5;}.tone-psychic{background:#e6d9ed;}.tone-water{background:#d6e4f6;}.expedition-wallet{font-weight:700;}.scene[data-expedition]:not([data-expedition=""]){border:3px solid #ddbd55;}.scene[data-expedition="fire"]{background-color:#ad553b;background-blend-mode:multiply;}.scene[data-expedition="psychic"]{background-color:#80649e;background-blend-mode:multiply;}.scene[data-expedition="ice"],.scene[data-expedition="water"]{background-color:#8fb8d9;background-blend-mode:luminosity;}
 @media(max-width:480px){.collection-grid{grid-template-columns:repeat(3,minmax(0,1fr));}.expedition-card{padding:8px;}.expedition-card h3{font-size:14px;}.reward-choices{grid-template-columns:1fr;}.reward-choices button{min-height:90px;padding:12px;}}
+
+/* 2.13.1: protect the arena from roster growth and size intro content within it. */
+body.battle-mode .layout{height:auto;min-height:calc(100svh - 16px);grid-template-rows:auto minmax(0,1fr)}
+body.battle-mode .scene.fighting{min-height:280px}
+.trainer-intro{display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(0,1fr) auto auto;justify-items:center;align-items:center;gap:6px;padding:10px;box-sizing:border-box}
+.intro-actor{align-self:stretch;justify-content:center;min-height:0;min-width:0;width:100%;height:100%;gap:14px}
+.intro-actor img{width:auto;height:100%;max-height:240px;max-width:65%;min-height:0;object-fit:contain}
+.intro-vs{font-size:clamp(28px,6vw,52px);flex:none}
+.intro-copy{box-sizing:border-box;max-width:100%;padding:6px 12px;min-width:0}
+.intro-copy small{font-size:8px;letter-spacing:1px;margin-bottom:3px}
+.intro-copy strong{display:block;font-size:clamp(15px,3.6vw,22px);line-height:1.25}
+.intro-copy p{font-size:11px;margin:3px 0 0}
+#skip-trainer-intro{position:relative;inset:auto;min-height:36px;padding:5px 12px;justify-self:end;margin:0}
+@media(max-width:740px){
+ .roster-panel{grid-template-columns:minmax(0,1fr);gap:5px}
+ .roster-panel .roster,body.battle-mode .roster{display:flex;flex-direction:column;flex-wrap:nowrap;gap:4px}
+ .roster-panel .roster button,body.battle-mode .roster button{flex:0 0 auto;width:100%;min-height:40px;padding:3px 7px;gap:7px;box-sizing:border-box}
+ .roster-panel .roster button>span,body.battle-mode .roster button>span{display:flex;flex:1;align-items:center;justify-content:space-between;gap:8px;min-width:0}
+ .roster-panel .roster strong,body.battle-mode .roster strong{font-size:11px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+ .roster-panel .roster small,body.battle-mode .roster small{font-size:9px;flex-shrink:0;margin:0}
+ body.battle-mode .play-column{grid-template-rows:minmax(360px,1fr) auto}
+ body.battle-mode .game-top{height:auto;min-height:28px;padding:4px 8px;box-sizing:border-box}
+ body.battle-mode .trainer-info{min-width:0;flex-wrap:wrap}
+ body.battle-mode .trainer-info strong{overflow-wrap:anywhere}
+ body.battle-mode .trainer-team{flex-wrap:wrap}
+ .intro-actor img{width:auto;height:100%;max-height:180px;max-width:65%}
+}
