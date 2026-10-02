@@ -1,5 +1,5 @@
-import {FIELD_ITEMS,initField,side,grounded,clearVolatile,resetOnSwitch,entryHazards,fieldMove,afterFieldHit,tickField,fieldResidual} from './field.js?v=pokegotchi-2105';
-import {HIDDEN_CHANCE,DROP_CHANCE,options,abilityOf,abilitySlug,assignAbility,abilityItemTarget,weather,changeStage,statusImmune,inflict,transform,enter,leave,statFactor,accuracyFactor,blockMove,damageFactor,sheerForce,afterHit,endAbilities,trapped} from './abilities.js?v=pokegotchi-2105';
+import {FIELD_ITEMS,initField,side,grounded,clearVolatile,resetOnSwitch,entryHazards,fieldMove,afterFieldHit,tickField,fieldResidual} from './field.js?v=pokegotchi-2106';
+import {HIDDEN_CHANCE,DROP_CHANCE,options,abilityOf,abilitySlug,assignAbility,abilityItemTarget,weather,changeStage,statusImmune,inflict,transform,enter,leave,statFactor,accuracyFactor,blockMove,damageFactor,sheerForce,afterHit,endAbilities,trapped} from './abilities.js?v=pokegotchi-2106';
 export {HIDDEN_CHANCE,DROP_CHANCE,abilityOf,abilityItemTarget};
 // Pure game rules. Canonical data lives in data/pokedex.json; care rules are game-specific.
 export const clamp=(n,a,b)=>Math.min(b,Math.max(a,n));
@@ -371,7 +371,7 @@ export class Game{
  }
  eggStock(random=Math.random){
   if(!this.pet||!this.s.specialShopOpen)return {eggs:[],bonus:[]};
-  const sp=this.species,key=String(sp.id),pool=sp.bonusMoves??[],old=this.s.eggOffers[key];
+  const sp=this.species,key='legendUniversal',normalTMs=new Set(Object.values(this.db.tms??{}).filter(t=>t.enabled).map(t=>t.moveId)),pool=(this.db.eggShopRules?.supportedMoveIds??[]).filter(id=>this.db.moves[id]&&!normalTMs.has(id)),old=this.s.eggOffers[key];
   if(!old||old.day!==this.s.day||!Array.isArray(old.moves)||old.moves.length!==Math.min(6,pool.length)||new Set(old.moves).size!==old.moves.length||old.moves.some(id=>!pool.includes(id))){
    const choices=[...pool];for(let i=choices.length-1;i>0;i--){const j=Math.floor(random()*(i+1));[choices[i],choices[j]]=[choices[j],choices[i]];}this.s.eggOffers[key]={day:this.s.day,moves:choices.slice(0,6)};
   }
