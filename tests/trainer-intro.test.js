@@ -17,15 +17,15 @@ test('all 17 trainer appearances have local PNG files and persist in battle save
 });
 for(const mode of ['timeout','skip','reduced'])test(`trainer intro ${mode}: locks, exits, restores focus, never replays`,async()=>{
  const nodes={};let timer,delay,saves=0,focused=null,cleared=false;
- const $=id=>nodes[id]??=( {hidden:true,classList:{add(){},remove(){},toggle(){}},focus(){focused=id;},querySelector(){return {focus(){focused='move';}}} });
+ const $=id=>nodes[id]??=( {hidden:true,classList:{add(){},remove(){},toggle(){}},focus(){focused=id;},removeAttribute(name){delete this[name];},querySelectorAll(){return [];},querySelector(){return {focus(){focused='move';}}} });
  const context=vm.createContext({$,TRAINERS,LEGEND_TRAINERS,busy:false,save(){saves++;},render(){},window:{matchMedia(){return {matches:mode==='reduced'};}},setTimeout(fn,ms){timer=fn;delay=ms;return 1;},clearTimeout(){cleared=true;}});
- vm.runInContext(code.slice(code.indexOf('async function playTrainerIntro('),code.indexOf('async function startBattle(')),context);
+ vm.runInContext(code.slice(code.indexOf('function clearTrainerIntro('),code.indexOf('async function startBattle(')),context);
  const b={kind:'trainer',trainerId:TRAINERS[0].id,trainerName:TRAINERS[0].name,introSeen:false};
  const pending=context.playTrainerIntro(b);
  assert.equal(context.busy,true);assert.equal($('trainer-intro').hidden,false);assert.equal(delay,mode==='reduced'?900:2600);assert.equal(saves,1);
  if(mode==='skip')$('skip-trainer-intro').onclick();else timer();
  await pending;assert.equal(context.busy,false);assert.equal($('trainer-intro').hidden,true);assert.equal(focused,'move');assert.equal($('skip-trainer-intro').onclick,null);
- if(mode==='skip')assert.ok(cleared);
+ assert.ok(cleared);assert.equal($('intro-trainer-image').src,undefined);assert.equal($('intro-trainer-image').onerror,null);assert.equal($('intro-trainer-name').textContent,'');
  await context.playTrainerIntro(b);assert.equal(saves,1);
  await context.playTrainerIntro({kind:'wild'});assert.equal(saves,1);
 });
