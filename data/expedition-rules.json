@@ -1,0 +1,31 @@
+{
+  "legendaryIds": [
+    144,
+    145,
+    146,
+    150,
+    243,
+    244,
+    245,
+    249,
+    250
+  ],
+  "mythicalIds": [
+    151,
+    251
+  ],
+  "minimumPartyLevel": 40,
+  "levelOffset": 5,
+  "levelCap": 100,
+  "fragmentCost": 3,
+  "collectionThreshold": 50,
+  "ancientMapUses": 1,
+  "mythicalSelection": "Mew OR Celebi, permanent choice",
+  "reward": "choose one: existing paid special move shop OR one expedition fragment",
+  "retry": "next in-game day; site persists; immutable generated individual",
+  "capture": "one per species for save lifetime; full party automatically sends to box",
+  "rematchRewardPoints": 300,
+  "shinyChance": 0.04,
+  "hiddenAbilityChance": 0.03,
+  "collectionMigration": "current party and box species plus recorded originSpeciesId; released history unavailable"
+}

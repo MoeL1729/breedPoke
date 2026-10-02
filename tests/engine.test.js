@@ -7,7 +7,7 @@ function rollFor(id){const table=db.hatchTable;let prior=0;for(const row of tabl
 function started(id=25,level=10){const g=new Game(db);g.hatch(()=>rollFor(id===25?172:id));if(id===25){g.s.pets[25]=g.pet;delete g.s.pets[g.s.active];g.s.active=25;}g.s.pets[id]={...makePet(db,id,level),ivs:g.pet.ivs};return g;}
 function settle(g,accept=true){let count=0;while(g.s.pending.length||g.s.progressing){assert.ok(++count<500);const e=g.s.pending[0]??g.progress();if(!e)break;if(e.kind==='move')g.chooseMove(0);else g.chooseEvolution(accept);}return g;}
 test('snapshot uses HGSS learnsets and historically accurate examples',()=>{
- assert.equal(db.meta.versionGroupId,10);assert.equal(Object.keys(db.pokemon).length,289);assert.equal(Object.keys(db.moves).length,423);
+ assert.equal(db.meta.versionGroupId,10);assert.equal(Object.keys(db.pokemon).length,300);assert.equal(Object.keys(db.moves).length,428);
  assert.equal(db.moves[33].power,35);assert.equal(db.moves[33].accuracy,95);assert.equal(db.moves[85].power,95);assert.equal(db.moves[204].typeId,1);
  assert.equal(db.pokemon[25].stats.defense,40);assert.equal(db.pokemon[26].stats.speed,110);assert.equal(db.pokemon[51].stats.attack,100);
  assert.deepEqual(db.pokemon[173].typeIds,[1]);assert.equal(db.pokemon[4].evolutions[0].minLevel,16);assert.equal(db.pokemon[5].evolutions[0].minLevel,36);

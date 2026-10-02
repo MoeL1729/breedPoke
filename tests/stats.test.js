@@ -23,7 +23,7 @@ test('actual damage responds to the matching defensive stat only',()=>{
 });
 test('six current stats grow with level; existing saved IVs and progress survive',()=>{
  assert.deepEqual(statsFor(db,25,50),{hp:95,attack:60,defense:45,'special-attack':55,'special-defense':55,speed:95});
- const g=new Game(db);g.hatch(()=>0,()=>1,()=>.5);g.s.pets[g.s.active]=makePet(db,236,15);g.pet.ivs={attack:31,defense:0};g.pet.hp=7;
+ const g=new Game(db);g.hatch(()=>0,()=>1,()=>.5);g.s.pets[g.s.active]=makePet(db,236,15);g.pet.ivs={attack:31,defense:0};g.pet.hp=7;g.recordCaught(236);
  const raw=JSON.stringify(g.s),loaded=new Game(db,validateState(db,JSON.parse(raw)));assert.equal(JSON.stringify(loaded.s),raw);
  assert.ok(statsFor(db,236,15,g.pet.ivs).attack>statsFor(db,236,15,g.pet.ivs).defense);
 });
