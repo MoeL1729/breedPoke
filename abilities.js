@@ -90,6 +90,7 @@ export function accuracyFactor(g,a,d,m){
 }
 export function blockMove(g,a,d,m,logs){
  if(m.slug==='struggle'||m.target==='user')return false;
+ if(m.damageClass!=='status'&&active(g,d,a,'wonder-guard')&&g.effectiveness(m,d,a)<=1){a.lastHit={effect:0,immune:true};announce(g,d,logs,'효과가 굉장한 공격 외에는 막았어요.');return true;}
  const type=m.typeId;
  let blocked=type===5&&active(g,d,a,'levitate')&&!g.isGrounded?.(d)||m.flags?.includes('sound')&&active(g,d,a,'soundproof')||m.flags?.includes('powder')&&(active(g,d,a,'overcoat')||g.fighterTypes(d).includes(12));
  if(type===11&&active(g,d,a,'water-absorb','dry-skin')||type===13&&active(g,d,a,'volt-absorb')){heal(d,d.maxHp/4);blocked=true;}

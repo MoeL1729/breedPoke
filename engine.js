@@ -1,11 +1,12 @@
-import {FIELD_ITEMS,initField,side,grounded,clearVolatile,resetOnSwitch,entryHazards,fieldMove,afterFieldHit,tickField,fieldResidual} from './field.js?v=pokegotchi-2131';
-import {HIDDEN_CHANCE,DROP_CHANCE,options,abilityOf,abilitySlug,assignAbility,abilityItemTarget,weather,changeStage,statusImmune,inflict,transform,enter,leave,statFactor,accuracyFactor,blockMove,damageFactor,sheerForce,afterHit,endAbilities,trapped} from './abilities.js?v=pokegotchi-2131';
+import {FIELD_ITEMS,initField,side,grounded,clearVolatile,resetOnSwitch,entryHazards,fieldMove,afterFieldHit,tickField,fieldResidual} from './field.js?v=pokegotchi-2140';
+import {HIDDEN_CHANCE,DROP_CHANCE,options,abilityOf,abilitySlug,assignAbility,abilityItemTarget,weather,changeStage,statusImmune,inflict,transform,enter,leave,statFactor,accuracyFactor,blockMove,damageFactor,sheerForce,afterHit,endAbilities,trapped} from './abilities.js?v=pokegotchi-2140';
 export {HIDDEN_CHANCE,DROP_CHANCE,abilityOf,abilityItemTarget};
 // Pure game rules. Canonical data lives in data/pokedex.json; care rules are game-specific.
 export const clamp=(n,a,b)=>Math.min(b,Math.max(a,n));
 export function statsFor(db,id,level,ivs={}){
   const s=db.pokemon[id].stats, out={};
   for(const [k,v] of Object.entries(s)) out[k]=Math.floor((2*v+(ivs?.[k]??0))*level/100)+(k==='hp'?level+10:5);
+  if(Number(id)===292)out.hp=1;
   return out;
 }
 export function initialMoves(db,id,level){
@@ -133,6 +134,7 @@ export function validateState(db,input){
  if(s.specialShopOpen!==undefined&&typeof s.specialShopOpen!=='boolean')fail();
  if(s.legendWins!==undefined&&(!Number.isSafeInteger(s.legendWins)||s.legendWins<0))fail();
  if(s.pendingLegendId!=null&&!LEGEND_TRAINERS.some(t=>t.id===s.pendingLegendId))fail();
+ if(s.growthQueue!==undefined&&(!Array.isArray(s.growthQueue)||!s.growthQueue.length||new Set(s.growthQueue).size!==s.growthQueue.length||s.growthQueue.some(id=>!Number.isSafeInteger(id)||!s.pets[id])||s.growthQueue[0]!==s.active||!s.pets[s.growthReturnActive]))fail();
  const box=s.box??{};if(!box||typeof box!=='object'||Array.isArray(box)||Object.keys(box).length>MAX_BOX)fail();
  if(Object.keys(box).some(id=>Object.hasOwn(s.pets,id)))fail();
  if(s.caughtSpecies!==undefined&&(!Array.isArray(s.caughtSpecies)||new Set(s.caughtSpecies).size!==s.caughtSpecies.length||s.caughtSpecies.some(id=>!Number.isInteger(id)||!db.pokemon[id])))fail();
@@ -151,6 +153,7 @@ export function validateState(db,input){
   const sp=db.pokemon[p?.speciesId],origin=db.pokemon[p?.originSpeciesId];
   if(!sp||!origin||!origin.family.includes(p.speciesId)||typeof p.shiny!=='boolean'||(p.heldItem!==null&&ITEMS[p.heldItem]?.kind!=='held')||!Number.isInteger(p.level)||p.level<1||p.level>100||!Array.isArray(p.moves)||p.moves.length<1||p.moves.length>4||new Set(p.moves).size!==p.moves.length||p.moves.some(m=>!db.moves[m]))fail();
   if(![p.hp,p.hunger,p.friendship,p.exp,p.wins].every(Number.isFinite)||p.hp<0||p.hp>statsFor(db,p.speciesId,p.level,p.ivs).hp||p.hunger<0||p.hunger>100||p.friendship<0||p.friendship>255||p.exp<0||p.wins<0)fail();
+  if(p.beauty!==undefined&&(!Number.isInteger(p.beauty)||p.beauty<0||p.beauty>255))fail();
   if(p.abilitySlot!==undefined&&![1,2,3].includes(p.abilitySlot))fail();
   if(p.originSpeciesId===265&&![266,268].includes(p.evolutionBranch))fail();
   if(p.ivs&&Object.entries(p.ivs).some(([k,v])=>!['attack','defense'].includes(k)||!Number.isInteger(v)||v<0||v>31))fail();
@@ -221,7 +224,7 @@ export class Game{
    if(!e.captured&&!this.captureSpace())throw Error('포획할 동행 또는 박스 자리를 비워주세요.');
    const enemy=structuredClone(e.pet);enemy.hp=statsFor(this.db,enemy.speciesId,enemy.level,enemy.ivs).hp;
    this.s.fatigue+=35;this.pet.hunger=clamp(this.pet.hunger-18,0,100);e.lastAttemptDay=this.s.day;
-   const b=this.s.battle={kind:'expedition',expeditionId:id,rematch:e.captured,location:site.place,field:{player:{},enemy:{}},player:this.fighter(this.pet),enemy:this.fighter(enemy),originalEnemy:enemy,activeId:this.s.active,turn:1};
+   const b=this.s.battle={kind:'expedition',expeditionId:id,rematch:e.captured,location:site.place,field:{player:{},enemy:{}},player:this.fighter(this.pet),enemy:this.fighter(enemy),originalEnemy:enemy,activeId:this.s.active,participants:[this.s.active],turn:1};
    const logs=[];enter(this,b.player,b.enemy,logs);enter(this,b.enemy,b.player,logs);b.abilityLogs=logs;this.log(`${site.place}에서 ${this.db.pokemon[id].name}와 만났어요!`);return b;
   }
   captureSpace(){return Object.keys(this.s.pets).length<MAX_PARTY||Object.keys(this.s.box).length<MAX_BOX;}
@@ -250,6 +253,7 @@ export class Game{
   }
   evolutionEligible(e){
     const p=this.pet,c=this.s.evolutionContext??{timeOfDay:'day',locationId:null};
+    if(e.minBeauty&&(p.beauty??0)<e.minBeauty)return false;
     if(e.personalityBranch&&p.evolutionBranch!==e.personalityBranch)return false;
     if(e.trigger!=='level-up'||p.level<(e.minLevel||1)||p.friendship<(e.minFriendship||0))return false;
     if(e.timeOfDay&&e.timeOfDay!==c.timeOfDay)return false;
@@ -259,13 +263,33 @@ export class Game{
   }
   switch(id){if(!this.ready()||!this.s.pets[id])return false;this.s.active=Number(id);return true;}
   can(action){if(!this.ready())return '지금 진행 중인 일을 먼저 마쳐주세요.';if(action==='battle'){if(this.s.fatigue+35>100)return '오늘은 많이 피곤해요. 잠을 자고 다시 도전하세요.';if(this.pet.hp<=0)return 'HP를 회복한 뒤 전투할 수 있어요.';if(this.pet.hunger<15)return '배가 고파요. 먼저 밥을 먹여주세요.';}if(action==='feed'&&this.s.fatigue+15>100)return '식사할 기운도 부족해요. 잠을 자고 내일 먹어요.';return null;}
-  feed(){const e=this.can('feed');if(e)throw Error(e);const p=this.pet;this.s.fatigue+=15;p.hunger=clamp(p.hunger+35,0,100);p.hp=clamp(p.hp+Math.ceil(statsFor(this.db,p.speciesId,p.level,p.ivs).hp*.3),0,statsFor(this.db,p.speciesId,p.level,p.ivs).hp);p.friendship=clamp(p.friendship+12,0,255);this.log(`${this.species.name}에게 밥을 주었어요. 친밀도 +12`);}
+  feed(){const e=this.can('feed');if(e)throw Error(e);const p=this.pet;this.s.fatigue+=15;p.hunger=clamp(p.hunger+35,0,100);p.hp=clamp(p.hp+Math.ceil(statsFor(this.db,p.speciesId,p.level,p.ivs).hp*.3),0,statsFor(this.db,p.speciesId,p.level,p.ivs).hp);p.friendship=clamp(p.friendship+12,0,255);if(p.speciesId===349){p.beauty=clamp((p.beauty??0)+20,0,255);this.log(`빈티나의 아름다움 +20 (${p.beauty}/170)`);}this.log(`${this.species.name}에게 밥을 주었어요. 친밀도 +12`);}
   sleep(){const e=this.can('sleep');if(e)throw Error(e);this.s.day++;this.s.fatigue=0;for(const p of Object.values(this.s.pets)){p.hp=statsFor(this.db,p.speciesId,p.level,p.ivs).hp;p.hunger=clamp(p.hunger-12,0,100);}this.pet.friendship=clamp(this.pet.friendship+3,0,255);this.log('친구가 푹 잤어요. 피로와 HP를 회복하고 새 아침을 맞았어요.');}
   nextXp(p=this.pet){return p.level>=100?null:this.db.experience[this.db.pokemon[p.speciesId].growthRateId][p.level+1];}
   awardXP(amount){this.pet.exp=Math.min(this.db.experience[this.species.growthRateId][100],this.pet.exp+amount);this.s.progressing=true;this.progress();}
+  awardBattleXP(amount,b,logs=[]){
+    const ids=[...new Set([...(b.participants??Object.keys(b.bench??{}).map(Number)),b.activeId].map(Number))]
+      .filter(id=>this.s.pets[id]&&this.s.pets[id].hp>0);
+    const share=ids.length?Math.floor(amount/ids.length):0;
+    if(!share)return;
+    this.s.growthReturnActive=this.s.active;
+    this.s.growthQueue=ids;
+    for(const id of ids){const p=this.s.pets[id],sp=this.db.pokemon[p.speciesId];
+      p.exp=Math.min(this.db.experience[sp.growthRateId][100],p.exp+share);
+      const message=`${sp.name}: 경험치 +${share} (생존한 참여 포켓몬 ${ids.length}마리 균등 분배)`;
+      logs.push(message);this.log(message);
+    }
+    this.s.active=ids[0];this.s.progressing=true;this.progress();
+  }
   progress(){
     if(this.s.pending.length)return this.s.pending[0];
-    const p=this.pet;if(p.level>=100||p.exp<this.nextXp()){this.s.progressing=false;return null;}
+    const p=this.pet;if(p.level>=100||p.exp<this.nextXp()){
+      if(this.s.growthQueue?.length){this.s.growthQueue.shift();if(this.s.growthQueue.length){this.s.active=this.s.growthQueue[0];return this.progress();}
+        if(this.s.pets[this.s.growthReturnActive])this.s.active=this.s.growthReturnActive;
+        delete this.s.growthQueue;delete this.s.growthReturnActive;
+      }
+      this.s.progressing=false;return null;
+    }
     const oldHP=statsFor(this.db,p.speciesId,p.level,p.ivs).hp;p.level++;p.hp=clamp(p.hp+statsFor(this.db,p.speciesId,p.level,p.ivs).hp-oldHP,0,statsFor(this.db,p.speciesId,p.level,p.ivs).hp);p.friendship=clamp(p.friendship+5,0,255);this.log(`${this.species.name}, 레벨 ${p.level} 달성!`);
     for(const m of this.species.learnset.filter(m=>m.level===p.level&&!p.moves.includes(m.moveId)))if(!this.s.pending.some(e=>e.kind==='move'&&e.moveId===m.moveId))this.s.pending.push({kind:'move',moveId:m.moveId,level:p.level});
     const e=[...this.species.evolutions].sort((a,b)=>Number(!!b.locationId)-Number(!!a.locationId)).find(e=>this.evolutionEligible(e));
@@ -273,7 +297,13 @@ export class Game{
     return this.s.pending[0]??this.progress();
   }
   chooseMove(slot){const event=this.s.pending[0];if(event?.kind!=='move')throw Error('학습할 기술이 없습니다.');const p=this.pet;if(slot!==null){if(p.moves.includes(event.moveId))throw Error('이미 알고 있는 기술입니다.');if(p.moves.length<4)p.moves.push(event.moveId);else{if(!Number.isInteger(slot)||slot<0||slot>3)throw Error('교체할 기술을 선택하세요.');p.moves[slot]=event.moveId;}this.log(`${this.species.name}, ${this.db.moves[event.moveId].name} 습득!`);}else this.log(`${this.db.moves[event.moveId].name} 배우기를 건너뛰었어요.`);this.s.pending.shift();return this.progress();}
-  evolveTo(to){const p=this.pet,old=this.species,oldHp=statsFor(this.db,p.speciesId,p.level,p.ivs).hp;p.speciesId=to;this.recordCaught(to);p.hp=clamp(p.hp+statsFor(this.db,to,p.level,p.ivs).hp-oldHp,0,statsFor(this.db,to,p.level,p.ivs).hp);this.log(`${old.name} → ${this.species.name}! 진화했어요.`);}
+  evolveTo(to){const p=this.pet,old=this.species,oldHp=statsFor(this.db,p.speciesId,p.level,p.ivs).hp;p.speciesId=to;this.recordCaught(to);p.hp=clamp(p.hp+statsFor(this.db,to,p.level,p.ivs).hp-oldHp,0,statsFor(this.db,to,p.level,p.ivs).hp);this.log(`${old.name} → ${this.species.name}! 진화했어요.`);
+    if(old.id===290&&to===291&&Object.keys(this.s.pets).length<MAX_PARTY&&(this.s.inventory['poke-ball']??0)>0){
+      const key=Math.max(0,...Object.keys(this.s.pets).map(Number),...Object.keys(this.s.box).map(Number))+1;
+      const shed={...structuredClone(p),speciesId:292,hp:1,heldItem:null,abilitySlot:1};
+      this.s.inventory['poke-ball']--;this.s.pets[key]=shed;this.recordCaught(292);this.log('빈 동행 칸과 몬스터볼 1개에 껍질몬이 찾아왔어요!');
+    }
+  }
   chooseEvolution(accept){const e=this.s.pending[0];if(e?.kind!=='evolution')throw Error('진화할 수 없습니다.');this.s.pending.shift();if(accept){this.evolveTo(e.to);const learned=this.species.learnset.filter(m=>m.level===this.pet.level&&!this.pet.moves.includes(m.moveId));this.s.pending.unshift(...learned.map(m=>({kind:'move',moveId:m.moveId,level:this.pet.level})));}else this.log(`${this.species.name}의 진화를 다음 레벨업으로 미뤘어요.`);return this.progress();}
   buy(id,quantity=1){
  if(!this.ready())throw Error('전투와 성장을 마친 뒤 상점을 이용하세요.');
@@ -320,7 +350,7 @@ export class Game{
  this.s.fatigue+=35;this.pet.hunger=clamp(this.pet.hunger-18,0,100);
  this.s.battleCount++;this.s.lastBattleTrainer=trainer;
  if(trainer&&!this.s.specialShopOpen){if(legend)this.s.pendingLegendId=appearance.id;else this.s.trainerCycle=Math.min(4,this.s.trainerCycle+1);}
- const enemy=team[0];this.s.battle={legend,specialLegend:special,trainerId:appearance?.id??null,introSeen:false,kind:trainer?'trainer':'wild',trainerName:appearance?(legend?'레전드 트레이너 · ':'')+appearance.name:null,field:{player:{},enemy:{}},enemyIndex:0,enemyTeam:team,earnedXP:0,player:this.fighter(this.pet),enemy:this.fighter(enemy),originalEnemy:structuredClone(enemy),activeId:this.s.active,turn:1};
+ const enemy=team[0];this.s.battle={legend,specialLegend:special,trainerId:appearance?.id??null,introSeen:false,kind:trainer?'trainer':'wild',trainerName:appearance?(legend?'레전드 트레이너 · ':'')+appearance.name:null,field:{player:{},enemy:{}},enemyIndex:0,enemyTeam:team,earnedXP:0,player:this.fighter(this.pet),enemy:this.fighter(enemy),originalEnemy:structuredClone(enemy),activeId:this.s.active,participants:[this.s.active],turn:1};
  const intro=[];enter(this,this.s.battle.player,this.s.battle.enemy,intro);enter(this,this.s.battle.enemy,this.s.battle.player,intro);this.s.battle.player.enteredTurn=0;this.s.battle.enemy.enteredTurn=0;this.s.battle.abilityLogs=intro;
  this.log(trainer?`${this.s.battle.trainerName}가 포켓몬 ${team.length}마리로 승부를 걸었어요!`:`야생 ${this.db.pokemon[enemy.speciesId].name}와 만났어요.`);return this.s.battle;
  }
@@ -393,6 +423,7 @@ export class Game{
  const replacement=b.player.hp<=0;
  if(!replacement&&b.player.heldItem!=='shed-shell'&&(b.player.bound||b.player.ingrain||trapped(this,b.player,b.enemy)))throw Error('상대 특성 때문에 교대할 수 없어요.');if(!replacement)leave(this,b.player);this.syncPlayer();resetOnSwitch(b.player);
  if(b.player.transformed){b.player.moves=b.player.originalMoves??this.pet.moves.map(id=>({id,pp:this.db.moves[id].pp}));for(const key of ['transformed','transformedSpeciesId','transformedShiny','typeIds','copiedStats','originalMoves'])delete b.player[key];}
+ b.participants=[...new Set([...(b.participants??Object.keys(b.bench??{}).map(Number)),this.s.active,Number(id)])];
  b.bench??={};b.bench[this.s.active]=b.player;
  this.s.active=Number(id);b.activeId=this.s.active;b.player=b.bench[id]??this.fighter(this.pet);delete b.bench[id];
  b.player.stages={attack:0,defense:0,'special-attack':0,'special-defense':0,speed:0,accuracy:0,evasion:0};b.player.confused=0;b.player.seeded=false;b.player.charge=null;b.player.guard=false;b.enemy.guard=false;
@@ -421,7 +452,7 @@ export class Game{
  if(p.hp<=0&&!reserves.length)result='lose';else if(currentEnemy.hp<=0)result='win';else if(b.turn>this.battleTurnLimit(b))result='draw';
  b.awaitingReplacement=!result&&p.hp<=0;
  if(b.awaitingReplacement)logs.push('포켓몬이 쓰러졌어요. 다음에 싸울 친구를 선택하세요.');
- if(result){this.s.battle=null;if(result==='win'){this.pet.wins++;if(b.kind==='trainer')this.s.trainerWins++;if(b.legend){this.s.legendWins++;this.s.specialShopOpen=true;this.s.legendRewardChoice='pending';this.s.trainerCycle=0;this.s.pendingLegendId=null;this.s.eggOffers={};logs.push('레전드전 승리! 기술 구매 기회 또는 탐험 조각 중 보상을 선택하세요!');}const reward=b.legend?(b.specialLegend?900:600):b.kind==='trainer'?240:b.kind==='expedition'?300:80;this.s.coins+=reward;const xp=b.rematch?0:(b.earnedXP??0)+battleExperience(currentEnemy.level);this.log(`전투 승리! 경험치 +${xp}, 모험 포인트 +${reward} P`);this.awardXP(xp);logs.push(`승리! 경험치 ${xp}와 ${reward} P를 받았어요.`);if(!b.rematch)this.rollDrop(logs,dropRandom);}else if(result==='lose'){if(b.legend){this.s.trainerCycle=0;this.s.pendingLegendId=null;logs.push('레전드 도전 카운트가 0으로 초기화됐어요. 다음 5번째 트레이너에게 다시 도전하세요.');}this.pet.friendship=clamp(this.pet.friendship-3,0,255);this.log('전투에서 졌어요. 다른 친구와 다시 도전하거나 회복하세요.');logs.push('모든 포켓몬이 쓰러져 쉼터로 돌아왔어요.');}else{this.log('긴 전투를 무승부로 마쳤어요.');logs.push(`${this.battleTurnLimit(b)}턴이 지나 무승부로 마쳤어요.`);}}
+ if(result){this.s.battle=null;if(result==='win'){this.pet.wins++;if(b.kind==='trainer')this.s.trainerWins++;if(b.legend){this.s.legendWins++;this.s.specialShopOpen=true;this.s.legendRewardChoice='pending';this.s.trainerCycle=0;this.s.pendingLegendId=null;this.s.eggOffers={};logs.push('레전드전 승리! 기술 구매 기회 또는 탐험 조각 중 보상을 선택하세요!');}const reward=b.legend?(b.specialLegend?900:600):b.kind==='trainer'?240:b.kind==='expedition'?300:80;this.s.coins+=reward;const xp=b.rematch?0:(b.earnedXP??0)+battleExperience(currentEnemy.level);this.log(`전투 승리! 경험치 +${xp}, 모험 포인트 +${reward} P`);this.awardBattleXP(xp,b,logs);logs.push(`승리! 경험치 ${xp}와 ${reward} P를 받았어요.`);if(!b.rematch)this.rollDrop(logs,dropRandom);}else if(result==='lose'){if(b.legend){this.s.trainerCycle=0;this.s.pendingLegendId=null;logs.push('레전드 도전 카운트가 0으로 초기화됐어요. 다음 5번째 트레이너에게 다시 도전하세요.');}this.pet.friendship=clamp(this.pet.friendship-3,0,255);this.log('전투에서 졌어요. 다른 친구와 다시 도전하거나 회복하세요.');logs.push('모든 포켓몬이 쓰러져 쉼터로 돌아왔어요.');}else{this.log('긴 전투를 무승부로 마쳤어요.');logs.push(`${this.battleTurnLimit(b)}턴이 지나 무승부로 마쳤어요.`);}}
  return {logs,events,result};
  }
  rollDrop(logs,random=Math.random){

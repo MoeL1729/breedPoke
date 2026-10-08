@@ -1,5 +1,5 @@
 // Gen-IV side conditions; existing Gen-VII abilities remain available.
-import {inflict,changeStage} from './abilities.js?v=pokegotchi-2131';
+import {inflict,changeStage} from './abilities.js?v=pokegotchi-2140';
 export const FIELD_ITEMS={
  'light-clay':{name:'빛의점토',kind:'held',price:1000,description:'리플렉터·빛의장막을 5턴에서 8턴으로 연장.'},
  'iron-ball':{name:'검은철구',kind:'held',price:650,description:'스피드 절반. 비행·부유도 땅에 닿아 설치 기술과 땅 공격에 영향받음.'},
