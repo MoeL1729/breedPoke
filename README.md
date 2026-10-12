@@ -11,13 +11,7 @@
 - 저장된 전투의 날씨·필드·남은 턴을 유지합니다. 기존 미스트필드 저장 형식도 호환됩니다. 기절 후 의무 교체는 여전히 턴을 소모하지 않습니다.
 - 범위: 매직룸(전체 도구 무효화), 원시 날씨, 9세대 눈, 다이맥스·더블배틀은 이번 버전에 포함하지 않습니다. 모든 세대의 전체 기믹을 구현한 것은 아닙니다.
 
-### 적용 방법
 
-기존 파일을 백업한 뒤 index.html, style.css, app.js, engine.js, abilities.js, field.js, quests.js, data/pokedex.json을 덮어쓰세요. 2.16.0에서 업데이트할 경우 assets는 변경할 필요가 없습니다. 직접 추가한 트레이너 코드는 engine.js에서 병합하세요. Pages 배포가 끝나면 새로고침하세요. 브라우저 저장 데이터를 삭제하지 마세요.
-
-### 검증 및 데이터
-
-자동 테스트 221개 통과. 날씨 특성·지속 시간, 필드 교체·접지·회복·면역·피해 보정, 원더룸, 조건부 기술, 상점 호환성, 저장 복원과 상태 UI 렌더링/클릭을 검증했습니다. 모바일용 CSS 경계와 DOM 구조를 확인했으나 실제 모바일 브라우저 시각 검증은 수행하지 않았습니다.
 
 재생성: 기존 데이터 생성 → scripts/build_fairy.py → scripts/build_field.py. POKEDAYS_CACHE에 PokeAPI CSV 경로를 지정하세요. Gen-8 그래스슬라이더 위력은 Pokémon Showdown Gen-8 override의 70을 명시 적용합니다. 상세 출처는 data/pokedex.json의 meta.fieldExpansion에 있습니다.
 
@@ -36,8 +30,6 @@
 
 ### 이번 버전 적용
 
-ZIP을 풀어 index.html, app.js, engine.js, abilities.js, field.js, quests.js, data/pokedex.json을 같은 경로에 덮어쓰세요. 2.15.0에서 업데이트한다면 assets는 그대로 사용할 수 있습니다. 이전 버전이라면 ZIP의 assets·data 폴더도 병합하세요. 직접 수정한 트레이너 목록은 먼저 백업 후 병합하세요. 기존 저장 데이터는 유지되며 알 확률·스타팅·경험치는 변경하지 않았습니다.
-
 재현: 기존 데이터 생성 후 `POKEDAYS_CACHE=/path/to/pokeapi-csv python scripts/build_fairy.py`. PokeAPI CSV의 move_flags 파일이 없다면 .data-cache/abilities 캐시도 필요합니다. 효과 기준은 Pokémon Showdown의 Gen-8 singles 규칙을 참고했습니다. 데이터 출처는 data/pokedex.json의 meta.fairyMoves에 기록했습니다.
 
 ## 2.15.0 — 페어리 · 8세대 타입 · 환상 퀘스트 23종
@@ -53,14 +45,7 @@ ZIP을 풀어 index.html, app.js, engine.js, abilities.js, field.js, quests.js, 
 - 불가사의부적 등 기존 특성에 더해 승리의별·나이트메어·매지션·소울하트·독조종을 연결했습니다. 아르세우스는 노말 기본 폼이며 플레이트 타입 변경은 미지원입니다.
 - 자동 테스트 190개 통과. 이번 작업에서 실제 모바일 브라우저 시각 검증은 수행하지 않았습니다.
 
-### GitHub Pages 업데이트
 
-1. index.html, style.css, app.js, engine.js, abilities.js, field.js를 덮어쓰고 **quests.js를 새로 추가**하세요.
-2. data 폴더를 병합 업로드하세요. 특히 pokedex.json은 반드시 교체하세요.
-3. assets/sprites, assets/shiny, assets/types, assets/items를 병합 업로드하세요. 신규 환상 이미지, 페어리 타입 이미지와 기술머신 아이콘이 필요합니다.
-4. Pages 배포 완료 후 새로고침하세요. 저장 데이터는 유지합니다. 직접 추가한 트레이너 목록이 있다면 engine.js의 사용자 수정 부분을 먼저 보관·병합하세요.
-
-전체 퀘스트 조건은 QUESTS.md와 data/mythical-quests.json에 있습니다. 실행 기준은 quests.js입니다.
 
 ## 2.14.0 — 참여 포켓몬 경험치 분배 · 3세대 확장
 
@@ -72,9 +57,6 @@ ZIP을 풀어 index.html, app.js, engine.js, abilities.js, field.js, quests.js, 
 - 빈티나는 아름다움 170 이상에서 레벨업하면 진화합니다. 게임 내 식사로 아름다움 +20을 얻도록 적용했습니다.
 - 경험치 총량은 늘리지 않았습니다. 포획/도주/패배 보상 규칙도 유지합니다.
 
-### GitHub Pages 적용
-
-index.html, style.css, app.js, engine.js, abilities.js, field.js와 data/pokedex.json을 덮어쓰세요. assets/sprites 및 assets/shiny에 신규 이미지도 병합 업로드해야 합니다(기존 파일 삭제 불필요). 기존 플레이 저장은 유지됩니다. 사용자 지정 트레이너 목록을 수정했다면 engine.js의 해당 목록을 따로 보관해 병합하세요.
 
 ## 2.13.1 — 모바일 전장 잘림 수정
 
@@ -127,7 +109,6 @@ index.html, style.css, app.js, engine.js, abilities.js, field.js와 data/pokedex
 트레이너/레전드전 승리·패배 시 기존 포켓몬 및 트레이너 이미지로 결과 카드를 표시합니다. 승리 보상·특별상점 해금 안내 후 계속하기를 누르면 성장 처리가 이어집니다. 도주/무승부/야생전에는 표시하지 않습니다. 추가 assets 업로드는 필요 없습니다.
 
 ### 2.10.2 업데이트
-`index.html`, `style.css`, `app.js`, `engine.js`, `field.js`를 함께 덮어쓰세요. assets는 변경되지 않았습니다. 저장 데이터를 지울 필요가 없습니다.
 기절 후에는 기술 버튼 대신 남은 친구 선택이 나타납니다. 기절 후 교체는 턴을 사용하지 않으며, 자발적인 교체는 기존처럼 상대에게 한 번의 행동을 허용합니다. 필드 진입 피해는 정상 적용됩니다.
 검증: 자동 테스트 145개 통과. 실제 모바일 브라우저 렌더링은 확인하지 못했습니다.
 
@@ -145,7 +126,6 @@ index.html, style.css, app.js, engine.js, abilities.js, field.js와 data/pokedex
 - 긴 전투 로그는 짧은 로그창 안에서 스크롤하며 기술 버튼을 아래로 밀지 않습니다.
 - 기존 레전드·상점·저장 규칙 변경 없음. 138개 기존 테스트 통과. 브라우저 렌더링/실제 터치 크기는 이번 환경에서 실측하지 못했습니다.
 
-적용: ZIP 내용물을 같은 위치에 덮어쓰세요. index.html, style.css, app.js, engine.js, field.js를 함께 반영하면 됩니다. **이번 2.10.1 수정에는 assets 추가 변경이 없습니다.**
 
 ## 2.10.0 — 레전드 트레이너 · 1회 특별상점
 
@@ -163,8 +143,6 @@ index.html, style.css, app.js, engine.js, abilities.js, field.js와 data/pokedex
 - 상단에 다음 레전드까지 남은 조우 횟수 표시, 레전드 보라/금색 연출 추가.
 
 ### 2.9.0에서 업데이트
-
-ZIP 압축을 풀어 내용물을 기존 GitHub 저장소에 덮어쓰세요. **index.html, style.css, app.js, engine.js, field.js, data/pokedex.json, data/trainers.json과 assets/trainers/의 새 이미지**를 포함해야 합니다. 이번에는 Assets 업데이트가 필요합니다. 기존 Pokémon 이미지 경로는 그대로입니다.
 
 자동 테스트 138개 통과. 실제 브라우저·모바일 터치 화면은 이번 작업에서 검증하지 못했습니다. 기존 저장 키를 유지하며 새 저장 필드는 자동 변환됩니다.
 
@@ -188,9 +166,6 @@ ZIP 압축을 풀어 내용물을 기존 GitHub 저장소에 덮어쓰세요. **
 - 알기술 상점은 역사적 기록을 합친 게임 전용 유료 학습 시스템. 원작의 교배나 세대 간 전송 제약 전체를 모사하지 않으며, 미구현 기술은 판매하지 않음.
 - 검증: `npm test` 130개 통과. 실제 브라우저의 화면/터치 동작은 이번 작업에서 확인하지 못함.
 
-### GitHub Pages 반영
-
-기존 2.8.2에서 **index.html, style.css, app.js, engine.js, abilities.js, 새 파일 field.js, data/pokedex.json, data/items.json**을 같은 위치에 덮어쓰기 후 커밋합니다. Assets는 이번 패치에서 변경하지 않았습니다. 전체 ZIP을 압축 해제해 내용물을 올려도 됩니다. ZIP 파일 자체를 올리는 방식은 아닙니다. 저장 키를 유지하므로 같은 주소에서 기존 친구·포인트를 이어받습니다.
 
 ### 데이터 재생성
 
@@ -217,14 +192,6 @@ ZIP 압축을 풀어 내용물을 기존 GitHub 저장소에 덮어쓰세요. **
 
 2.2.1에서 업데이트할 때는 **index.html, app.js, engine.js**를 교체하면 됩니다. 이번 패치는 assets 변경이 없습니다.
 
-## GitHub Pages 업데이트
-
-1. 게임에서 저장 백업을 내려받습니다. 기존 사이트 데이터는 삭제하지 마세요.
-2. 배포 ZIP을 압축 해제합니다. **ZIP 자체가 아니라 그 안의 파일·폴더**를 기존 저장소의 같은 위치에 덮어씁니다.
-3. `index.html`, `app.js`, `engine.js`, `style.css`, `data/`, **`assets/` 전체**를 포함해 커밋합니다. 이번 버전에는 `assets/shiny/` 이미지 320장이 새로 필요합니다.
-4. 기존 Pages 배포가 끝나면 같은 주소에서 새로고침합니다. 예전 화면이 보이면 강력 새로고침을 사용합니다.
-
-처음 설정한다면 Settings → Pages에서 배포 브랜치와 `index.html`이 있는 루트 경로를 선택합니다. 이미 Pages가 동작하면 설정 변경은 필요 없습니다. 이 ZIP을 받는 것만으로 원격 저장소가 변경되지는 않습니다.
 
 로컬 실행: 이 폴더에서 `python3 -m http.server 8000` 후 `http://localhost:8000`을 엽니다. HTML 파일을 직접 더블클릭하면 JSON 로딩이 제한될 수 있습니다. 실행 중 게임 데이터 API 호출은 없으며, 글꼴은 네트워크 실패 시 시스템 글꼴로 대체됩니다.
 
@@ -360,12 +327,6 @@ ZIP 압축을 풀어 내용물을 기존 GitHub 저장소에 덮어쓰세요. **
 맹화·급류·심록·벌레의알림, 위협, 부유, 흡수/무효 특성, 상태 방어, 접촉 반응, 적응력, 테크니션, 틀깨기, 옹골참, 변신괴짜, 트레이스, 교대 회복, 날씨·턴 종료 효과 등을 연결했습니다. 마비 속도 1/2·화상 턴 피해 1/16은 7세대 기준입니다.
 
 현재 게임에는 성별·헤롱헤롱·더블배틀·벽·대타출동 시스템이 없습니다. 투쟁심·헤롱헤롱바디·힐러·프렌드가드·텔레파시·틈새포착 등 관련 특성의 해당 효과는 적용되지 않으며 게임 상세 화면에 이를 안내합니다. 발광의 필드 효과도 없습니다. 급소의 세부 랭크 무시, 다단 공격의 개별 부가 효과·타격별 재계산 등 복잡한 원작 처리 전체를 재현한 대전 시뮬레이터는 아닙니다. 부가효과 확률·다단 공격 분포 등 기존 간소화 규칙이 남아 있습니다.
-
-### GitHub Pages 업데이트
-
-압축을 풀고 기존 저장소 루트에 다음 파일을 덮어쓰거나 추가하세요:
-`index.html`, `app.js`, `engine.js`, **`abilities.js`(신규)**, `style.css`, **`data/pokedex.json`**.
-기존 2.4.0 사용자라면 이번 업데이트는 이미지 변경이 없으므로 assets를 다시 올리지 않아도 됩니다. 그보다 이전 버전이라면 전체 파일을 업로드하세요. node_modules나 빌드 서버는 필요하지 않습니다. 이 패키지는 GitHub에 자동 커밋되지 않습니다.
 
 데이터 재생성: `python scripts/build_abilities.py`. 생성된 JSON은 게임에 포함되어 실행 중 외부 API를 호출하지 않습니다. 특성 데이터 캐시는 .data-cache/abilities에 저장됩니다.
 
