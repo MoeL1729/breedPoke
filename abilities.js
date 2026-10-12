@@ -25,7 +25,7 @@ const active=(g,p,attacker,...slugs)=>!has(g,attacker,'mold-breaker')&&has(g,p,.
 const heal=(f,n)=>{if(f.hp>0)f.hp=Math.min(f.maxHp,f.hp+Math.max(1,Math.floor(n)));};
 const chip=(g,f,n)=>{if(!has(g,f,'magic-guard'))f.hp=Math.max(0,f.hp-Math.max(1,Math.floor(n)));};
 const announce=(g,f,logs,text)=>logs.push(`${g.db.pokemon[f.speciesId].name} · ${abilityOf(g.db,f)?.name??'특성'}: ${text}`);
-export function weather(g){const b=g.s.battle;if(!b)return null;return [b.player,b.enemy].some(f=>f.hp>0&&has(g,f,'cloud-nine'))?null:b.weather;}
+export function weather(g){const b=g.s.battle;if(!b)return null;return [b.player,b.enemy].some(f=>f.hp>0&&has(g,f,'cloud-nine','air-lock'))?null:b.weather;}
 export function changeStage(g,f,key,delta,source,logs){
  const hostile=source!==f;if(hostile&&delta<0&&g.fieldSide?.(f).mist&&!active(g,source,f,'infiltrator')){logs.push('흰안개가 능력치 하락을 막았어요.');return false;}
  if(hostile&&delta<0&&(f.heldItem==='clear-amulet'||active(g,f,source,'clear-body')||key==='attack'&&active(g,f,source,'hyper-cutter')||key==='defense'&&active(g,f,source,'big-pecks')||key==='accuracy'&&active(g,f,source,'keen-eye'))){logs.push('특성·도구가 능력치 하락을 막았어요.');return false;}
@@ -34,13 +34,15 @@ export function changeStage(g,f,key,delta,source,logs){
  return f.stages[key]!==old;
 }
 export function statusImmune(g,f,status,source=f){
+ if(status==='sleep'&&g.s.battle?.field?.electricTerrain&&g.isGrounded?.(f)&&!['fly','bounce','dig','dive'].includes(g.db.moves[f.charge]?.slug))return true;
+ if(g.s.battle?.field?.mistyTerrain&&g.isGrounded?.(f)&&!['fly','bounce','dig','dive'].includes(g.db.moves[f.charge]?.slug))return true;
  if(source!==f&&g.fieldSide?.(f).safeguard&&!has(g,source,'infiltrator'))return true;
  if(status==='confusion'&&active(g,f,source,'own-tempo'))return true;
  const w=weather(g);
  return active(g,f,source,'leaf-guard')&&w==='sun'||status==='paralysis'&&(g.fighterTypes(f).includes(13)||active(g,f,source,'limber'))||status==='sleep'&&active(g,f,source,'insomnia','vital-spirit')||status==='poison'&&(g.fighterTypes(f).some(t=>[4,9].includes(t))||active(g,f,source,'immunity'))||status==='burn'&&(g.fighterTypes(f).includes(10)||active(g,f,source,'water-veil'))||status==='freeze'&&(g.fighterTypes(f).includes(15)||w==='sun');
 }
 export function inflict(g,f,status,source,logs,turns=3,reflect=true){
- if(f.hp<=0||statusImmune(g,f,status,source)||status!=='confusion'&&f.status)return false;
+ if(f.hp<=0||status==='confusion'&&f.confused>0||statusImmune(g,f,status,source)||status!=='confusion'&&f.status)return false;
  if(status==='confusion')f.confused=3;else{f.status=status;f.statusTurns=status==='sleep'&&has(g,f,'early-bird')?Math.ceil(turns/2):turns;}
  logs.push(`${g.db.pokemon[f.speciesId].name}에게 ${ {poison:'독',burn:'화상',paralysis:'마비',sleep:'잠듦',freeze:'얼음',confusion:'혼란'}[status]}!`);
  if(status==='poison'&&source!==f&&has(g,source,'poison-puppeteer'))inflict(g,f,'confusion',source,logs,3,false);
@@ -58,7 +60,8 @@ export function enter(g,f,other,logs,copy=true){
  const slug=abilitySlug(g.db,f);
  if(slug==='trace'&&copy&&!has(g,other,'trace','imposter')){f.copiedAbilityId=abilityOf(g.db,other)?.id;announce(g,f,logs,'상대 특성을 복사했어요.');enter(g,f,other,logs,false);}
  if(slug==='imposter')transform(g,f,other,logs);
- if(slug==='drought'){g.s.battle.weather='sun';g.s.battle.weatherTurns=5;announce(g,f,logs,'햇살이 강해졌어요.');}
+ const weatherKey={drought:'sun',drizzle:'rain','sand-stream':'sand','snow-warning':'hail'}[slug];if(weatherKey)g.setWeather(weatherKey,f,logs);
+ const terrainKey={'electric-surge':'electricTerrain','grassy-surge':'grassyTerrain','misty-surge':'mistyTerrain','psychic-surge':'psychicTerrain'}[slug];if(terrainKey)g.setTerrain(terrainKey,f,logs);
  if(slug==='intimidate'){if(changeStage(g,other,'attack',-1,f,logs))announce(g,f,logs,'상대 공격 하락!');}
  if(slug==='download'){const key=g.effectiveStat(other,'defense')<g.effectiveStat(other,'special-defense')?'attack':'special-attack';changeStage(g,f,key,1,f,logs);announce(g,f,logs,'능력치 상승!');}
  if(slug==='frisk')announce(g,f,logs,other.heldItem?`상대 도구: ${g.itemName(other.heldItem)}`:'상대가 도구를 지니지 않았어요.');
@@ -74,9 +77,13 @@ export function leave(g,f){
 export function statFactor(g,f,key){
  let mult=1;const a=abilitySlug(g.db,f),w=weather(g);
  if(key==='speed'){
-  if((a==='swift-swim'&&w==='rain')||(a==='chlorophyll'&&w==='sun')||(a==='sand-rush'&&w==='sand')||(a==='unburden'&&f.unburden))mult*=2;
+  if((a==='swift-swim'&&w==='rain')||(a==='chlorophyll'&&w==='sun')||(a==='sand-rush'&&w==='sand')||(a==='slush-rush'&&w==='hail')||(a==='surge-surfer'&&g.s.battle?.field?.electricTerrain)||(a==='unburden'&&f.unburden))mult*=2;
   if(a==='quick-feet'&&f.status)mult*=1.5;
  }
+ if(key==='special-defense'&&w==='sand'&&g.fighterTypes(f).includes(6))mult*=1.5;
+ if(key==='defense'&&a==='grass-pelt'&&g.s.battle?.field?.grassyTerrain)mult*=1.5;
+ if(key==='attack'&&a==='flower-gift'&&w==='sun')mult*=1.5;
+ if(key==='special-defense'&&a==='flower-gift'&&w==='sun')mult*=1.5;
  if(key==='attack'&&a==='hustle')mult*=1.5;
  if(key==='attack'&&a==='guts'&&f.status)mult*=1.5;
  if(key==='defense'&&a==='marvel-scale'&&f.status)mult*=1.5;
@@ -90,7 +97,7 @@ export function accuracyFactor(g,a,d,m){
  return n;
 }
 export function blockMove(g,a,d,m,logs){
- if(m.slug==='struggle'||m.target==='user')return false;
+ if(m.slug==='struggle'||m.target==='user'||m.damageClass==='status'&&[4,6,12,13,14].includes(m.targetId))return false;
  if(m.damageClass!=='status'&&active(g,d,a,'wonder-guard')&&g.effectiveness(m,d,a)<=1){a.lastHit={effect:0,immune:true};announce(g,d,logs,'효과가 굉장한 공격 외에는 막았어요.');return true;}
  const type=m.typeId;
  let blocked=type===5&&active(g,d,a,'levitate')&&!g.isGrounded?.(d)||m.flags?.includes('sound')&&active(g,d,a,'soundproof')||m.flags?.includes('powder')&&(active(g,d,a,'overcoat')||g.fighterTypes(d).includes(12));
@@ -121,7 +128,7 @@ export function damageFactor(g,a,d,m,power,effect){
  if(w==='rain')n*=m.typeId===11?1.5:m.typeId===10?.5:1;
  return n;
 }
-export function sheerForce(g,a,m){return m.slug!=='overheat'&&has(g,a,'sheer-force')&&m.damageClass!=='status'&&(m.meta?.ailmentChance>0||m.meta?.statChance>0||m.meta?.flinchChance>0);}
+export function sheerForce(g,a,m){return !['overheat','fleur-cannon'].includes(m.slug)&&has(g,a,'sheer-force')&&m.damageClass!=='status'&&(m.meta?.ailmentChance>0||m.meta?.statChance>0||m.meta?.flinchChance>0);}
 export function afterHit(g,a,d,m,damage,logs,random){
  if(damage<=0)return;
  const contact=m.flags?.includes('contact');
@@ -150,7 +157,7 @@ export function endAbilities(g,f,other,logs,random){
  if(a==='dry-skin'&&w==='rain')heal(f,f.maxHp/8);
  if((a==='dry-skin'||a==='solar-power')&&w==='sun')chip(g,f,f.maxHp/8);
  if(w==='sand'&&!g.fighterTypes(f).some(t=>[5,6,9].includes(t))&&!has(g,f,'sand-veil','sand-rush','sand-force','overcoat'))chip(g,f,f.maxHp/16);
- if(w==='hail'&&!g.fighterTypes(f).includes(15)&&!has(g,f,'ice-body','snow-cloak','overcoat'))chip(g,f,f.maxHp/16);
+ if(w==='hail'&&!g.fighterTypes(f).includes(15)&&!has(g,f,'ice-body','snow-cloak','slush-rush','overcoat'))chip(g,f,f.maxHp/16);
  if(a==='harvest'&&!f.heldItem&&f.lastBerry&&(w==='sun'||random()<.5)){f.heldItem=f.lastBerry;delete f.lastBerry;announce(g,f,logs,'먹은 열매를 다시 얻었어요.');}
  if(a==='pickup'&&!f.heldItem&&other.lastConsumedItem){f.heldItem=other.lastConsumedItem;delete other.lastConsumedItem;announce(g,f,logs,'상대가 쓴 도구를 주웠어요.');}
  if(f.disabledTurns>0&&--f.disabledTurns===0)delete f.disabledMove;
