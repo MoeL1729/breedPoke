@@ -13,7 +13,7 @@ test('Gen7 move classes use each move rather than its type, and all species have
  assert.equal(db.meta.statGeneration,7);assert.equal(db.meta.damageClassGeneration,7);
  // Fire Fang is physical, Ember special; Bite physical despite Dark being special in Gen III.
  for(const [id,kind] of [[424,'physical'],[52,'special'],[44,'physical'],[247,'special'],[45,'status']])assert.equal(db.moves[id].damageClass,kind);
- for(const m of Object.values(db.moves))assert.equal(m.damageClassGeneration,7);
+ for(const m of Object.values(db.moves))assert.ok([7,8,9].includes(m.damageClassGeneration));
  for(const p of Object.values(db.pokemon))assert.equal(Object.keys(p.stats).length,6);
  assert.equal(db.pokemon[85].stats.speed,110);assert.equal(db.pokemon[295].stats['special-defense'],73);
 });

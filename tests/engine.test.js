@@ -7,10 +7,10 @@ function rollFor(id){const table=db.hatchTable;let prior=0;for(const row of tabl
 function started(id=25,level=10){const g=new Game(db);g.hatch(()=>rollFor(id===25?172:id));if(id===25){g.s.pets[25]=g.pet;delete g.s.pets[g.s.active];g.s.active=25;}g.s.pets[id]={...makePet(db,id,level),ivs:g.pet.ivs};return g;}
 function settle(g,accept=true){let count=0;while(g.s.pending.length||g.s.progressing){assert.ok(++count<500);const e=g.s.pending[0]??g.progress();if(!e)break;if(e.kind==='move')g.chooseMove(0);else g.chooseEvolution(accept);}return g;}
 test('snapshot uses HGSS learnsets and historically accurate examples',()=>{
- assert.equal(db.meta.versionGroupId,10);assert.equal(Object.keys(db.pokemon).length,300);assert.equal(Object.keys(db.moves).length,428);
- assert.equal(db.moves[33].power,35);assert.equal(db.moves[33].accuracy,95);assert.equal(db.moves[85].power,95);assert.equal(db.moves[204].typeId,1);
+ assert.equal(db.meta.versionGroupId,10);assert.equal(Object.keys(db.pokemon).length,402);assert.equal(Object.keys(db.moves).length,497);
+ assert.equal(db.moves[33].power,35);assert.equal(db.moves[33].accuracy,95);assert.equal(db.moves[85].power,95);assert.equal(db.moves[204].typeId,18);
  assert.equal(db.pokemon[25].stats.defense,40);assert.equal(db.pokemon[26].stats.speed,110);assert.equal(db.pokemon[51].stats.attack,100);
- assert.deepEqual(db.pokemon[173].typeIds,[1]);assert.equal(db.pokemon[4].evolutions[0].minLevel,16);assert.equal(db.pokemon[5].evolutions[0].minLevel,36);
+ assert.deepEqual(db.pokemon[173].typeIds,[18]);assert.equal(db.pokemon[4].evolutions[0].minLevel,16);assert.equal(db.pokemon[5].evolutions[0].minLevel,36);
  assert.equal(db.pokemon[238].evolutions[0].minLevel,30);assert.equal(db.pokemon[174].evolutions[0].minFriendship,220);
  assert.equal(db.pokemon[25].learnset.find(x=>x.moveId===98).level,13);
  for(const p of Object.values(db.pokemon)){assert.ok(p.learnset.length);for(const m of p.learnset)assert.ok(db.moves[m.moveId]);for(const e of p.evolutions)assert.ok(db.pokemon[e.to]);}
@@ -62,8 +62,8 @@ test('legacy save retains the active evolved Pokemon and progression only',()=>{
 });
 test('party saves allow up to three Pokemon',()=>{const g=started();g.s.pets[4]=makePet(db,4);g.s.pets[7]=makePet(db,7);assert.equal(validateState(db,g.s),g.s);g.s.pets[1]=makePet(db,1);assert.throws(()=>validateState(db,g.s));});
 
-test('all 240 Kanto/Johto opponents are reachable; legendary and mythical species never spawn',()=>{
- const expected=Array.from({length:251},(_,i)=>i+1).filter(i=>![144,145,146,150,151,243,244,245,249,250,251].includes(i));
+test('all 365 Kanto/Johto/Hoenn opponents are reachable; legendary and mythical species never spawn',()=>{
+ const expected=Array.from({length:386},(_,i)=>i+1).filter(i=>![144,145,146,150,151,243,244,245,249,250,251,377,378,379,380,381,382,383,384,385,386].includes(i));
  assert.deepEqual(db.enemyIds,expected);
  const seen=new Set();
  for(let level=1;level<=100;level++){
@@ -94,7 +94,7 @@ test('actual battle picker reaches every candidate at first/last level rolls',()
    assert.equal(b.enemy.speciesId,pool[i]);assert.equal(b.enemy.level,enemyLevel);seen.add(b.enemy.speciesId);
   }
  }
- assert.equal(seen.size,240);
+ assert.equal(seen.size,365);
 });
 test('type multipliers and STAB change real HP damage; fixed damage and Struggle exceptions',()=>{
  const g=started();
@@ -107,7 +107,7 @@ test('type multipliers and STAB change real HP damage; fixed damage and Struggle
   const expected=effect===0?0:Math.max(1,Math.floor(((2*40/5+2)*m.power*atk/def/50+2)*stab*effect*.925));
   assert.equal(10000-d.hp,expected,`${aid}/${mid} -> ${did}`);
  }
- assert.equal(db.typeChart[8][9],.5);assert.equal(db.typeChart[17][9],.5);assert.equal(Object.keys(db.types).filter(id=>Number(id)<100).length,17);
+ assert.equal(db.typeChart[8][9],1);assert.equal(db.typeChart[17][9],1);assert.equal(Object.keys(db.types).filter(id=>Number(id)<100).length,18);
  for(const defender of [4,74]){const a=g.fighter(makePet(db,56,40)),d=g.fighter(makePet(db,defender,40));d.hp=1000;g.execute(a,d,69,[],()=>.5);assert.equal(1000-d.hp,40);}
  const a=g.fighter(makePet(db,25,40)),d=g.fighter(makePet(db,92,40));const before=d.hp;g.execute(a,d,-1,[],()=>.5);assert.ok(d.hp<before);
 });

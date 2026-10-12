@@ -43,6 +43,7 @@ export function inflict(g,f,status,source,logs,turns=3,reflect=true){
  if(f.hp<=0||statusImmune(g,f,status,source)||status!=='confusion'&&f.status)return false;
  if(status==='confusion')f.confused=3;else{f.status=status;f.statusTurns=status==='sleep'&&has(g,f,'early-bird')?Math.ceil(turns/2):turns;}
  logs.push(`${g.db.pokemon[f.speciesId].name}에게 ${ {poison:'독',burn:'화상',paralysis:'마비',sleep:'잠듦',freeze:'얼음',confusion:'혼란'}[status]}!`);
+ if(status==='poison'&&source!==f&&has(g,source,'poison-puppeteer'))inflict(g,f,'confusion',source,logs,3,false);
  if(reflect&&source!==f&&has(g,f,'synchronize')&&['poison','burn','paralysis'].includes(status))inflict(g,source,status,f,logs,0,false);
  return true;
 }
@@ -83,7 +84,7 @@ export function statFactor(g,f,key){
  return mult;
 }
 export function accuracyFactor(g,a,d,m){
- let n=has(g,a,'compound-eyes')?1.3:1;if(has(g,a,'hustle')&&m.damageClass==='physical')n*=.8;
+ let n=has(g,a,'compound-eyes')?1.3:1;if(has(g,a,'victory-star'))n*=1.1;if(has(g,a,'hustle')&&m.damageClass==='physical')n*=.8;
  if(active(g,d,a,'sand-veil')&&weather(g)==='sand'||active(g,d,a,'snow-cloak')&&weather(g)==='hail')n*=.8;
  if(active(g,d,a,'tangled-feet')&&d.confused>0)n*=.5;
  return n;
@@ -124,6 +125,7 @@ export function sheerForce(g,a,m){return m.slug!=='overheat'&&has(g,a,'sheer-for
 export function afterHit(g,a,d,m,damage,logs,random){
  if(damage<=0)return;
  const contact=m.flags?.includes('contact');
+ if(has(g,a,'magician')&&!a.heldItem&&d.heldItem&&!active(g,d,a,'sticky-hold')){a.heldItem=d.heldItem;d.heldItem=null;announce(g,a,logs,'상대 도구를 가져왔어요.');}
  if(d.hp<=0){if(contact&&has(g,d,'aftermath')&&!has(g,a,'damp'))chip(g,a,a.maxHp/4);if(has(g,a,'moxie'))changeStage(g,a,'attack',1,a,logs);}
  if(d.hp>0&&has(g,d,'weak-armor')&&m.damageClass==='physical'){changeStage(g,d,'defense',-1,d,logs);changeStage(g,d,'speed',2,d,logs);}
  if(d.hp>0&&has(g,d,'justified')&&m.typeId===17)changeStage(g,d,'attack',1,d,logs);
@@ -143,6 +145,7 @@ export function endAbilities(g,f,other,logs,random){
  if(f.hp<=0)return;const a=abilitySlug(g.db,f),w=weather(g);
  if(a==='speed-boost'&&f.enteredTurn!==g.s.battle.turn)changeStage(g,f,'speed',1,f,logs);
  if(a==='shed-skin'&&f.status&&random()<1/3||a==='hydration'&&w==='rain'&&f.status){f.status=null;f.statusTurns=0;announce(g,f,logs,'상태이상을 회복했어요.');}
+ if(a==='bad-dreams'&&other.hp>0&&other.status==='sleep'){chip(g,other,other.maxHp/8);announce(g,f,logs,'잠든 상대가 악몽에 시달려요.');}
  if(a==='rain-dish'&&w==='rain'||a==='ice-body'&&w==='hail')heal(f,f.maxHp/16);
  if(a==='dry-skin'&&w==='rain')heal(f,f.maxHp/8);
  if((a==='dry-skin'||a==='solar-power')&&w==='sun')chip(g,f,f.maxHp/8);
@@ -159,6 +162,9 @@ export function trapped(g,f,other){
 }
 // No substitute mechanics or fake stat boost for abilities with no applicable rule.
 export const abilityNotes={
+ multitype:'기본 노말폼으로 등장합니다. 플레이트·폼 변경은 아직 지원하지 않습니다.',
+ 'soul-heart':'전장에 있는 다른 포켓몬이 쓰러지면 특수공격이 1단계 오릅니다.',
+ 'poison-puppeteer':'직접 독을 걸면 혼란도 시도합니다. 독에 걸리지 않는 상대에게는 발동하지 않습니다.',
  gluttony:'현재 열매들은 원래 HP 절반 이하 또는 상태이상 때 발동하므로 추가로 빨라지지 않습니다.',
  illuminate:'이 게임에는 필드 조우 빈도 시스템이 없어 추가 효과가 없습니다.',
  'cute-charm':'이 게임에는 성별·헤롱헤롱 시스템이 없어 추가 효과가 없습니다.',
