@@ -11,14 +11,7 @@
 - 불가사의부적 등 기존 특성에 더해 승리의별·나이트메어·매지션·소울하트·독조종을 연결했습니다. 아르세우스는 노말 기본 폼이며 플레이트 타입 변경은 미지원입니다.
 - 자동 테스트 190개 통과. 이번 작업에서 실제 모바일 브라우저 시각 검증은 수행하지 않았습니다.
 
-### GitHub Pages 업데이트
 
-1. index.html, style.css, app.js, engine.js, abilities.js, field.js를 덮어쓰고 **quests.js를 새로 추가**하세요.
-2. data 폴더를 병합 업로드하세요. 특히 pokedex.json은 반드시 교체하세요.
-3. assets/sprites, assets/shiny, assets/types, assets/items를 병합 업로드하세요. 신규 환상 이미지, 페어리 타입 이미지와 기술머신 아이콘이 필요합니다.
-4. Pages 배포 완료 후 새로고침하세요. 저장 데이터는 유지합니다. 직접 추가한 트레이너 목록이 있다면 engine.js의 사용자 수정 부분을 먼저 보관·병합하세요.
-
-전체 퀘스트 조건은 QUESTS.md와 data/mythical-quests.json에 있습니다. 실행 기준은 quests.js입니다.
 
 ## 2.14.0 — 참여 포켓몬 경험치 분배 · 3세대 확장
 
@@ -30,9 +23,6 @@
 - 빈티나는 아름다움 170 이상에서 레벨업하면 진화합니다. 게임 내 식사로 아름다움 +20을 얻도록 적용했습니다.
 - 경험치 총량은 늘리지 않았습니다. 포획/도주/패배 보상 규칙도 유지합니다.
 
-### GitHub Pages 적용
-
-index.html, style.css, app.js, engine.js, abilities.js, field.js와 data/pokedex.json을 덮어쓰세요. assets/sprites 및 assets/shiny에 신규 이미지도 병합 업로드해야 합니다(기존 파일 삭제 불필요). 기존 플레이 저장은 유지됩니다. 사용자 지정 트레이너 목록을 수정했다면 engine.js의 해당 목록을 따로 보관해 병합하세요.
 
 ## 2.13.1 — 모바일 전장 잘림 수정
 
@@ -84,10 +74,6 @@ index.html, style.css, app.js, engine.js, abilities.js, field.js와 data/pokedex
 ## 2.10.3 — 트레이너전 결과 화면
 트레이너/레전드전 승리·패배 시 기존 포켓몬 및 트레이너 이미지로 결과 카드를 표시합니다. 승리 보상·특별상점 해금 안내 후 계속하기를 누르면 성장 처리가 이어집니다. 도주/무승부/야생전에는 표시하지 않습니다. 추가 assets 업로드는 필요 없습니다.
 
-### 2.10.2 업데이트
-`index.html`, `style.css`, `app.js`, `engine.js`, `field.js`를 함께 덮어쓰세요. assets는 변경되지 않았습니다. 저장 데이터를 지울 필요가 없습니다.
-기절 후에는 기술 버튼 대신 남은 친구 선택이 나타납니다. 기절 후 교체는 턴을 사용하지 않으며, 자발적인 교체는 기존처럼 상대에게 한 번의 행동을 허용합니다. 필드 진입 피해는 정상 적용됩니다.
-검증: 자동 테스트 145개 통과. 실제 모바일 브라우저 렌더링은 확인하지 못했습니다.
 
 # POkegotchi 2.10.1
 
@@ -122,8 +108,6 @@ index.html, style.css, app.js, engine.js, abilities.js, field.js와 data/pokedex
 
 ### 2.9.0에서 업데이트
 
-ZIP 압축을 풀어 내용물을 기존 GitHub 저장소에 덮어쓰세요. **index.html, style.css, app.js, engine.js, field.js, data/pokedex.json, data/trainers.json과 assets/trainers/의 새 이미지**를 포함해야 합니다. 이번에는 Assets 업데이트가 필요합니다. 기존 Pokémon 이미지 경로는 그대로입니다.
-
 자동 테스트 138개 통과. 실제 브라우저·모바일 터치 화면은 이번 작업에서 검증하지 못했습니다. 기존 저장 키를 유지하며 새 저장 필드는 자동 변환됩니다.
 
 사천왕 이미지 출처와 원본 파일 링크는 `data/trainers.json`에 종별 기록했습니다. 출처: [Smogon canonical trainer sprites](https://github.com/smogon/sprites/tree/master/src/_uncategorized/canonical/trainers). Pokémon 이미지 권리는 각 권리자에게 있습니다. 검은 실루엣은 이 프로젝트의 SVG입니다.
@@ -146,13 +130,6 @@ ZIP 압축을 풀어 내용물을 기존 GitHub 저장소에 덮어쓰세요. **
 - 알기술 상점은 역사적 기록을 합친 게임 전용 유료 학습 시스템. 원작의 교배나 세대 간 전송 제약 전체를 모사하지 않으며, 미구현 기술은 판매하지 않음.
 - 검증: `npm test` 130개 통과. 실제 브라우저의 화면/터치 동작은 이번 작업에서 확인하지 못함.
 
-### GitHub Pages 반영
-
-기존 2.8.2에서 **index.html, style.css, app.js, engine.js, abilities.js, 새 파일 field.js, data/pokedex.json, data/items.json**을 같은 위치에 덮어쓰기 후 커밋합니다. Assets는 이번 패치에서 변경하지 않았습니다. 전체 ZIP을 압축 해제해 내용물을 올려도 됩니다. ZIP 파일 자체를 올리는 방식은 아닙니다. 저장 키를 유지하므로 같은 주소에서 기존 친구·포인트를 이어받습니다.
-
-### 데이터 재생성
-
-기존 빌드 스크립트 뒤에 `python scripts/build_field_egg.py`를 마지막으로 실행합니다. `.data-cache/tm`과 `.data-cache/abilities`의 PokeAPI CSV 스냅샷을 사용합니다(배포 ZIP에는 캐시 제외). 런타임에는 API 호출 없이 포함된 JSON을 사용합니다.
 
 출처: [PokeAPI CSV](https://github.com/PokeAPI/pokeapi/tree/master/data/v2/csv), [4세대 Spikes](https://bulbapedia.bulbagarden.net/wiki/Spikes_(move)), [Leech Seed](https://bulbapedia.bulbagarden.net/wiki/Leech_Seed_(move)), [Egg Move](https://bulbapedia.bulbagarden.net/wiki/Egg_Move).
 
@@ -175,16 +152,6 @@ ZIP 압축을 풀어 내용물을 기존 GitHub 저장소에 덮어쓰세요. **
 
 2.2.1에서 업데이트할 때는 **index.html, app.js, engine.js**를 교체하면 됩니다. 이번 패치는 assets 변경이 없습니다.
 
-## GitHub Pages 업데이트
-
-1. 게임에서 저장 백업을 내려받습니다. 기존 사이트 데이터는 삭제하지 마세요.
-2. 배포 ZIP을 압축 해제합니다. **ZIP 자체가 아니라 그 안의 파일·폴더**를 기존 저장소의 같은 위치에 덮어씁니다.
-3. `index.html`, `app.js`, `engine.js`, `style.css`, `data/`, **`assets/` 전체**를 포함해 커밋합니다. 이번 버전에는 `assets/shiny/` 이미지 320장이 새로 필요합니다.
-4. 기존 Pages 배포가 끝나면 같은 주소에서 새로고침합니다. 예전 화면이 보이면 강력 새로고침을 사용합니다.
-
-처음 설정한다면 Settings → Pages에서 배포 브랜치와 `index.html`이 있는 루트 경로를 선택합니다. 이미 Pages가 동작하면 설정 변경은 필요 없습니다. 이 ZIP을 받는 것만으로 원격 저장소가 변경되지는 않습니다.
-
-로컬 실행: 이 폴더에서 `python3 -m http.server 8000` 후 `http://localhost:8000`을 엽니다. HTML 파일을 직접 더블클릭하면 JSON 로딩이 제한될 수 있습니다. 실행 중 게임 데이터 API 호출은 없으며, 글꼴은 네트워크 실패 시 시스템 글꼴로 대체됩니다.
 
 ## 2.2 밸런스·3세대 스타터 추가
 
@@ -270,12 +237,6 @@ ZIP 압축을 풀어 내용물을 기존 GitHub 저장소에 덮어쓰세요. **
 - 친밀도 진화는 220 이상에서 레벨업입니다. 낮·밤과 신오 진화 여행지를 선택할 수 있습니다. 장소 진화는 HGSS에 없는 D/P/Pt 장소를 게임 안에 보완한 설정입니다.
 - 놓아주기는 선택한 한 마리만 제거하고 지닌 도구를 가방에 돌려줍니다. 나머지 친구·포인트·가방·날짜·피로도는 유지합니다. 마지막 친구를 놓아주면 새 알을 받을 수 있습니다.
 
-## 저장과 검증
-
-저장은 브라우저 localStorage의 기존 `pokedays-hgss-v1` 키를 사용하며 구조 버전은 3입니다. 이전 구조 변환 전 원본은 `pokedays-hgss-v1-legacy-backup`에 보관합니다. 다른 기기·브라우저로 자동 동기화되지는 않습니다. 저장 파일 가져오기는 진행 중인 전투·학습 처리가 없는 백업을 지원합니다.
-
-`npm test`: 71개 테스트 통과. 포획 공식, 세 마리 제한, 이로치 이미지, 저장 변환, 가방·도구 보존, 회복 턴, 기술 효과, 진화와 고오스 오류를 검사합니다. 브라우저에서 상점 구매·장착·회복·포획·선택을 확인했고 320/360/393/430/740px에서 HP창과 캐릭터 영역이 겹치지 않음을 확인했습니다.
-
 ## 데이터와 출처
 
 `data/pokedex.json`에는 205종, 387개 기술, HGSS 레벨 기술표·진화 조건·종별 포획률·원본 출처가 있습니다. 야생 상대는 1세대 146종으로 프리져·썬더·파이어·뮤츠·뮤를 제외합니다. 일반 및 이로치 앞/뒤 스프라이트는 총 820장입니다. 한국어 도감 설명은 HGSS 번역 자료 부재로 X 버전 설명을 사용하며 출처 버전을 표시합니다.
@@ -319,13 +280,6 @@ ZIP 압축을 풀어 내용물을 기존 GitHub 저장소에 덮어쓰세요. **
 
 현재 게임에는 성별·헤롱헤롱·더블배틀·벽·대타출동 시스템이 없습니다. 투쟁심·헤롱헤롱바디·힐러·프렌드가드·텔레파시·틈새포착 등 관련 특성의 해당 효과는 적용되지 않으며 게임 상세 화면에 이를 안내합니다. 발광의 필드 효과도 없습니다. 급소의 세부 랭크 무시, 다단 공격의 개별 부가 효과·타격별 재계산 등 복잡한 원작 처리 전체를 재현한 대전 시뮬레이터는 아닙니다. 부가효과 확률·다단 공격 분포 등 기존 간소화 규칙이 남아 있습니다.
 
-### GitHub Pages 업데이트
-
-압축을 풀고 기존 저장소 루트에 다음 파일을 덮어쓰거나 추가하세요:
-`index.html`, `app.js`, `engine.js`, **`abilities.js`(신규)**, `style.css`, **`data/pokedex.json`**.
-기존 2.4.0 사용자라면 이번 업데이트는 이미지 변경이 없으므로 assets를 다시 올리지 않아도 됩니다. 그보다 이전 버전이라면 전체 파일을 업로드하세요. node_modules나 빌드 서버는 필요하지 않습니다. 이 패키지는 GitHub에 자동 커밋되지 않습니다.
-
-데이터 재생성: `python scripts/build_abilities.py`. 생성된 JSON은 게임에 포함되어 실행 중 외부 API를 호출하지 않습니다. 특성 데이터 캐시는 .data-cache/abilities에 저장됩니다.
 
 출처: [PokeAPI](https://pokeapi.co/docs/v2/#abilities), [특성 슬롯 변경 이력](https://github.com/PokeAPI/pokeapi/blob/master/data/v2/csv/pokemon_abilities_past.csv), [특성캡슐](https://bulbapedia.bulbagarden.net/wiki/Ability_Capsule), [특성패치](https://bulbapedia.bulbagarden.net/wiki/Ability_Patch), [Pokémon Showdown 7세대 규칙 참고](https://github.com/smogon/pokemon-showdown/blob/master/data/mods/gen7/abilities.ts).
 
@@ -344,9 +298,6 @@ ZIP 압축을 풀어 내용물을 기존 GitHub 저장소에 덮어쓰세요. **
 - 전투 경험치 = floor(이전 버전 보상 × 0.6). 야생·트레이너 모두 적용하며 포인트 보상은 그대로입니다. 7레벨 149→89, 20레벨 992→595, 50레벨 6032→3619. 기존 경험치·레벨은 줄이지 않습니다. 패치 전 진행 중인 트레이너전에서 이미 쌓은 경험치는 보존합니다.
 - 객기 조건부 위력, 오버히트의 사용자 특수공격 하락, 강철날개의 사용자 방어 상승을 연결했습니다. 친밀도 기술은 공격한 개체 자신의 친밀도를 사용합니다. 2.5에서 안내한 기타 간소화 전투 규칙은 유지됩니다.
 
-업데이트 파일: index.html, app.js, engine.js, abilities.js, data/pokedex.json. 전체 ZIP을 덮어써도 됩니다. 2.5 사용자는 assets 재업로드가 필요 없습니다. GitHub에 직접 커밋한 패키지는 아닙니다.
-
-기술머신 데이터 재생성: python scripts/build_tms.py (기존 도감 JSON에 추가). 데이터 출처: https://github.com/PokeAPI/pokeapi/tree/master/data/v2/csv ; 목록 대조: https://pokemondb.net/ruby-sapphire/tms . 실행 시 외부 API를 호출하지 않습니다.
 
 2.6 검증: 자동 테스트 103개 통과. 이번 변경의 실제 브라우저 화면 검증은 수행하지 않았습니다.
 
