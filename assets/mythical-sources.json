@@ -1,0 +1,278 @@
+[
+  {
+    "id": 151,
+    "shiny": false,
+    "source": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/151.png",
+    "backUsesFront": false
+  },
+  {
+    "id": 151,
+    "shiny": true,
+    "source": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/151.png",
+    "backUsesFront": false
+  },
+  {
+    "id": 251,
+    "shiny": false,
+    "source": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/251.png",
+    "backUsesFront": false
+  },
+  {
+    "id": 251,
+    "shiny": true,
+    "source": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/251.png",
+    "backUsesFront": false
+  },
+  {
+    "id": 385,
+    "shiny": false,
+    "source": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/385.png",
+    "backUsesFront": false
+  },
+  {
+    "id": 385,
+    "shiny": true,
+    "source": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/385.png",
+    "backUsesFront": false
+  },
+  {
+    "id": 386,
+    "shiny": false,
+    "source": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/386.png",
+    "backUsesFront": false
+  },
+  {
+    "id": 386,
+    "shiny": true,
+    "source": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/386.png",
+    "backUsesFront": false
+  },
+  {
+    "id": 489,
+    "shiny": false,
+    "source": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/489.png",
+    "backUsesFront": false
+  },
+  {
+    "id": 489,
+    "shiny": true,
+    "source": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/489.png",
+    "backUsesFront": false
+  },
+  {
+    "id": 490,
+    "shiny": false,
+    "source": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/490.png",
+    "backUsesFront": false
+  },
+  {
+    "id": 490,
+    "shiny": true,
+    "source": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/490.png",
+    "backUsesFront": false
+  },
+  {
+    "id": 491,
+    "shiny": false,
+    "source": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/491.png",
+    "backUsesFront": false
+  },
+  {
+    "id": 491,
+    "shiny": true,
+    "source": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/491.png",
+    "backUsesFront": false
+  },
+  {
+    "id": 492,
+    "shiny": false,
+    "source": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/492.png",
+    "backUsesFront": false
+  },
+  {
+    "id": 492,
+    "shiny": true,
+    "source": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/492.png",
+    "backUsesFront": false
+  },
+  {
+    "id": 493,
+    "shiny": false,
+    "source": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/493.png",
+    "backUsesFront": false
+  },
+  {
+    "id": 493,
+    "shiny": true,
+    "source": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/493.png",
+    "backUsesFront": false
+  },
+  {
+    "id": 494,
+    "shiny": false,
+    "source": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/494.png",
+    "backUsesFront": false
+  },
+  {
+    "id": 494,
+    "shiny": true,
+    "source": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/494.png",
+    "backUsesFront": false
+  },
+  {
+    "id": 647,
+    "shiny": false,
+    "source": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/647.png",
+    "backUsesFront": false
+  },
+  {
+    "id": 647,
+    "shiny": true,
+    "source": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/647.png",
+    "backUsesFront": false
+  },
+  {
+    "id": 648,
+    "shiny": false,
+    "source": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/648.png",
+    "backUsesFront": false
+  },
+  {
+    "id": 648,
+    "shiny": true,
+    "source": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/648.png",
+    "backUsesFront": false
+  },
+  {
+    "id": 649,
+    "shiny": false,
+    "source": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/649.png",
+    "backUsesFront": false
+  },
+  {
+    "id": 649,
+    "shiny": true,
+    "source": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/649.png",
+    "backUsesFront": false
+  },
+  {
+    "id": 719,
+    "shiny": false,
+    "source": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/719.png",
+    "backUsesFront": false
+  },
+  {
+    "id": 719,
+    "shiny": true,
+    "source": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/719.png",
+    "backUsesFront": false
+  },
+  {
+    "id": 720,
+    "shiny": false,
+    "source": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/720.png",
+    "backUsesFront": false
+  },
+  {
+    "id": 720,
+    "shiny": true,
+    "source": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/720.png",
+    "backUsesFront": false
+  },
+  {
+    "id": 721,
+    "shiny": false,
+    "source": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/721.png",
+    "backUsesFront": false
+  },
+  {
+    "id": 721,
+    "shiny": true,
+    "source": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/721.png",
+    "backUsesFront": false
+  },
+  {
+    "id": 801,
+    "shiny": false,
+    "source": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/801.png",
+    "backUsesFront": false
+  },
+  {
+    "id": 801,
+    "shiny": true,
+    "source": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/801.png",
+    "backUsesFront": false
+  },
+  {
+    "id": 802,
+    "shiny": false,
+    "source": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/802.png",
+    "backUsesFront": false
+  },
+  {
+    "id": 802,
+    "shiny": true,
+    "source": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/802.png",
+    "backUsesFront": false
+  },
+  {
+    "id": 807,
+    "shiny": false,
+    "source": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/807.png",
+    "backUsesFront": false
+  },
+  {
+    "id": 807,
+    "shiny": true,
+    "source": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/807.png",
+    "backUsesFront": false
+  },
+  {
+    "id": 808,
+    "shiny": false,
+    "source": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/808.png",
+    "backUsesFront": false
+  },
+  {
+    "id": 808,
+    "shiny": true,
+    "source": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/808.png",
+    "backUsesFront": false
+  },
+  {
+    "id": 809,
+    "shiny": false,
+    "source": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/809.png",
+    "backUsesFront": false
+  },
+  {
+    "id": 809,
+    "shiny": true,
+    "source": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/809.png",
+    "backUsesFront": false
+  },
+  {
+    "id": 893,
+    "shiny": false,
+    "source": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/893.png",
+    "backUsesFront": false
+  },
+  {
+    "id": 893,
+    "shiny": true,
+    "source": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/893.png",
+    "backUsesFront": false
+  },
+  {
+    "id": 1025,
+    "shiny": false,
+    "source": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1025.png",
+    "backUsesFront": false
+  },
+  {
+    "id": 1025,
+    "shiny": true,
+    "source": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/1025.png",
+    "backUsesFront": false
+  }
+]
