@@ -85,6 +85,11 @@
       "typeId": 17,
       "source": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-iv/heartgold-soulsilver/17.png",
       "sha256": "ea259925c969fa69559352370345fd22c0d83ffa05cf5b78f1c5e6be7d032ceb"
+    },
+    {
+      "typeId": 18,
+      "source": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-viii/sword-shield/18.png",
+      "sha256": "637756230774d899e3dbf120f12d0d346ab98e172c3c112f534b530692b9c130"
     }
   ]
 }
